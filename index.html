@@ -327,10 +327,10 @@ const SIM_ROT=(()=>{try{const v=new URLSearchParams(location.search).get('simrot
  if(src&&tj){const tx=JSON.parse(tj.textContent),tl=new THREE.TextureLoader(),ani=renderer.capabilities.getMaxAnisotropy();
   const T=(u,srgb)=>{const t=tl.load(u);if(srgb)t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=ani;return t;};
   const sm=new THREE.MeshStandardMaterial({map:T(tx.map,true),normalMap:T(tx.normalMap),roughnessMap:T(tx.roughnessMap),metalnessMap:T(tx.metalnessMap),roughness:1,metalness:1});
-  // backs of the three screens are black: east-facing surfaces of the upper front part (screens face the driver to the west)
-  {const [sx]=P(1118,0);sm.onBeforeCompile=sh=>{sh.uniforms.uSimX={value:sx};
+  // backs of the three screens are black: surfaces of the screen unit that do not face the driver's seat
+  {const [sx,sz]=P(1118,1556);sm.onBeforeCompile=sh=>{sh.uniforms.uSimX={value:sx};sh.uniforms.uSeat={value:new THREE.Vector3(sx-.75,1.15,sz)};
     sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec3 vWN;').replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvWP=(modelMatrix*vec4(transformed,1.0)).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');
-    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec3 vWN;uniform float uSimX;').replace('#include <map_fragment>','#include <map_fragment>\nif(vWN.x>0.3&&vWP.y>0.95&&vWP.x>uSimX+0.45){diffuseColor.rgb=vec3(0.015);}');};}
+    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec3 vWN;uniform float uSimX;uniform vec3 uSeat;').replace('#include <map_fragment>','#include <map_fragment>\nif(vWP.y>0.95&&vWP.x>uSimX-0.25&&dot(normalize(vWN),normalize(uSeat-vWP))<0.05){diffuseColor.rgb=vec3(0.015);}');};}
   gltf.parse(b64ToBuf(src.textContent),'',g=>{const o=g.scene;o.traverse(c=>{if(c.isMesh){c.material=sm;c.castShadow=true;c.receiveShadow=true;}});
     const inner=new THREE.Group();inner.add(o);inner.rotation.y=SIM_ROT;
     const wrap=new THREE.Group();wrap.add(inner);scene.add(wrap);
