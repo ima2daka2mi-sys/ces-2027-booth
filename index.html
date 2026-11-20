@@ -12,6 +12,7 @@
   --ui:"Noto Sans JP","BIZ UDPGothic","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
   color-scheme:dark;
 }
+[hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--bg);color:var(--fg);font-family:var(--ui);overflow:hidden}
 #stage{position:fixed;inset:0}
@@ -49,6 +50,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .pin:hover span{transform:scale(1.15)}
 .pin.on span{background:var(--accent);transform:scale(1.35)}
 .hide-labels .lbl{display:none}
+.lbl.dim{background:rgba(255,210,63,.92);color:#1b1d22;border-color:transparent}
 /* equipment & power panel */
 .panel{position:fixed;right:max(16px,env(safe-area-inset-right,0px));top:var(--ptop,72px);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(360px,calc(100% - 32px));
   background:var(--panel);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;overflow:hidden;backdrop-filter:blur(6px)}
@@ -95,14 +97,15 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
     <button id="t-eq" aria-pressed="true" data-en="Equipment &amp; power" data-ja="機材・電力">Equipment &amp; power</button>
     <button id="t-banner" aria-pressed="true" data-en="Banner" data-ja="吊りバナー">Banner</button>
     <button id="t-label" aria-pressed="false" data-en="Labels" data-ja="ラベル">Labels</button>
+    <button id="t-dim" aria-pressed="true" data-en="Heights" data-ja="高さ">Heights</button>
     <button id="t-rot" aria-pressed="false" data-en="Auto-rotate" data-ja="自動回転">Auto-rotate</button>
   </div>
   <div class="group" role="group" aria-label="帳票">
     <details class="docs" id="docs"><summary data-en="Documents (PDF)" data-ja="帳票（PDF）">Documents (PDF)</summary>
     <div class="menu">
-      <a href="docs/floor-plan.pdf" target="_blank" rel="noopener"><span data-en="Floor plan" data-ja="平面図">Floor plan</span><small>PDF A3 1:60</small></a>
-      <a href="docs/power-list.pdf" target="_blank" rel="noopener"><span data-en="Equipment & power list" data-ja="機材・電力一覧">Equipment &amp; power list</span><small>PDF A3</small></a>
-      <a class="all" href="docs/booth-documents-all.pdf" target="_blank" rel="noopener"><span data-en="All documents (2 pages)" data-ja="帳票一式（2ページ）">All documents (2 pages)</span><small>PDF</small></a>
+      <a href="docs/floor-plan-en.pdf" data-href-en="docs/floor-plan-en.pdf" data-href-ja="docs/floor-plan.pdf" target="_blank" rel="noopener"><span data-en="Floor plan" data-ja="平面図">Floor plan</span><small>PDF A3 1:60</small></a>
+      <a href="docs/power-list-en.pdf" data-href-en="docs/power-list-en.pdf" data-href-ja="docs/power-list.pdf" target="_blank" rel="noopener"><span data-en="Equipment & power list" data-ja="機材・電力一覧">Equipment &amp; power list</span><small>PDF A3</small></a>
+      <a class="all" href="docs/booth-documents-all-en.pdf" data-href-en="docs/booth-documents-all-en.pdf" data-href-ja="docs/booth-documents-all.pdf" target="_blank" rel="noopener"><span data-en="All documents (2 pages)" data-ja="帳票一式（2ページ）">All documents (2 pages)</span><small>PDF</small></a>
     </div></details>
   </div>
   <div class="group" role="group" aria-label="Language">
@@ -124,7 +127,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   <footer>
     <p data-en="Guide: one outlet per device." data-ja="口数は1機材1口の目安。">Guide: one outlet per device.</p>
     <p data-en="Power figures are running estimates; rated values are from the SIGGRAPH Asia 2026 equipment list (No.1 is the specified 1,500 W)." data-ja="電力は使用時の目安。定格は SIGGRAPH Asia 2026 機材一覧の値（①は指定値 1,500W）。">Power figures are running estimates.</p>
-    <p data-en="To confirm: ZENMAI robots, G1 charger." data-ja="要確認：ZENMAI ロボット、G1 充電器。">To confirm: ZENMAI robots, G1 charger.</p>
+    <p data-en="To confirm: G1 charger." data-ja="要確認：G1 充電器。">To confirm: G1 charger.</p>
   </footer>
 </aside>
 
@@ -238,7 +241,7 @@ function chair(X,Y,face){const [x,z]=P(X,Y);const g=new THREE.Group();g.position
 chair(2000,11500,Math.PI); chair(2000,10300,0); chair(1150,10900,Math.PI/2); chair(2850,10900,-Math.PI/2);
 
 // Octanorm counter (SIGGRAPH): body under a blue top, depth 400, H1010; p1,p2 on the wall face, n = outward normal (plan)
-function counterOn(p1,p2,n,depth=.4,h=1.01,devices=true){
+function counterOn(p1,p2,n,depth=.4,h=1.01,devices=true,withIpad=true){
   const L=Math.hypot(p2[0]-p1[0],p2[1]-p1[1]),ux=(p2[0]-p1[0])/L,uy=(p2[1]-p1[1])/L,d=depth*1000,inset=38,bd=330;
   const q=(a,b,o1,o2)=>[[a[0]+n[0]*o1,a[1]+n[1]*o1],[b[0]+n[0]*o1,b[1]+n[1]*o1],[b[0]+n[0]*o2,b[1]+n[1]*o2],[a[0]+n[0]*o2,a[1]+n[1]*o2]];
   const a=[p1[0]+ux*inset,p1[1]+uy*inset],b=[p2[0]-ux*inset,p2[1]-uy*inset];
@@ -246,7 +249,7 @@ function counterOn(p1,p2,n,depth=.4,h=1.01,devices=true){
   prism(q(p1,p2,0,d),h-.06,.06,mat.cTop);
   if(devices){const lt=screenTex('DEMO','',205);
     [.25,.75].forEach(s=>laptop(p1[0]+ux*L*s+n[0]*d/2,p1[1]+uy*L*s+n[1]*d/2,n[0],n[1],h,lt));
-    ipad(p1[0]+ux*L*.5+n[0]*d/2,p1[1]+uy*L*.5+n[1]*d/2,n[0],n[1],h,screenTex('iPad','',205));}}
+    if(withIpad)ipad(p1[0]+ux*L*.5+n[0]*d/2,p1[1]+uy*L*.5+n[1]*d/2,n[0],n[1],h,screenTex('iPad','',205));}}
 // laptop / iPad (SIGGRAPH models); facing = direction the screen looks (plan)
 function laptop(X,Y,fx,fy,h,tex){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(x,h,z);g.rotation.y=Math.atan2(fx,-fy);scene.add(g);
   const al=M(0x9aa0a8,{metalness:.5,roughness:.35});
@@ -267,15 +270,18 @@ const R=(X,Y)=>[X-250,Y];
 prism([[2536,2],[3044,2],[3044,3152],[2536,3152]].map(p=>R(...p)),0,H,mat.wall);
 tv(...R(3044,1577),1,0,IN[85],1.7,screenTex('85"','Presentation',215));
 
+// presenter's high table Ø600 H1050 + laptop (as at SIGGRAPH), by the 85" screen
+{const X=3250,Y=3600;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
+ laptop(X,Y,-.6,-.8,1.05,screenTex('PRESENT','',215));}
 // ③ ZENMAI bent wall (CEATEC shape) + robot stands with SIGGRAPH counters
 prism([[5150,9440],[4249,7878],[4249,5028],[4917,3850],[5136,3966],[4536,5000],[4536,7716],[5436,9270]],0,H,mat.wall);
-tv(4249,5802,-1,0,IN[50],1.6,screenTex('ZENMAI','Robot',265));
-tv(4249,7001,-1,0,IN[50],1.6,screenTex('ZENMAI','Robot',285));
+tv(4249,5802,-1,0,IN[50],1.6,screenTex('DEMO','',265));
+tv(4249,7001,-1,0,IN[50],1.6,screenTex('DEMO','',285));
 tv(4536,6356,1,0,IN[50],1.6,screenTex('ZENMAI','',265));
 tv(4642,8688,-.866,.5,IN[50],1.6,screenTex('ZENMAI','',300));
 tv(5040,8470,.866,-.5,IN[50],1.6,screenTex('ZENMAI','',280));
-counterOn([4233,5202],[4233,6401],[-1,0],.4,1.01,false);
-counterOn([4233,6401],[4233,7601],[-1,0],.4,1.01,false);
+counterOn([4233,5202],[4233,6401],[-1,0],.4,1.01,true,false);   // demo corner: 2 laptops per screen
+counterOn([4233,6401],[4233,7601],[-1,0],.4,1.01,true,false);
 counterOn([4309,8017],[5061,9313],unit(-391,224));
 function robot(X,Y){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(x,1.01,z);scene.add(g);
   const w=M(0xf5f6f8,{roughness:.35}),acc=M(0x2e86de,{roughness:.4});
@@ -283,17 +289,26 @@ function robot(X,Y){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(
   const hd=new THREE.Mesh(new THREE.SphereGeometry(.09,24,16),w);hd.position.y=.3;g.add(hd);
   const ey=new THREE.Mesh(new THREE.BoxGeometry(.1,.025,.02),acc);ey.position.set(0,.31,-.085);g.add(ey);
   g.rotation.y=Math.PI/2;g.traverse(o=>{if(o.isMesh)o.castShadow=true;});}
-robot(4033,5800); robot(4033,7000);
+
 
 // ⑤ 3-face tower (H2400) at the west edge + SIGGRAPH counters
 const T=(X,Y)=>[X-1400,Y-5];   // centred between ① and ② (centre Y about 5,130)
 prism([[1912,4520],[2975,5133],[1912,5745]].map(p=>T(...p)),0,2.4,mat.wall);
-tv(...T(1912,5133),-1,0,IN[50],1.6,screenTex('TOWER','A',200));
-tv(...T(2443,4826),.5,-.866,IN[50],1.6,screenTex('TOWER','B',170));
-tv(...T(2443,5439),.5,.866,IN[50],1.6,screenTex('TOWER','C',230));
-counterOn(T(1899,5731),T(1899,4532),[-1,0]);
-counterOn(T(1939,4506),T(2981,5106),[.5,-.866]);
-counterOn(T(2981,5157),T(1939,5761),[.5,.866]);
+tv(...T(1912,5133),-1,0,IN[50],1.6,screenTex('DEMO','A',200));
+tv(...T(2443,4826),.5,-.866,IN[50],1.6,screenTex('DEMO','B',170));
+tv(...T(2443,5439),.5,.866,IN[50],1.6,screenTex('DEMO','C',230));
+counterOn(T(1899,5731),T(1899,4532),[-1,0],.4,1.01,true,false);   // demo tower: 2 laptops per screen
+counterOn(T(1939,4506),T(2981,5106),[.5,-.866],.4,1.01,true,false);
+counterOn(T(2981,5157),T(1939,5761),[.5,.866],.4,1.01,true,false);
+
+// height guides: yellow dimension lines with arrows and the height, on by default
+const dimGroup=new THREE.Group();scene.add(dimGroup);const dimLbls=[];
+{const dimMat=new THREE.LineBasicMaterial({color:0xffd23f}),cone=new THREE.MeshBasicMaterial({color:0xffd23f});
+ function dimLine(X,Y,y0,y1,text){const [x,z]=P(X,Y),v=(a,b,c)=>new THREE.Vector3(a,b,c),t=.09;
+   dimGroup.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([v(x,y0,z),v(x,y1,z),v(x-t,y1,z),v(x+t,y1,z),v(x,y1,z-t),v(x,y1,z+t),v(x-t,y0,z),v(x+t,y0,z),v(x,y0,z-t),v(x,y0,z+t)]),dimMat));
+   [[y1,Math.PI],[y0,0]].forEach(([yy,r])=>{const c=new THREE.Mesh(new THREE.ConeGeometry(.03,.09,12),cone);c.position.set(x,yy+(r?-.045:.045),z);c.rotation.x=r;dimGroup.add(c);});
+   const d=document.createElement('div');d.className='lbl dim';d.innerHTML=tr(text);const o=new CSS2DObject(d);o.position.set(x,(y0+y1)/2,z);dimGroup.add(o);dimLbls.push([d,text]);}
+ window.__dimLine=dimLine;}
 
 // glTF models from the SIGGRAPH Asia 2026 booth
 try{window.createImageBitmap=undefined;}catch(e){}   // GLTFLoader then uses TextureLoader (<img>) for embedded images
@@ -312,6 +327,10 @@ const SIM_ROT=(()=>{try{const v=new URLSearchParams(location.search).get('simrot
  if(src&&tj){const tx=JSON.parse(tj.textContent),tl=new THREE.TextureLoader(),ani=renderer.capabilities.getMaxAnisotropy();
   const T=(u,srgb)=>{const t=tl.load(u);if(srgb)t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=ani;return t;};
   const sm=new THREE.MeshStandardMaterial({map:T(tx.map,true),normalMap:T(tx.normalMap),roughnessMap:T(tx.roughnessMap),metalnessMap:T(tx.metalnessMap),roughness:1,metalness:1});
+  // backs of the three screens are black: east-facing surfaces of the upper front part (screens face the driver to the west)
+  {const [sx]=P(1118,0);sm.onBeforeCompile=sh=>{sh.uniforms.uSimX={value:sx};
+    sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec3 vWN;').replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvWP=(modelMatrix*vec4(transformed,1.0)).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');
+    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec3 vWN;uniform float uSimX;').replace('#include <map_fragment>','#include <map_fragment>\nif(vWN.x>0.3&&vWP.y>0.95&&vWP.x>uSimX+0.45){diffuseColor.rgb=vec3(0.015);}');};}
   gltf.parse(b64ToBuf(src.textContent),'',g=>{const o=g.scene;o.traverse(c=>{if(c.isMesh){c.material=sm;c.castShadow=true;c.receiveShadow=true;}});
     const inner=new THREE.Group();inner.add(o);inner.rotation.y=SIM_ROT;
     const wrap=new THREE.Group();wrap.add(inner);scene.add(wrap);
@@ -460,8 +479,11 @@ function logo3D(X,Y,nx,ny,width,cy,depth=.04,layers=16){const [x,z]=P(X,Y),dx=nx
     const geo=new THREE.PlaneGeometry(width,h);
     for(let k=0;k<=layers;k++){const m=new THREE.Mesh(geo,k===layers?face:edge);m.position.z=.004+depth*k/layers;m.castShadow=true;g.add(m);}};
   img.src=F8_LOGO;return g;}
-logo3D(2838,12192,0,1,2.4,3.5);          // STOCK north face, upper band (back aisle)
-logo3D(1420,9794,0,-1,2.2,3.5);          // STOCK south face, upper band (toward VR360)
+// STOCK: solid logo centred on the upper band of each of the four walls
+logo3D(2101,12192,0,1,2.4,3.5);          // north (rear aisle)
+logo3D(48,10993,-1,0,2.0,3.5);           // west (side aisle)
+logo3D(3463+.864*30,11008-.503*30,.864,-.503,2.2,3.5);   // slant wall (toward the motion seat)
+logo3D(1411,9794,0,-1,2.2,3.5);          // south (toward VR360)
 
 // scale figure 1700
 {const [x,z]=P(4600,-900);const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);const m=M(0x7a808a);
@@ -477,15 +499,15 @@ const EQ=[
  {no:1,name:['ドライビングシミュレータ（32"×3面・モーション）','Driving simulator (motion, 32" ×3)'],qty:1,est:1500,rated:1500,size:'約2240×1800×1800',kg:'—',mount:['床置き','Floor'],note:['指定値 1,500W（モーション部・PC・モニター込み）','Specified 1,500 W (motion base, PC and monitors)'],pos:[1118,1556],pin:2.15,view:[.2,-1],d:4.2,th:1.0},
  {no:2,name:['VR360シミュレータ','VR360 Simulator'],qty:1,est:2000,rated:2800,size:'2047×1250×1960',kg:'350',mount:['床置き','Floor'],note:['ポールパーテーションで動線規制','Pole partitions guide visitor flow'],pos:[1342,8700],pin:2.3,view:[-.6,-1],d:4.5,th:1.1},
  {no:3,name:['VRモーションシート（公道最速体感）','VR motion seat (rally experience)'],qty:1,est:800,rated:1100,size:'800×800×1600',kg:['約110','approx. 110'],mount:['床置き','Floor'],note:['背面の倉庫斜め壁に43インチTV','43" TV on the STOCK slant wall behind'],pos:[4097,11103],pin:1.95,view:[1,.3],d:3.5,th:1.0},
- {no:4,name:['3Dホログラフィックディスプレイ（Metavania HoloSync）','3D holographic display (Metavania HoloSync)'],qty:1,est:200,rated:200,size:['750×750 厚み150・台座Ø500','750×750, depth 150, base Ø500'],kg:['約1.5','approx. 1.5'],mount:['床置き','Floor'],note:['ZENMAI 北袖の外側モニターと連動','Synced with the ZENMAI north-wing outer monitor'],pos:[5733,8070],pin:2.2,view:[1,-.2],d:3,th:1.4},
+ {no:4,name:['3Dホログラフィックディスプレイ（Metavania HoloSync）','3D holographic display (Metavania HoloSync)'],qty:1,est:200,rated:200,size:['750×750 厚み150・台座Ø500','750×750, depth 150, base Ø500'],kg:['約1.5','approx. 1.5'],mount:['床置き','Floor'],note:['北袖の外側モニターと連動','Synced with the north-wing outer monitor'],pos:[5733,8070],pin:2.2,view:[1,-.2],d:3,th:1.4},
  {no:5,name:['85インチモニター（プレゼン）','85" monitor (presentation)'],qty:1,est:300,rated:400,size:['約1900×70×1100','approx. 1900×70×1100'],kg:'55',mount:['壁掛け','Wall-mounted'],note:['85インチ壁 東面','East face of the 85" wall'],pos:[2794,1577],pin:2.5,view:[1,-.3],d:4,th:1.6},
- {no:6,name:['50インチTV（ZENMAI 5台・3面タワー 3台）','50" TV (ZENMAI 5, 3-face tower 3)'],qty:8,est:100,rated:120,size:['約1120×65×650','approx. 1120×65×650'],kg:'12',mount:['壁掛け','Wall-mounted'],note:'',pos:[4249,7001],pin:2.15,view:[-1,-.2],d:3,th:1.5},
+ {no:6,name:['50インチTV（デモコーナー 5台・3面タワー 3台）','50" TV (demo corner 5, 3-face tower 3)'],qty:8,est:100,rated:120,size:['約1120×65×650','approx. 1120×65×650'],kg:'12',mount:['壁掛け','Wall-mounted'],note:'',pos:[4249,7001],pin:2.15,view:[-1,-.2],d:3,th:1.5},
  {no:7,name:['43インチTV（モーションシート用）','43" TV (for the motion seat)'],qty:1,est:70,rated:80,size:['約960×60×560','approx. 960×60×560'],kg:'9',mount:['壁掛け（中心 H2200）','Wall-mounted (centre H2200)'],note:'',pos:[3664,11354],pin:2.75,view:[.8,-.6],d:3,th:2.0},
  {no:8,name:['55インチディスプレイ（STOCK 扉横）','55" display (beside the STOCK door)'],qty:1,est:120,rated:150,size:['約1230×60×710','approx. 1230×60×710'],kg:['約17','approx. 17'],mount:['壁掛け（裏通路向き）','Wall-mounted (facing the rear aisle)'],note:'',pos:[2838,12192],pin:2.2,view:[0,1],d:3.5,th:1.6},
  {no:9,name:['体験コーナー（ハンドル＋ペダル）','Driving corner (wheel + pedals)'],qty:6,est:0,rated:0,wText:['PCからUSB給電','USB-powered from PC'],size:'—',kg:'—',mount:['天板・足元','Tabletop / floor'],note:['カウンター 600×2200 H1100 ×2列、1列3セット','Counters 600×2200 H1100, 2 rows of 3 sets'],pos:[4796,1100],pin:1.7,view:[.3,-1],d:4.5,th:1.0},
- {no:10,name:['ノートPC（体験 6・3面タワー 6・ZENMAI 2）','Laptop PCs (driving 6, tower 6, ZENMAI 2)'],qty:14,est:65,rated:120,size:'—',kg:'—',mount:['各カウンター上','On the counters'],note:'',pos:[1700,4600],pin:1.45,view:[1,-.2],d:3,th:1.0},
- {no:11,name:['iPad（3面タワー 3・ZENMAI 1）','iPad (tower 3, ZENMAI 1)'],qty:4,est:0,rated:0,wText:['PC/USB給電','PC / USB-powered'],size:'—',kg:'—',mount:['スタンド','On a holder'],note:'',pos:null},
- {no:12,name:['ZENMAI ロボット','ZENMAI robots'],qty:2,est:null,rated:null,wText:['要確認','To confirm'],size:'—',kg:'—',mount:['ロボット台','Robot stand'],note:'',pos:[4033,5800],pin:1.6,view:[-1,-.3],d:2.8,th:1.2},
+ {no:10,name:['ノートPC（体験 6・デモ 12・講師 1）','Laptop PCs (driving 6, demo 12, presenter 1)'],qty:19,est:65,rated:120,size:'—',kg:'—',mount:['各カウンター・講師テーブル上','On the counters / presenter table'],note:['デモは各画面にノートPC 2台','Demo: two laptops per screen'],pos:[1700,4600],pin:1.45,view:[1,-.2],d:3,th:1.0},
+ {no:11,name:['iPad（デモコーナー北袖）','iPad (demo corner, north wing)'],qty:1,est:0,rated:0,wText:['PC/USB給電','PC / USB-powered'],size:'—',kg:'—',mount:['スタンド','On a holder'],note:'',pos:null},
+ {no:12,name:['講師用ハイテーブル Ø600','Presenter high table Ø600'],qty:1,est:0,rated:0,wText:['電源なし（PCは⑩）','No power (laptop in No.10)'],size:['Ø600 H1050','Ø600 H1050'],kg:'—',mount:['床置き','Floor'],note:['85インチ前・プレゼン用','By the 85" screen, for presentations'],pos:[3250,3600],pin:1.5,view:[.6,-.8],d:3,th:1.0},
  {no:13,name:['ヒューマノイドロボット（Unitree G1）','Humanoid robot (Unitree G1)'],qty:1,est:null,rated:null,wText:['要確認（充電器）','To confirm (charger)'],size:'1320×450×200',kg:['約35','approx. 35'],mount:['床置き','Floor'],note:['バッテリー駆動','Battery-powered'],pos:[5250,6056],pin:1.6,view:[1,0],d:3,th:0.9},
  {no:14,name:['STOCK 内コンセント（ネットワーク機器等）','STOCK outlet (network switch etc.)'],qty:1,est:200,rated:200,size:'—',kg:'—',mount:['STOCK 内・床','Inside STOCK, floor'],note:'',pos:[1600,10700],pin:1.3,view:[0,-1],d:3,th:0.5,up:4.5},
 ];
@@ -496,8 +518,8 @@ const pins={};let sel=null;
 EQ.forEach(e=>{if(!e.pos)return;const d=document.createElement('div');d.className='pin';d.innerHTML=`<span>${e.no}</span>`;
   d.onclick=ev=>{ev.stopPropagation();select(e.no,true);};const o=new CSS2DObject(d);const [x,z]=P(...e.pos);o.position.set(x,e.pin,z);scene.add(o);pins[e.no]=d;});
 // area names (text labels, as on the SIGGRAPH page)
-[[['ドライビングシミュレータ','Driving simulator'],1118,1556,2.5],[['VR360シミュレータ','VR360 Simulator'],1342,8700,2.7],['ZENMAI Interactive Robot Experience',4400,6400,3.3],['Metabania HoloSync',5733,8070,2.6],
- [['3面モニタータワー','3-face monitor tower'],866,5128,2.7],[['85インチ壁','85" wall'],2540,1577,3.3],[['体験コーナー','Driving corner'],4796,1100,2.0],[['VRモーションシート','VR motion seat'],4097,11103,2.35],[['ヒューマノイド','Humanoid'],5250,6056,2.0],['STOCK',1600,11000,4.3]]
+[[['ドライビングシミュレータ','Driving simulator'],1118,1556,2.5],[['VR360シミュレータ','VR360 Simulator'],1342,8700,2.7],[['デモコーナー','Demo corner'],4400,6400,3.3],['Metabania HoloSync',5733,8070,2.6],
+ [['3面デモタワー','3-face demo tower'],866,5128,2.7],[['講師用ハイテーブル','Presenter table'],3250,3600,1.5],[['85インチ壁','85" wall'],2540,1577,3.3],[['体験コーナー','Driving corner'],4796,1100,2.0],[['VRモーションシート','VR motion seat'],4097,11103,2.35],[['ヒューマノイド','Humanoid'],5250,6056,2.0],['STOCK',1600,11000,4.3]]
  .forEach(([t,X,Y,h])=>label(t,X,Y,h));
 const list=document.getElementById('eq-list'),panel=document.getElementById('panel');
 function rowHTML(e){const on=sel===e.no,tot=(e.est||0)*e.qty;const L=(ja,en)=>lang==='ja'?ja:en;
@@ -528,7 +550,7 @@ function placePanel(){const b=document.querySelector('.bar').getBoundingClientRe
 addEventListener('resize',placePanel);placePanel();
 setPanel(innerWidth>700);renderPanel();
 // documents are published on GitHub Pages; elsewhere (claude.ai) point the links there
-if(!/github\.io$/.test(location.hostname))document.querySelectorAll('#docs a').forEach(a=>{a.href='https://ima2daka2mi-sys.github.io/ces-2027-booth/'+a.getAttribute('href');});
+const DOC_BASE=/github\.io$/.test(location.hostname)?'':'https://ima2daka2mi-sys.github.io/ces-2027-booth/';
 addEventListener('click',ev=>{const d=document.getElementById('docs');if(d.open&&!d.contains(ev.target))d.open=false;});
 
 // ---------- views ----------
@@ -550,13 +572,24 @@ VBTN.forEach(v=>{document.getElementById('v-'+v).onclick=()=>{fly(...VIEWS[v].ma
 const tb=document.getElementById('t-banner');tb.onclick=()=>{banner.visible=!banner.visible;tb.setAttribute('aria-pressed',String(banner.visible));};
 const tl=document.getElementById('t-label');tl.onclick=()=>{const on=tl.getAttribute('aria-pressed')!=='true';LABELS_ON=on;tl.setAttribute('aria-pressed',String(on));labels.forEach(o=>o.visible=on);};
 const tr_=document.getElementById('t-rot');tr_.onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=.8;tr_.setAttribute('aria-pressed',String(controls.autoRotate));};
+// height guides
+__dimLine(2790,9810,0,4.0,['STOCK 壁 H4000','STOCK wall H4000']);
+__dimLine(2794,2,0,3.0,['展示壁 H3000','Display wall H3000']);
+__dimLine(5136,3966,0,3.0,['展示壁 H3000','Display wall H3000']);
+__dimLine(512,5133,0,2.4,['3面タワー H2400','Tower H2400']);
+__dimLine(OX-2500,OY-4000,0,4.5,['吊りバナー下端 H4500','Banner bottom H4500']);
+__dimLine(OX-3000,OY-4500,4.5,6.0,['吊りバナー 1500（上端 H6000）','Banner 1500 (top H6000)']);
+const td=document.getElementById('t-dim');
+const showDim=on=>{dimGroup.visible=on;dimGroup.traverse(o=>{if(o.isCSS2DObject){o.visible=on;o.element.style.display=on?'':'none';}});td.setAttribute('aria-pressed',String(on));};
+td.onclick=()=>showDim(td.getAttribute('aria-pressed')!=='true');showDim(true);
 window.__flyTo=(p,t)=>fly(p,t);
 window.__look=(px,py,pz,tx,ty,tz)=>{camera.position.set(px,py,pz);controls.target.set(tx,ty,tz);};
-function applyLang(l){lang=l;try{localStorage.setItem('ces-booth-lang',l);}catch(e){}
+function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d,t])=>d.innerHTML=tr(t));try{localStorage.setItem('ces-booth-lang',l);}catch(e){}
   document.documentElement.lang=l;document.title=l==='ja'?'CES 2027 FORUM8 ブース3D':'CES 2027 FORUM8 Booth 3D';
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn'];});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
