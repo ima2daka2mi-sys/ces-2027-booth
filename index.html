@@ -25,7 +25,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--font-ui);overflow:hi
 .panel ol{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:12.5px}
 .panel li{display:grid;grid-template-columns:22px 1fr;gap:6px;align-items:baseline;cursor:pointer;border-radius:6px;padding:2px 4px}
 .panel li:hover,.panel li:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
-.panel li b{color:var(--pin);font-weight:700}
+.panel li b{color:var(--pin);font-weight:700;font-size:11px;letter-spacing:-.05em}
 .panel li span small{display:block;color:var(--muted);font-size:11px}
 .panel .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 10px}
 .panel .sum div{border:1px solid var(--line);border-radius:8px;padding:6px 8px;display:grid;gap:1px}
@@ -78,7 +78,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--font-ui);overflow:hi
     <a href="docs/power-list.pdf" target="_blank" rel="noopener">機材・電力一覧<small>A3</small></a>
     <a href="docs/booth-documents-all.pdf" target="_blank" rel="noopener">帳票一式<small>2ページ</small></a>
   </div>
-  <p class="foot">電力は SIGGRAPH Asia 2026 ブースの機材一覧の値。①は1,500W。要確認：ZENMAI ロボット、G1 充電器。番号をクリックすると詳細を表示。</p>
+  <p class="foot">口数は1機器1口の目安。電力はSIGGRAPH Asia 2026 機材一覧の値（①は1,500W）。番号をクリックすると該当機器を表示。</p>
 </aside>
 
 <nav class="bar" aria-label="視点">
@@ -429,39 +429,49 @@ logo3D(...R(2536,1577),-1,0,1.9,2.45);    // west face, above the simulator scre
  g.traverse(o=>{if(o.isMesh)o.castShadow=true;});label('人物 1700',4600,-900,1.85,'small');}
 
 // ---------- item list + labels ----------
-// equipment & power (unit values from the SIGGRAPH Asia 2026 equipment list; ① 1,500 W as specified)
-// [no, name, size, X, Y, label height, watts (null = to confirm), outlets, power breakdown]
+// equipment & power, one row per device as in the SIGGRAPH Asia 2026 equipment list (unit W from that list; ① 1,500 W as specified)
+// area labels in the 3D view: [no, name, X, Y, height]
+const AREAS=[['①','ドライビングシミュレータ',1118,1556,2.0],['②','VR360シミュレータ',1342,8700,2.3],['③','ZENMAI Interactive Robot Experience',4033,6400,1.6],
+ ['④','Metabania HoloSync',5733,8070,2.2],['⑤','3面モニタータワー',866,5128,2.7],['⑥','85インチ壁',2650,1577,2.5],['⑦','体験コーナー',4796,1100,1.6],
+ ['⑧','VRモーションシート',4097,11103,1.95],['⑨','ヒューマノイドロボット',5250,6056,1.6],['⑪','STOCK',1600,11000,3.3]];
+// rows: [name, qty, W per unit (0 = USB from PC, null = to confirm), size, areas, note]
 const EQ=[
- ['①','ドライビングシミュレータ','32"×3面・約2240×1800×H1800',1118,1556,2.0,1500,1,'本体（モーション・PC・モニター込み）'],
- ['②','VR360シミュレータ','2047×1250×1960・350kg',1342,8700,2.3,2800,1,'SIGGRAPH No.1'],
- ['③','ZENMAI Interactive Robot Experience','折れ壁・ロボット台・50"×5',4033,6400,1.6,840,8,'50" 120W×5＋ノートPC 120W×2＋ロボット 要確認',true],
- ['④','Metabania HoloSync','台座Ø500・750×750×150',5733,8070,2.2,200,1,'SIGGRAPH No.4'],
- ['⑤','3面モニタータワー','50"×3・カウンター×3',866,5128,2.7,1080,9,'50" 120W×3＋ノートPC 120W×6（iPad×3 はPC給電）'],
- ['⑥','85インチ壁','3150×510・85" 1882×1059',2650,1577,2.5,400,1,'85" 400W'],
- ['⑦','体験コーナー','600×2200 H1100 ×2列・3セット',4796,1100,1.6,720,6,'ノートPC 120W×6（ハンドル・ペダルはUSB給電）'],
- ['⑧','VRモーションシート','800×800×1600・背面に43"（H2200）',4097,11103,1.95,1180,2,'シート 1,100W＋43" 80W'],
- ['⑨','ヒューマノイドロボット','Unitree G1 1320×450×200・約35kg',5250,6056,1.6,null,1,'バッテリー駆動・充電器 要確認'],
- ['⑪','STOCK','台形・扉W850・扉横に55"',1600,11000,3.3,350,2,'55" 150W＋コンセント 200W（ネットワーク機器等）'],
- ['⑫','吊りバナー','JID 15009 四角テーパー型・下端4.0m',OX,OY,null,0,0,'電源なし'],
+ ['ドライビングシミュレータ（モーション・PC・32"×3面込み）',1,1500,'約2240×1800×H1800',['①'],'1,500W'],
+ ['VR360シミュレータ',1,2800,'2047×1250×1960・350kg',['②'],'SIGGRAPH No.1'],
+ ['VRモーションシート（公道最速体感）',1,1100,'800×800×1600・約110kg',['⑧'],'SIGGRAPH No.3'],
+ ['3Dホログラフィックディスプレイ（Metavania HoloSync）',1,200,'750×750×150・台座Ø500',['④'],'SIGGRAPH No.4'],
+ ['85インチモニター（プレゼン）',1,400,'約1900×70×1100・55kg',['⑥'],'SIGGRAPH No.9'],
+ ['50インチTV（ZENMAI 5台・3面タワー 3台）',8,120,'約1120×65×650・12kg',['③','⑤'],'SIGGRAPH No.5/7'],
+ ['43インチTV（モーションシート用・中心H2200）',1,80,'約960×60×560・9kg',['⑧'],'SIGGRAPH No.11'],
+ ['55インチディスプレイ（STOCK 扉横）',1,150,'約1230×60×710',['⑪'],'一般的な55インチの目安'],
+ ['体験コーナー（ハンドル＋ペダル）',6,0,'カウンター 600×2200 H1100 ×2',['⑦'],'SIGGRAPH No.10：PCからUSB給電'],
+ ['ノートPC（体験6・3面タワー6・ZENMAI 2）',14,120,'—',['③','⑤','⑦'],'SIGGRAPH：1台 120W'],
+ ['iPad（3面タワー3・ZENMAI 1）',4,0,'—',['③','⑤'],'PC/USB給電'],
+ ['ZENMAI ロボット',2,null,'—',['③'],'電力 要確認'],
+ ['ヒューマノイド（Unitree G1）',1,null,'1320×450×200・約35kg',['⑨'],'バッテリー駆動・充電器 要確認'],
+ ['STOCK 内コンセント（ネットワーク機器等）',1,200,'—',['⑪'],'SIGGRAPH：汎用 200W'],
 ];
 const fmt=n=>n.toLocaleString('en-US');
-const totalW=EQ.reduce((t,e)=>t+(e[6]||0),0), outlets=EQ.reduce((t,e)=>t+e[7],0);
+const totalW=EQ.reduce((t,e)=>t+(e[2]||0)*e[1],0), outlets=EQ.reduce((t,e)=>t+(e[2]===0?0:e[1]),0);
 document.getElementById('sum-w').textContent=fmt(totalW)+' W';
 document.getElementById('sum-a').textContent=Math.round(totalW/120)+' A';
 document.getElementById('sum-o').textContent=outlets+' 口';
-const list=document.getElementById('list');const lis={},tags={};let sel=null;
-function select(n,fly){sel=n;Object.entries(lis).forEach(([k,li])=>li.setAttribute('aria-current',String(k===n)));
+const list=document.getElementById('list');const rows=[],tags={};
+function select(n,fly){rows.forEach(([li,ar])=>li.setAttribute('aria-current',String(ar.includes(n))));
   Object.entries(tags).forEach(([k,d])=>d.classList.toggle('on',k===n));
-  if(fly){const e=EQ.find(r=>r[0]===n);if(e){const [x,z]=P(e[3],e[4]);const ty=e[5]===null?4.2:Math.min(e[5],1.4);
-    window.__flyTo(new THREE.Vector3(x+3.2,ty+2.6,z+3.6),new THREE.Vector3(x,ty,z));}}
-  if(lis[n])lis[n].scrollIntoView({block:'nearest'});}
-EQ.forEach(([n,name,size,X,Y,h,w,o,note,partial])=>{
-  if(h!==null){const lb=label(`<b>${n}</b>${name}`,X,Y,h);tags[n]=lb.element;lb.element.onclick=ev=>{ev.stopPropagation();if(window.__showList)window.__showList(true);select(n,true);};}
-  const pw=w===null?'<em>要確認</em>':(w?`${fmt(w)} W`+(partial?'＋<em>要確認</em>':''):'—');
+  const first=rows.find(([li,ar])=>ar.includes(n));if(first)first[0].scrollIntoView({block:'nearest'});
+  if(fly){const a=AREAS.find(r=>r[0]===n);if(a){const [x,z]=P(a[2],a[3]);const ty=Math.min(a[4],1.4);
+    window.__flyTo(new THREE.Vector3(x+3.2,ty+2.6,z+3.6),new THREE.Vector3(x,ty,z));}}}
+AREAS.forEach(([n,name,X,Y,h])=>{const lb=label(`<b>${n}</b>${name}`,X,Y,h);tags[n]=lb.element;
+  lb.element.onclick=ev=>{ev.stopPropagation();if(window.__showList)window.__showList(true);select(n,true);};});
+EQ.forEach(([name,qty,w,size,ar,note])=>{
+  const pw=w===null?'<em>要確認</em>':(w===0?'USB給電':`${fmt(w)} W${qty>1?' ／台':''}`);
+  const sub=w?` ＝ ${fmt(w*qty)} W`:'';
   const li=document.createElement('li');li.tabIndex=0;
-  li.innerHTML=`<b>${n}</b><span>${name}<small>${size}</small><span class="pw">${pw}${o?`・${o}口`:''}</span><small>${note}</small></span>`;
-  lis[n]=li;const go=()=>{select(n,true);setPressed(null);};
+  li.innerHTML=`<b>${ar.join('')}</b><span>${name}<small>${size}</small><span class="pw">${pw} × ${qty}${sub}</span><small>${note}</small></span>`;
+  rows.push([li,ar]);const go=()=>{select(ar[0],true);setPressed(null);};
   li.onclick=go;li.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};list.appendChild(li);});
+// the banner label (no power)
 // documents are published on GitHub Pages; elsewhere (claude.ai) point the links there
 if(!/github\.io$/.test(location.hostname))document.querySelectorAll('#docs a').forEach(a=>{a.href='https://ima2daka2mi-sys.github.io/ces-2027-booth/'+a.getAttribute('href');});
 
