@@ -132,7 +132,7 @@ function screenTex(title,sub,hue){const c=document.createElement('canvas');c.wid
   g.fillStyle='#fff';g.textAlign='center';g.font='800 56px "Noto Sans JP",sans-serif';g.fillText(title,320,190);
   if(sub){g.font='600 28px "Noto Sans JP",sans-serif';g.fillStyle='rgba(255,255,255,.85)';g.fillText(sub,320,240);}
   const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}
-const IN={50:[1.107,.623],85:[1.882,1.059]};
+const IN={50:[1.107,.623],55:[1.215,.684],85:[1.882,1.059]};
 // TV on a wall face: centre (plan), outward normal (plan), size (m), centre height
 function tv(X,Y,nx,ny,[w,h],ch,tex){const [x,z]=P(X,Y);const dx=nx,dz=-ny;const g=new THREE.Group();
   const body=new THREE.Mesh(new THREE.BoxGeometry(w+.03,h+.03,.05),mat.dark);body.castShadow=true;g.add(body);
@@ -160,9 +160,17 @@ box(48,9794,2775,9825,0,H,mat.wall);
 prism([[4126,12162],[2775,9825],[2800,9810],[4152,12147]],0,H,mat.wall);
 box(77,12162,700,12192,0,H,mat.wall); box(1550,12162,4126,12192,0,H,mat.wall); box(700,12162,1550,12192,2.0,H-2.0,mat.wall);
 box(712,12168,1538,12188,0,1.99,mat.door);
-box(976,9825,2775,10272,0,.72,mat.white);
+tv(2400,12192,0,1,IN[55],1.6,screenTex('FORUM8','55"',215));   // 55" beside the STOCK door, facing the back aisle
 box(1896,11862,3695,12132,0,1.8,mat.grey);
-[[1070,10560],[1700,10540],[2370,10560]].forEach(([X,Y])=>box(X-200,Y-220,X+200,Y+220,0,.45,mat.grey));
+// table 1200×700 H720 in the middle of STOCK, four chairs round it
+box(1400,10350,2600,11050,.69,.03,mat.white);
+[[1430,10380],[2570,10380],[1430,11020],[2570,11020]].forEach(([X,Y])=>cyl(X,Y,.025,0,.69,mat.metal,12));
+function chair(X,Y,face){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=face;scene.add(g);
+  const seat=new THREE.Mesh(new THREE.BoxGeometry(.44,.05,.44),M(0x2a5bd7,{roughness:.6}));seat.position.y=.45;g.add(seat);
+  const back=new THREE.Mesh(new THREE.BoxGeometry(.44,.42,.04),M(0x2a5bd7,{roughness:.6}));back.position.set(0,.69,-.2);g.add(back);
+  [[-.19,-.19],[.19,-.19],[-.19,.19],[.19,.19]].forEach(([a,b])=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.45,8),mat.metal);l.position.set(a,.225,b);g.add(l);});
+  g.traverse(o=>{if(o.isMesh)o.castShadow=true;});}
+chair(2000,11300,Math.PI); chair(2000,10100,0); chair(1150,10700,Math.PI/2); chair(2850,10700,-Math.PI/2);
 
 // Octanorm counter (SIGGRAPH): body under a blue top, depth 400, H1010; p1,p2 on the wall face, n = outward normal (plan)
 function counterOn(p1,p2,n,depth=.4,h=1.01,devices=true){
@@ -274,7 +282,7 @@ polePair(273,8090,9089); polePair(2442,8128,9099);
  const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2];
  const vc=[mid[0]+n[0]*500+u[0]*400,mid[1]+n[1]*500+u[1]*400];
  placeModel('m-motionseat',vc[0],vc[1],1.6,Math.atan2(n[0],-n[1]),.012);
- tv(mid[0]+u[0]*400+n[0]*25,mid[1]+u[1]*400+n[1]*25,n[0],n[1],[.952,.535],1.6,screenTex('RALLY VR','43"',0));
+ tv(mid[0]+u[0]*400+n[0]*25,mid[1]+u[1]*400+n[1]*25,n[0],n[1],[.952,.535],2.2,screenTex('RALLY VR','43"',0));   // raised: centre 2.2 m
  window.__seat=vc;}
 
 // ④ Metabania HoloSync (SIGGRAPH): pole stand Ø500, acrylic 750×750×150, faces the booth
@@ -387,7 +395,7 @@ const ITEMS=[
  ['⑥','85インチ壁','3150×510・85" 1882×1059',2650,1577,2.5],
  ['⑦','体験コーナー','2200×600 H1100 ×2列・3セット',4796,1100,1.6],
  ['⑧','VRモーションシート','800×800×1600・背面に43"',4097,11103,1.95],
- ['⑪','STOCK','台形・扉W850（裏通路側）',1600,11000,3.3],
+ ['⑪','STOCK','台形・扉W850・扉横に55"（裏通路向き）',1600,11000,3.3],
  ['⑫','吊りバナー','JID 15009 四角テーパー型',OX,OY,null],
 ];
 const list=document.getElementById('list');
