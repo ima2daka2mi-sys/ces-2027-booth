@@ -106,7 +106,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
     </div></details>
   </div>
 </div>
-<div class="spec">STOCK・展示壁 3000・展示カウンター 1010・体験コーナー 1100・吊りバナー下端 4000。ドラッグで回転、ホイール／ピンチで拡大。番号をクリックで詳細。</div>
+<div class="spec">STOCK 壁 4000・展示壁 3000・展示カウンター 1010・体験コーナー 1100・吊りバナー下端 4500。ドラッグで回転、ホイール／ピンチで拡大。番号をクリックで詳細。</div>
 <aside class="panel" id="panel" aria-labelledby="eq-h">
   <header>
     <div class="hd"><h2 id="eq-h">出展機材・電力</h2><button class="x" id="eq-x" aria-label="閉じる">×</button></div>
@@ -209,11 +209,12 @@ const H=3.0;
 // LED line round the carpet edge (SIGGRAPH design)
 [[0,0,6096,25],[0,12167,6096,12192],[0,25,25,12167],[6071,25,6096,12167]].forEach(r=>box(...r,0.012,0.006,mat.ledFloor));
 
-// STOCK (CEATEC trapezoid), lockable door W850×H2000 on the north (back-aisle) face
-box(48,9794,77,12192,0,H,mat.wall);
-box(48,9794,2775,9825,0,H,mat.wall);
-prism([[4126,12162],[2775,9825],[2800,9810],[4152,12147]],0,H,mat.wall);
-box(77,12162,700,12192,0,H,mat.wall); box(1550,12162,4126,12192,0,H,mat.wall); box(700,12162,1550,12192,2.0,H-2.0,mat.wall);
+// STOCK (CEATEC trapezoid), walls H4000, lockable door W850×H2000 on the north (back-aisle) face
+const HS=4.0;
+box(48,9794,77,12192,0,HS,mat.wall);
+box(48,9794,2775,9825,0,HS,mat.wall);
+prism([[4126,12162],[2775,9825],[2800,9810],[4152,12147]],0,HS,mat.wall);
+box(77,12162,700,12192,0,HS,mat.wall); box(1550,12162,4126,12192,0,HS,mat.wall); box(700,12162,1550,12192,2.0,HS-2.0,mat.wall);
 box(712,12168,1538,12188,0,1.99,mat.door);
 tv(2400,12192,0,1,IN[55],1.6,screenTex('FORUM8','55"',215));   // 55" beside the STOCK door, facing the back aisle
 box(1896,11862,3695,12132,0,1.8,mat.grey);
@@ -392,7 +393,7 @@ drivingCounter(3846,0); drivingCounter(5146,0);
 
 // ---------- hanging banner (JID 15009): top 9000x6000, bottom 8000x5000, H1500, bottom at 4000 ----------
 const banner=new THREE.Group();scene.add(banner);
-{const zb=4.0,zt=5.5;
+{const zb=4.5,zt=6.0;   // raised 500 to clear the 4 m STOCK walls and their logos
  // one print per face size, drawn at the face's true proportions (top edge x slant height 1581),
  // UVs follow the trapezoid (bottom edge uses the inner part of the image) so the print is not sheared
  const SLANT=Math.hypot(1500,500), ANISO=renderer.capabilities.getMaxAnisotropy();
@@ -421,23 +422,24 @@ const banner=new THREE.Group();scene.add(banner);
  {const body=M(0x1b1c1f,{roughness:.4,metalness:.5}),lens=new THREE.MeshBasicMaterial({color:0xfff1d6});
   const beamM=new THREE.MeshBasicMaterial({color:0xfff1d6,transparent:true,opacity:.05,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
   // [light X, Y on the wall top, target X, Y on the face (mid height), beam angle, intensity, which wall]
-  const L=[[2540,1700, 3048,1846, Math.PI/2.6,30,'85" wall top → south face'],
-           [3060,10300,3048,10346,Math.PI/2.6,30,'STOCK slant wall top → north face'],
-           [90,9880,   298,6096,  Math.PI/4.2,60,'STOCK west wall corner → west face'],
-           [5420,9300, 5798,6096, Math.PI/4.2,60,'ZENMAI north wing tip → east face']];
-  L.forEach(([lx,ly,tx,ty,ang,int])=>{const [x,z]=P(lx,ly),[u,v]=P(tx,ty);
-    const sp=new THREE.SpotLight(0xfff0d8,int,9,ang,.55,1.1);sp.position.set(x,3.12,z);sp.target.position.set(u,4.75,v);banner.add(sp);banner.add(sp.target);
-    const g=new THREE.Group();g.position.set(x,3.0,z);banner.add(g);
+  // [light X, Y, target X, Y, beam angle, intensity, wall-top height]
+  const L=[[2540,1700, 3048,1846, Math.PI/2.6,34,3.0],
+           [3060,10300,3048,10346,Math.PI/2.6,34,4.0],
+           [90,9880,   298,6096,  Math.PI/4.2,70,4.0],
+           [5420,9300, 5798,6096, Math.PI/4.2,64,3.0]];
+  L.forEach(([lx,ly,tx,ty,ang,int,mh])=>{const [x,z]=P(lx,ly),[u,v]=P(tx,ty);
+    const sp=new THREE.SpotLight(0xfff0d8,int,9,ang,.55,1.1);sp.position.set(x,mh+.12,z);sp.target.position.set(u,zb+.75,v);banner.add(sp);banner.add(sp.target);
+    const g=new THREE.Group();g.position.set(x,mh,z);banner.add(g);
     const base=new THREE.Mesh(new THREE.BoxGeometry(.12,.03,.12),body);base.position.y=.015;g.add(base);
     const yoke=new THREE.Mesh(new THREE.BoxGeometry(.03,.12,.03),body);yoke.position.y=.08;g.add(yoke);
     const head=new THREE.Group();head.position.y=.14;g.add(head);
     const can=new THREE.Mesh(new THREE.CylinderGeometry(.06,.08,.2,20),body);can.rotation.x=Math.PI/2;head.add(can);
     const le=new THREE.Mesh(new THREE.CircleGeometry(.055,20),lens);le.position.z=.101;head.add(le);
     const beam=new THREE.Mesh(new THREE.ConeGeometry(.55,1.6,24,1,true),beamM);beam.rotation.x=-Math.PI/2;beam.position.z=.9;head.add(beam);
-    head.lookAt(new THREE.Vector3(u,4.75,v));});}
+    head.lookAt(new THREE.Vector3(u,zb+.75,v));});}
  const wire=new THREE.LineBasicMaterial({color:0x666a72});
  T.forEach(p=>{const [x,z]=P(...p);const gg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,zt,z),new THREE.Vector3(x,10,z)]);banner.add(new THREE.Line(gg,wire));});
- const bl=label('吊りバナー 下端4.0m／上端5.5m',OX,OY,5.85);banner.add(bl);}
+ const bl=label('吊りバナー 下端4.5m／上端6.0m',OX,OY,6.35);banner.add(bl);}
 
 // FORUM8 logo, solid (stacked cut-out layers ≈ 40 mm deep letters) on both faces of the 85" wall (toward ① and ⑦)
 function logo3D(X,Y,nx,ny,width,cy,depth=.04,layers=16){const [x,z]=P(X,Y),dx=nx,dz=-ny;
@@ -451,6 +453,8 @@ function logo3D(X,Y,nx,ny,width,cy,depth=.04,layers=16){const [x,z]=P(X,Y),dx=nx
   img.src=F8_LOGO;return g;}
 logo3D(...R(3044,1577),1,0,1.9,2.62);     // east face, above the 85" (toward ⑦)
 logo3D(...R(2536,1577),-1,0,1.9,2.45);    // west face, above the simulator screens (toward ①)
+logo3D(2100,12192,0,1,2.4,3.5);          // STOCK north face, upper band (back aisle)
+logo3D(1420,9794,0,-1,2.2,3.5);          // STOCK south face, upper band (toward VR360)
 
 // scale figure 1700
 {const [x,z]=P(4600,-900);const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);const m=M(0x7a808a);
