@@ -94,7 +94,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   <div class="group" role="group" aria-label="表示">
     <button id="t-eq" aria-pressed="true">機材・電力</button>
     <button id="t-banner" aria-pressed="true">吊りバナー</button>
-    <button id="t-label" aria-pressed="true">ラベル</button>
+    <button id="t-label" aria-pressed="false">ラベル</button>
     <button id="t-rot" aria-pressed="false">自動回転</button>
   </div>
   <div class="group" role="group" aria-label="帳票">
@@ -180,7 +180,8 @@ function prism(pts,z0,h,m){const s=new THREE.Shape();pts.forEach(([X,Y],i)=>{con
 function cyl(X,Y,r,z0,h,m,seg=40){const [x,z]=P(X,Y);const o=mesh(new THREE.CylinderGeometry(r,r,h,seg),m);o.position.set(x,z0+h/2,z);return o;}
 
 const labels=[];
-function label(html,X,Y,h,cls=''){const d=document.createElement('div');d.className='lbl '+cls;d.innerHTML=html;const o=new CSS2DObject(d);const [x,z]=P(X,Y);o.position.set(x,h,z);scene.add(o);labels.push(o);return o;}
+let LABELS_ON=false;   // name labels are off by default (toggle with ラベル)
+function label(html,X,Y,h,cls=''){const d=document.createElement('div');d.className='lbl '+cls;d.innerHTML=html;const o=new CSS2DObject(d);const [x,z]=P(X,Y);o.position.set(x,h,z);scene.add(o);o.visible=LABELS_ON||cls==='small';if(cls!=='small')labels.push(o);return o;}
 
 function screenTex(title,sub,hue){const c=document.createElement('canvas');c.width=640;c.height=360;const g=c.getContext('2d');
   const gr=g.createLinearGradient(0,0,640,360);gr.addColorStop(0,`hsl(${hue},70%,26%)`);gr.addColorStop(1,`hsl(${hue+30},80%,52%)`);g.fillStyle=gr;g.fillRect(0,0,640,360);
@@ -219,14 +220,14 @@ box(712,12168,1538,12188,0,1.99,mat.door);
 tv(2400,12192,0,1,IN[55],1.6,screenTex('FORUM8','55"',215));   // 55" beside the STOCK door, facing the back aisle
 box(1896,11862,3695,12132,0,1.8,mat.grey);
 // table 1200×700 H720 in the middle of STOCK, four chairs round it
-box(1400,10350,2600,11050,.69,.03,mat.white);
-[[1430,10380],[2570,10380],[1430,11020],[2570,11020]].forEach(([X,Y])=>cyl(X,Y,.025,0,.69,mat.metal,12));
+box(1400,10550,2600,11250,.69,.03,mat.white);
+[[1430,10580],[2570,10580],[1430,11220],[2570,11220]].forEach(([X,Y])=>cyl(X,Y,.025,0,.69,mat.metal,12));
 function chair(X,Y,face){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=face;scene.add(g);
   const seat=new THREE.Mesh(new THREE.BoxGeometry(.44,.05,.44),M(0x2a5bd7,{roughness:.6}));seat.position.y=.45;g.add(seat);
   const back=new THREE.Mesh(new THREE.BoxGeometry(.44,.42,.04),M(0x2a5bd7,{roughness:.6}));back.position.set(0,.69,-.2);g.add(back);
   [[-.19,-.19],[.19,-.19],[-.19,.19],[.19,.19]].forEach(([a,b])=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.45,8),mat.metal);l.position.set(a,.225,b);g.add(l);});
   g.traverse(o=>{if(o.isMesh)o.castShadow=true;});}
-chair(2000,11300,Math.PI); chair(2000,10100,0); chair(1150,10700,Math.PI/2); chair(2850,10700,-Math.PI/2);
+chair(2000,11500,Math.PI); chair(2000,10300,0); chair(1150,10900,Math.PI/2); chair(2850,10900,-Math.PI/2);
 
 // Octanorm counter (SIGGRAPH): body under a blue top, depth 400, H1010; p1,p2 on the wall face, n = outward normal (plan)
 function counterOn(p1,p2,n,depth=.4,h=1.01,devices=true){
@@ -541,7 +542,7 @@ const VBTN=['persp','front','left','back','right','top'];
 function setPressed(v){VBTN.forEach(k=>document.getElementById('v-'+k).setAttribute('aria-pressed',String(k===v)));}
 VBTN.forEach(v=>{document.getElementById('v-'+v).onclick=()=>{fly(...VIEWS[v].map(x=>x.clone()));setPressed(v);};});
 const tb=document.getElementById('t-banner');tb.onclick=()=>{banner.visible=!banner.visible;tb.setAttribute('aria-pressed',String(banner.visible));};
-const tl=document.getElementById('t-label');tl.onclick=()=>{const on=tl.getAttribute('aria-pressed')!=='true';tl.setAttribute('aria-pressed',String(on));labels.forEach(o=>o.visible=on);};
+const tl=document.getElementById('t-label');tl.onclick=()=>{const on=tl.getAttribute('aria-pressed')!=='true';LABELS_ON=on;tl.setAttribute('aria-pressed',String(on));labels.forEach(o=>o.visible=on);};
 const tr_=document.getElementById('t-rot');tr_.onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=.8;tr_.setAttribute('aria-pressed',String(controls.autoRotate));};
 window.__flyTo=(p,t)=>fly(p,t);
 window.__look=(px,py,pz,tx,ty,tz)=>{camera.position.set(px,py,pz);controls.target.set(tx,ty,tz);};
