@@ -452,8 +452,6 @@ function logo3D(X,Y,nx,ny,width,cy,depth=.04,layers=16){const [x,z]=P(X,Y),dx=nx
     const geo=new THREE.PlaneGeometry(width,h);
     for(let k=0;k<=layers;k++){const m=new THREE.Mesh(geo,k===layers?face:edge);m.position.z=.004+depth*k/layers;m.castShadow=true;g.add(m);}};
   img.src=F8_LOGO;return g;}
-logo3D(...R(3044,1577),1,0,1.9,2.62);     // east face, above the 85" (toward ⑦)
-logo3D(...R(2536,1577),-1,0,1.9,2.45);    // west face, above the simulator screens (toward ①)
 logo3D(2100,12192,0,1,2.4,3.5);          // STOCK north face, upper band (back aisle)
 logo3D(1420,9794,0,-1,2.2,3.5);          // STOCK south face, upper band (toward VR360)
 
@@ -472,7 +470,7 @@ const EQ=[
  {no:2,name:'VR360シミュレータ',qty:1,est:2000,rated:2800,size:'2047×1250×1960',kg:'350',mount:'床置き',note:'ポールパーテーションで動線規制',pos:[1342,8700],pin:2.3,view:[-.6,-1],d:4.5,th:1.1},
  {no:3,name:'VRモーションシート（公道最速体感）',qty:1,est:800,rated:1100,size:'800×800×1600',kg:'約110',mount:'床置き',note:'背面の倉庫斜め壁に43インチTV',pos:[4097,11103],pin:1.95,view:[1,.3],d:3.5,th:1.0},
  {no:4,name:'3Dホログラフィックディスプレイ（Metavania HoloSync）',qty:1,est:200,rated:200,size:'750×750 厚み150・台座Ø500',kg:'約1.5',mount:'床置き',note:'ZENMAI 北袖の外側モニターと連動',pos:[5733,8070],pin:2.2,view:[1,-.2],d:3,th:1.4},
- {no:5,name:'85インチモニター（プレゼン）',qty:1,est:300,rated:400,size:'約1900×70×1100',kg:'55',mount:'壁掛け',note:'85インチ壁 東面・上部に FORUM8 立体ロゴ',pos:[2794,1577],pin:2.5,view:[1,-.3],d:4,th:1.6},
+ {no:5,name:'85インチモニター（プレゼン）',qty:1,est:300,rated:400,size:'約1900×70×1100',kg:'55',mount:'壁掛け',note:'85インチ壁 東面',pos:[2794,1577],pin:2.5,view:[1,-.3],d:4,th:1.6},
  {no:6,name:'50インチTV（ZENMAI 5台・3面タワー 3台）',qty:8,est:100,rated:120,size:'約1120×65×650',kg:'12',mount:'壁掛け',note:'',pos:[4249,7001],pin:2.15,view:[-1,-.2],d:3,th:1.5},
  {no:7,name:'43インチTV（モーションシート用）',qty:1,est:70,rated:80,size:'約960×60×560',kg:'9',mount:'壁掛け（中心 H2200）',note:'',pos:[3664,11354],pin:2.75,view:[.8,-.6],d:3,th:2.0},
  {no:8,name:'55インチディスプレイ（STOCK 扉横）',qty:1,est:120,rated:150,size:'約1230×60×710',kg:'約17',mount:'壁掛け（裏通路向き）',note:'',pos:[2400,12192],pin:2.2,view:[0,1],d:3.5,th:1.6},
