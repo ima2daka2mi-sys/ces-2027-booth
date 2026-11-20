@@ -271,7 +271,8 @@ prism([[2536,2],[3044,2],[3044,3152],[2536,3152]].map(p=>R(...p)),0,H,mat.wall);
 tv(...R(3044,1577),1,0,IN[85],1.7,screenTex('85"','Presentation',215));
 
 // presenter's high table Ø600 H1050 + laptop (as at SIGGRAPH), by the 85" screen
-{const X=3500,Y=330;   // on the main-aisle side, in front of the 85"cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
+// on the main-aisle side, east end of the presentation corner
+{const X=3500,Y=330;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
  laptop(X,Y,0,1,1.05,screenTex('PRESENT','',215));}
 // ③ ZENMAI bent wall (CEATEC shape) + robot stands with SIGGRAPH counters
 prism([[5150,9440],[4249,7878],[4249,5028],[4917,3850],[5136,3966],[4536,5000],[4536,7716],[5436,9270]],0,H,mat.wall);
@@ -293,7 +294,7 @@ function robot(X,Y){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(
 
 // ⑤ 3-face tower (H2400) at the west edge + SIGGRAPH counters
 const T=(X,Y)=>[X-1400,Y-5];   // centred between ① and ② (centre Y about 5,130)
-prism([[1912,4520],[2975,5133],[1912,5745]].map(p=>T(...p)),0,2.4,mat.wall);
+prism([[1912,4520],[2975,5133],[1912,5745]].map(p=>T(...p)),0,H,mat.wall);   // H3000
 tv(...T(1912,5133),-1,0,IN[50],1.6,screenTex('DEMO','A',200));
 tv(...T(2443,4826),.5,-.866,IN[50],1.6,screenTex('DEMO','B',170));
 tv(...T(2443,5439),.5,.866,IN[50],1.6,screenTex('DEMO','C',230));
@@ -520,7 +521,7 @@ EQ.forEach(e=>{if(!e.pos)return;const d=document.createElement('div');d.classNam
   d.onclick=ev=>{ev.stopPropagation();select(e.no,true);};const o=new CSS2DObject(d);const [x,z]=P(...e.pos);o.position.set(x,e.pin,z);scene.add(o);pins[e.no]=d;});
 // area names (text labels, as on the SIGGRAPH page)
 [[['ドライビングシミュレータ','Driving simulator'],1118,1556,2.5],[['VR360シミュレータ','VR360 Simulator'],1342,8700,2.7],[['デモコーナー','Demo corner'],4400,6400,3.3],['Metabania HoloSync',5733,8070,2.6],
- [['3面デモタワー','3-face demo tower'],866,5128,2.7],[['講師用ハイテーブル','Presenter table'],3500,330,1.5],[['85インチ壁','85" wall'],2540,1577,3.3],[['体験コーナー','Driving corner'],4796,1100,2.0],[['VRモーションシート','VR motion seat'],4097,11103,2.35],[['ヒューマノイド','Humanoid'],5250,6056,2.0],['STOCK',1600,11000,4.3]]
+ [['3面デモタワー','3-face demo tower'],866,5128,3.3],[['講師用ハイテーブル','Presenter table'],3500,330,1.5],[['85インチ壁','85" wall'],2540,1577,3.3],[['体験コーナー','Driving corner'],4796,1100,2.0],[['VRモーションシート','VR motion seat'],4097,11103,2.35],[['ヒューマノイド','Humanoid'],5250,6056,2.0],['STOCK',1600,11000,4.3]]
  .forEach(([t,X,Y,h])=>label(t,X,Y,h));
 const list=document.getElementById('eq-list'),panel=document.getElementById('panel');
 function rowHTML(e){const on=sel===e.no,tot=(e.est||0)*e.qty;const L=(ja,en)=>lang==='ja'?ja:en;
@@ -577,7 +578,7 @@ const tr_=document.getElementById('t-rot');tr_.onclick=()=>{controls.autoRotate=
 __dimLine(2790,9810,0,4.0,['STOCK 壁 H4000','STOCK wall H4000']);
 __dimLine(2794,2,0,3.0,['展示壁 H3000','Display wall H3000']);
 __dimLine(5136,3966,0,3.0,['展示壁 H3000','Display wall H3000']);
-__dimLine(512,5133,0,2.4,['3面タワー H2400','Tower H2400']);
+__dimLine(512,5133,0,3.0,['3面タワー H3000','Tower H3000']);
 __dimLine(OX-2500,OY-4000,0,4.5,['吊りバナー下端 H4500','Banner bottom H4500']);
 __dimLine(OX-3000,OY-4500,4.5,6.0,['吊りバナー 1500（上端 H6000）','Banner 1500 (top H6000)']);
 const td=document.getElementById('t-dim');
