@@ -50,6 +50,13 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .pin:hover span{transform:scale(1.15)}
 .pin.on span{background:var(--accent);transform:scale(1.35)}
 .hide-labels .lbl{display:none}
+/* wired LAN tags */
+.lan{pointer-events:auto;cursor:pointer}
+.lan span{display:block;padding:2px 6px;border-radius:3px;background:#ff9f1a;color:#1b1d22;font:800 10px/14px var(--ui);letter-spacing:.03em;border:1px solid #fff3;box-shadow:0 1px 5px rgba(0,0,0,.5);white-space:nowrap;transition:transform .15s}
+.lan:hover span{transform:scale(1.1)}
+.lan.on span{background:#fff;transform:scale(1.25)}
+.sec{margin:10px 8px 2px;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em}
+.lanrow .no{background:#ff9f1a;color:#1b1d22;font-size:9px}
 .lbl.dim{background:rgba(255,210,63,.92);color:#1b1d22;border-color:transparent}
 /* equipment & power panel */
 .panel{position:fixed;right:max(16px,env(safe-area-inset-right,0px));top:var(--ptop,72px);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(360px,calc(100% - 32px));
@@ -97,6 +104,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
     <button id="t-eq" aria-pressed="true" data-en="Equipment &amp; power" data-ja="機材・電力">Equipment &amp; power</button>
     <button id="t-banner" aria-pressed="true" data-en="Banner" data-ja="吊りバナー">Banner</button>
     <button id="t-label" aria-pressed="false" data-en="Labels" data-ja="ラベル">Labels</button>
+    <button id="t-lan" aria-pressed="true" data-en="LAN" data-ja="LAN">LAN</button>
     <button id="t-dim" aria-pressed="true" data-en="Heights" data-ja="高さ">Heights</button>
     <button id="t-rot" aria-pressed="false" data-en="Auto-rotate" data-ja="自動回転">Auto-rotate</button>
   </div>
@@ -127,6 +135,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   <footer>
     <p data-en="Guide: one outlet per device." data-ja="口数は1機材1口の目安。">Guide: one outlet per device.</p>
     <p data-en="Power figures are running estimates; rated values are from the SIGGRAPH Asia 2026 equipment list (No.1 is the specified 1,500 W)." data-ja="電力は使用時の目安。定格は SIGGRAPH Asia 2026 機材一覧の値（①は指定値 1,500W）。">Power figures are running estimates.</p>
+    <p data-en="Wired LAN: one port per PC location (orange tags), as at SIGGRAPH." data-ja="有線LANは機材ごとに1口（オレンジの札）、SIGGRAPH と同じ考え方。">Wired LAN: one port per PC location (orange tags), as at SIGGRAPH.</p>
     <p data-en="To confirm: G1 charger." data-ja="要確認：G1 充電器。">To confirm: G1 charger.</p>
   </footer>
 </aside>
@@ -513,6 +522,16 @@ const EQ=[
  {no:14,name:['65インチTV（HoloSync 背面・連動）','65" TV (behind HoloSync, synced)'],qty:1,est:160,rated:200,size:['約1450×70×840','approx. 1450×70×840'],kg:['約22','approx. 22'],mount:['壁掛け','Wall-mounted'],note:['SIGGRAPH同様、ホログラムと連動','Synced with the hologram, as at SIGGRAPH'],pos:[5040,8470],pin:2.2,view:[.86,-.5],d:3.2,th:1.6},
  {no:15,name:['STOCK 内コンセント（ネットワーク機器等）','STOCK outlet (network switch etc.)'],qty:1,est:200,rated:200,size:'—',kg:'—',mount:['STOCK 内・床','Inside STOCK, floor'],note:'',pos:[1600,10700],pin:1.3,view:[0,-1],d:3,th:0.5,up:4.5},
 ];
+const LAN=[{"no": "L1", "name": ["ドライビングシミュレータ用PC", "Driving simulator PC"], "ports": 1, "pos": [250, 1556], "tag": 1.4, "view": [0.2, -1], "d": 3.2, "th": 1.0}, {"no": "L2", "name": ["VR360 シミュレータ用PC", "VR360 Simulator PC"], "ports": 1, "pos": [2150, 9500], "tag": 1.75, "view": [0.6, -1], "d": 3.0, "th": 1.0}, {"no": "L3", "name": ["VRモーションシート用PC", "VR motion seat PC"], "ports": 1, "pos": [4550, 10650], "tag": 1.4, "view": [1, -0.3], "d": 2.8, "th": 1.0}, {"no": "L4", "name": ["3Dホログラフィックディスプレイ（HoloSync）", "3D holographic display (HoloSync)"], "ports": 1, "pos": [5650, 8400], "tag": 1.25, "view": [1, -0.2], "d": 2.6, "th": 1.0}, {"no": "L5", "name": ["デモ壁 内側（ノートPC×4）", "Demo wall, inner side (4 laptops)"], "ports": 4, "pos": [4150, 6400], "tag": 1.35, "view": [-1, -0.2], "d": 3.0, "th": 1.0}, {"no": "L6", "name": ["デモ壁 北袖（ノートPC×2＋iPad）", "Demo wall, north wing (2 laptops + iPad)"], "ports": 3, "pos": [4620, 8700], "tag": 1.35, "view": [-0.86, 0.5], "d": 2.6, "th": 1.0}, {"no": "L7", "name": ["3面デモタワー（ノートPC×6）", "3-face demo tower (6 laptops)"], "ports": 6, "pos": [1150, 5128], "tag": 1.5, "view": [1, -0.3], "d": 3.0, "th": 1.0}, {"no": "L8", "name": ["体験コーナー 1列目（ノートPC×3）", "Driving corner, row 1 (3 laptops)"], "ports": 3, "pos": [4120, 1100], "tag": 1.5, "view": [0.3, -1], "d": 3.2, "th": 1.0}, {"no": "L9", "name": ["体験コーナー 2列目（ノートPC×3）", "Driving corner, row 2 (3 laptops)"], "ports": 3, "pos": [5420, 1100], "tag": 1.5, "view": [0.3, -1], "d": 3.2, "th": 1.0}, {"no": "L10", "name": ["プレゼンコーナー 講師用（ノートPC）", "Presentation corner – presenter (laptop)"], "ports": 1, "pos": [3500, 330], "tag": 1.4, "view": [0.2, -1], "d": 2.6, "th": 1.0}, {"no": "L11", "name": ["ヒューマノイドロボット（G1）", "Humanoid robot (G1)"], "ports": 1, "pos": [5500, 6400], "tag": 1.2, "view": [1, 0], "d": 2.6, "th": 1.0}, {"no": "L12", "name": ["STOCK（倉庫）内", "Inside STOCK"], "ports": 1, "pos": [3000, 11500], "tag": 0.75, "view": [0, -1], "d": 2.2, "th": 0.2, "up": 5.0}];
+// wired LAN drops (as on the SIGGRAPH page): floor outlet, cable up to an orange tag
+const lanPorts=LAN.reduce((t,l)=>t+l.ports,0);
+const lanTags={},lanGroup=new THREE.Group();scene.add(lanGroup);
+{const lanMat=new THREE.MeshStandardMaterial({color:0x000000,emissive:0xff9f1a,emissiveIntensity:1.6});
+ LAN.forEach(l=>{const [x,z]=P(...l.pos);
+  const jack=new THREE.Mesh(new THREE.BoxGeometry(.12,.03,.12),lanMat);jack.position.set(x,.03,z);lanGroup.add(jack);
+  const drop=new THREE.Mesh(new THREE.CylinderGeometry(.006,.006,l.tag-.1,6),lanMat);drop.position.set(x,(l.tag-.1)/2+.03,z);lanGroup.add(drop);
+  const d=document.createElement('div');d.className='lan';d.innerHTML='<span></span>';d.firstChild.textContent=`LAN${l.ports>1?' ×'+l.ports:''}`;
+  d.onclick=ev=>{ev.stopPropagation();select(l.no,true);};const o=new CSS2DObject(d);o.position.set(x,l.tag,z);lanGroup.add(o);lanTags[l.no]=d;});}
 const fmt=n=>n.toLocaleString('en-US');
 const totalW=EQ.reduce((t,e)=>t+(e.est||0)*e.qty,0), ratedW=EQ.reduce((t,e)=>t+(e.rated||0)*e.qty,0);
 const outlets=EQ.reduce((t,e)=>t+(e.est===0?0:e.qty),0), maxW=Math.max(...EQ.map(e=>(e.est||0)*e.qty));
@@ -534,13 +553,16 @@ function rowHTML(e){const on=sel===e.no,tot=(e.est||0)*e.qty;const L=(ja,en)=>la
     ${tr(e.note)?`<span>${L('備考','Notes')}</span><b>${tr(e.note)}</b>`:''}</span>`:'';
   return `<button class="row${on?' on':''}" data-no="${e.no}" aria-expanded="${on}"><span class="no">${e.no}</span><span class="nm">${tr(e.name)}${e.qty>1?` <em>×${e.qty}</em>`:''}</span>
     ${pw}<span class="bar2"><i style="width:${(tot/maxW*100).toFixed(1)}%"></i></span>${det}</button>`;}
-function renderPanel(){list.innerHTML=EQ.map(rowHTML).join('');
+function lanRowHTML(l){const on=sel===l.no;
+  return `<button class="row lanrow${on?' on':''}" data-no="${l.no}"><span class="no">${l.no}</span><span class="nm">${tr(l.name)}</span><span class="pw">${l.ports} ${lang==='ja'?'口':(l.ports>1?'ports':'port')}</span></button>`;}
+function renderPanel(){list.innerHTML=EQ.map(rowHTML).join('')+`<h3 class="sec">${lang==='ja'?`有線LAN（計${lanPorts}口）`:`Wired LAN (${lanPorts} ports total)`}</h3>`+LAN.map(lanRowHTML).join('');
   document.getElementById('sum-w').textContent=fmt(totalW)+' W';document.getElementById('sum-w').title=(lang==='ja'?'定格合計 ':'Rated total ')+fmt(ratedW)+' W';
   document.getElementById('sum-a').textContent=(lang==='ja'?'約':'≈')+(totalW/120).toFixed(1)+' A';
   document.getElementById('sum-o').textContent=outlets;}
-list.addEventListener('click',ev=>{const b=ev.target.closest('.row');if(!b)return;const no=+b.dataset.no;select(sel===no?null:no,true);});
-function select(no,flyTo_){sel=no;Object.entries(pins).forEach(([k,d])=>d.classList.toggle('on',String(no)===k));renderPanel();
-  const e=EQ.find(x=>x.no===no);if(!e)return;
+list.addEventListener('click',ev=>{const b=ev.target.closest('.row');if(!b)return;const no=isNaN(b.dataset.no)?b.dataset.no:+b.dataset.no;select(sel===no?null:no,true);});
+function select(no,flyTo_){sel=no;[pins,lanTags].forEach(m=>Object.entries(m).forEach(([k,d])=>d.classList.toggle('on',String(no)===k)));renderPanel();
+  const e=EQ.find(x=>x.no===no)||LAN.find(x=>x.no===no);if(!e)return;
+  if(LAN.includes(e)&&!lanGroup.visible)document.getElementById('t-lan').click();
   if(panel.hidden)setPanel(true);
   list.querySelector('.row.on')?.scrollIntoView({block:'nearest',behavior:'smooth'});
   if(flyTo_&&e.pos){const [X,Z]=P(...e.pos);const v=new THREE.Vector2(e.view[0],-e.view[1]).normalize();
@@ -581,6 +603,9 @@ __dimLine(5136,3966,0,3.0,['展示壁 H3000','Display wall H3000']);
 __dimLine(512,5133,0,3.0,['3面タワー H3000','Tower H3000']);
 __dimLine(OX-2500,OY-4000,0,4.5,['吊りバナー下端 H4500','Banner bottom H4500']);
 __dimLine(OX-3000,OY-4500,4.5,6.0,['吊りバナー 1500（上端 H6000）','Banner 1500 (top H6000)']);
+const tlan=document.getElementById('t-lan');
+const showLan=on=>{lanGroup.visible=on;lanGroup.traverse(o=>{if(o.isCSS2DObject){o.visible=on;o.element.style.display=on?'':'none';}});tlan.setAttribute('aria-pressed',String(on));};
+tlan.onclick=()=>showLan(tlan.getAttribute('aria-pressed')!=='true');showLan(true);
 const td=document.getElementById('t-dim');
 const showDim=on=>{dimGroup.visible=on;dimGroup.traverse(o=>{if(o.isCSS2DObject){o.visible=on;o.element.style.display=on?'':'none';}});td.setAttribute('aria-pressed',String(on));};
 td.onclick=()=>showDim(td.getAttribute('aria-pressed')!=='true');showDim(true);
