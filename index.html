@@ -369,9 +369,11 @@ const banner=new THREE.Group();scene.add(banner);
    const g=c.getContext('2d');const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=ANISO;
    const t2=t.clone();t2.wrapS=THREE.RepeatWrapping;t2.repeat.x=-1;t2.offset.x=1;   // inside face, read the right way round
    const draw=()=>{const W=c.width,Hh=c.height;g.fillStyle='#141518';g.fillRect(0,0,W,Hh);
+     {const gr=g.createLinearGradient(0,Hh,0,0);gr.addColorStop(0,'rgba(255,236,205,.42)');gr.addColorStop(.35,'rgba(255,236,205,.16)');gr.addColorStop(.8,'rgba(255,236,205,0)');g.fillStyle=gr;g.fillRect(0,0,W,Hh);
+      for(let k=0;k<3;k++){const cx=W*(k+.5)/3,rg=g.createRadialGradient(cx,Hh*1.05,0,cx,Hh*1.05,Hh*.95);rg.addColorStop(0,'rgba(255,240,215,.35)');rg.addColorStop(1,'rgba(255,240,215,0)');g.fillStyle=rg;g.fillRect(0,0,W,Hh);}}
      if(im.complete&&im.naturalWidth){const r=im.naturalWidth/im.naturalHeight;let h=Hh*.5,w=h*r;if(w>W*.7){w=W*.7;h=w/r;}g.drawImage(whiteLogo(im),(W-w)/2,Hh*.5-h/2,w,h);}
      t.needsUpdate=true;t2.needsUpdate=true;};
-   draw();return {draw,out:new THREE.MeshStandardMaterial({map:t,roughness:.8,side:THREE.FrontSide}),
+   draw();return {draw,out:new THREE.MeshStandardMaterial({map:t,emissive:0xffffff,emissiveMap:t,emissiveIntensity:.55,roughness:.8,side:THREE.FrontSide}),
      in:new THREE.MeshStandardMaterial({color:0x141518,roughness:.8,side:THREE.BackSide})/* inside: plain, no logo */};}
  prints[6000]=makePrint(6000);prints[9000]=makePrint(9000);
  im.onload=()=>{prints[6000].draw();prints[9000].draw();};im.src=F8_LOGO;
@@ -383,6 +385,25 @@ const banner=new THREE.Group();scene.add(banner);
    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
    geo.setAttribute('uv',new THREE.BufferAttribute(new Float32Array([inset,0,1-inset,0,1,1,0,1]),2));geo.setIndex([0,1,2,0,2,3]);geo.computeVertexNormals();
    const pr=prints[topLen];const m=new THREE.Mesh(geo,pr.out);m.castShadow=true;banner.add(m);banner.add(new THREE.Mesh(geo,pr.in));}
+ // uplights: three small spot fixtures on arms below the bottom edge of every face, aimed up at the print
+ {const body=M(0x1b1c1f,{roughness:.4,metalness:.5}),lens=new THREE.MeshBasicMaterial({color:0xfff1d6});
+  const beamM=new THREE.MeshBasicMaterial({color:0xfff1d6,transparent:true,opacity:.07,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
+  for(let i=0;i<4;i++){const j=(i+1)%4,b0=B[i],b1=B[j];
+    const ux=b1[0]-b0[0],uy=b1[1]-b0[1],L=Math.hypot(ux,uy),nx=uy/L,ny=-ux/L;     // outward normal (plan)
+    const mid=[(b0[0]+b1[0])/2,(b0[1]+b1[1])/2];
+    // one real spotlight per face, washing the print from below
+    const [lx,lz]=P(mid[0]+nx*700,mid[1]+ny*700),[tx,tz]=P(mid[0]+nx*250,mid[1]+ny*250);
+    const sp=new THREE.SpotLight(0xfff0d8,26,6,Math.PI/5,.6,1.2);sp.position.set(lx,zb-.25,lz);sp.target.position.set(tx,zb+1.05,tz);banner.add(sp);banner.add(sp.target);
+    [.2,.5,.8].forEach(f=>{const px=b0[0]+ux*f+nx*420,py=b0[1]+uy*f+ny*420,[x,z]=P(px,py);
+      const g=new THREE.Group();g.position.set(x,zb-.18,z);banner.add(g);
+      const arm=new THREE.Mesh(new THREE.BoxGeometry(.03,.03,.42),body);arm.position.set(0,.09,0);
+      const head=new THREE.Mesh(new THREE.CylinderGeometry(.055,.075,.16,20),body);
+      const le=new THREE.Mesh(new THREE.CircleGeometry(.05,20),lens);le.position.y=.081;le.rotation.x=-Math.PI/2;head.add(le);
+      const dir=new THREE.Vector3(-nx,0,ny).normalize();                                   // toward the face (world)
+      const tilt=new THREE.Group();g.add(tilt);tilt.add(head);
+      tilt.rotation.y=Math.atan2(dir.x,dir.z);tilt.rotateX(.55);
+      const beam=new THREE.Mesh(new THREE.ConeGeometry(.42,1.25,24,1,true),beamM);beam.position.y=.7;beam.rotation.x=Math.PI;head.add(beam);
+      g.add(arm);arm.rotation.y=Math.atan2(dir.x,dir.z);arm.position.add(dir.clone().multiplyScalar(-.2));});}}
  const wire=new THREE.LineBasicMaterial({color:0x666a72});
  T.forEach(p=>{const [x,z]=P(...p);const gg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,zt,z),new THREE.Vector3(x,10,z)]);banner.add(new THREE.Line(gg,wire));});
  const bl=label('<b>⑫</b>吊りバナー 下端4.0m／上端5.5m',OX,OY,5.85);banner.add(bl);}
