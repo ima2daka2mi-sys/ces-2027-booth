@@ -67,7 +67,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--font-ui);overflow:hi
   <h1>CES 2027 Booth #20548</h1>
   <p class="sub">20' × 40'（6,096 × 12,192 mm）</p>
   <div class="sum">
-    <div><b id="sum-w">—</b><span>合計電力</span></div>
+    <div><b id="sum-w">—</b><span>合計電力（目安）</span></div>
     <div><b id="sum-a">—</b><span>120V換算</span></div>
     <div><b id="sum-o">—</b><span>口数（目安）</span></div>
   </div>
@@ -78,7 +78,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--font-ui);overflow:hi
     <a href="docs/power-list.pdf" target="_blank" rel="noopener">機材・電力一覧<small>A3</small></a>
     <a href="docs/booth-documents-all.pdf" target="_blank" rel="noopener">帳票一式<small>2ページ</small></a>
   </div>
-  <p class="foot">口数は1機器1口の目安。電力はSIGGRAPH Asia 2026 機材一覧の値（①は1,500W）。番号をクリックすると該当機器を表示。</p>
+  <p class="foot">電力は使用時の目安（定格は SIGGRAPH Asia 2026 機材一覧の値、①は指定値1,500W）。口数は1機器1口の目安。番号をクリックすると該当機器を表示。</p>
 </aside>
 
 <nav class="bar" aria-label="視点">
@@ -434,26 +434,26 @@ logo3D(...R(2536,1577),-1,0,1.9,2.45);    // west face, above the simulator scre
 const AREAS=[['①','ドライビングシミュレータ',1118,1556,2.0],['②','VR360シミュレータ',1342,8700,2.3],['③','ZENMAI Interactive Robot Experience',4033,6400,1.6],
  ['④','Metabania HoloSync',5733,8070,2.2],['⑤','3面モニタータワー',866,5128,2.7],['⑥','85インチ壁',2650,1577,2.5],['⑦','体験コーナー',4796,1100,1.6],
  ['⑧','VRモーションシート',4097,11103,1.95],['⑨','ヒューマノイドロボット',5250,6056,1.6],['⑪','STOCK',1600,11000,3.3]];
-// rows: [name, qty, W per unit (0 = USB from PC, null = to confirm), size, areas, note]
+// rows: [name, qty, estimated W per unit (0 = USB from PC, null = to confirm), rated W per unit, size, areas, note]
 const EQ=[
- ['ドライビングシミュレータ（モーション・PC・32"×3面込み）',1,1500,'約2240×1800×H1800',['①'],'1,500W'],
- ['VR360シミュレータ',1,2800,'2047×1250×1960・350kg',['②'],'SIGGRAPH No.1'],
- ['VRモーションシート（公道最速体感）',1,1100,'800×800×1600・約110kg',['⑧'],'SIGGRAPH No.3'],
- ['3Dホログラフィックディスプレイ（Metavania HoloSync）',1,200,'750×750×150・台座Ø500',['④'],'SIGGRAPH No.4'],
- ['85インチモニター（プレゼン）',1,400,'約1900×70×1100・55kg',['⑥'],'SIGGRAPH No.9'],
- ['50インチTV（ZENMAI 5台・3面タワー 3台）',8,120,'約1120×65×650・12kg',['③','⑤'],'SIGGRAPH No.5/7'],
- ['43インチTV（モーションシート用・中心H2200）',1,80,'約960×60×560・9kg',['⑧'],'SIGGRAPH No.11'],
- ['55インチディスプレイ（STOCK 扉横）',1,150,'約1230×60×710',['⑪'],'一般的な55インチの目安'],
- ['体験コーナー（ハンドル＋ペダル）',6,0,'カウンター 600×2200 H1100 ×2',['⑦'],'SIGGRAPH No.10：PCからUSB給電'],
- ['ノートPC（体験6・3面タワー6・ZENMAI 2）',14,120,'—',['③','⑤','⑦'],'SIGGRAPH：1台 120W'],
- ['iPad（3面タワー3・ZENMAI 1）',4,0,'—',['③','⑤'],'PC/USB給電'],
- ['ZENMAI ロボット',2,null,'—',['③'],'電力 要確認'],
- ['ヒューマノイド（Unitree G1）',1,null,'1320×450×200・約35kg',['⑨'],'バッテリー駆動・充電器 要確認'],
- ['STOCK 内コンセント（ネットワーク機器等）',1,200,'—',['⑪'],'SIGGRAPH：汎用 200W'],
+ ['ドライビングシミュレータ（モーション・PC・32"×3面込み）',1,1500,1500,'約2240×1800×H1800',['①'],'指定値'],
+ ['VR360シミュレータ',1,2000,2800,'2047×1250×1960・350kg',['②'],'定格の約70%（6軸機の平均／最大の比率）'],
+ ['VRモーションシート（公道最速体感）',1,800,1100,'800×800×1600・約110kg',['⑧'],'定格の約70%'],
+ ['3Dホログラフィックディスプレイ（Metavania HoloSync）',1,200,200,'750×750×150・台座Ø500',['④'],'SIGGRAPH No.4'],
+ ['85インチモニター（プレゼン）',1,300,400,'約1900×70×1100・55kg',['⑥'],'通常表示時の目安'],
+ ['50インチTV（ZENMAI 5台・3面タワー 3台）',8,100,120,'約1120×65×650・12kg',['③','⑤'],'通常表示時の目安'],
+ ['43インチTV（モーションシート用・中心H2200）',1,70,80,'約960×60×560・9kg',['⑧'],'通常表示時の目安'],
+ ['55インチディスプレイ（STOCK 扉横）',1,120,150,'約1230×60×710',['⑪'],'通常表示時の目安'],
+ ['体験コーナー（ハンドル＋ペダル）',6,0,0,'カウンター 600×2200 H1100 ×2',['⑦'],'PCからUSB給電'],
+ ['ノートPC（体験6・3面タワー6・ZENMAI 2）',14,65,120,'—',['③','⑤','⑦'],'使用時の目安'],
+ ['iPad（3面タワー3・ZENMAI 1）',4,0,0,'—',['③','⑤'],'PC/USB給電'],
+ ['ZENMAI ロボット',2,null,null,'—',['③'],'電力 要確認'],
+ ['ヒューマノイド（Unitree G1）',1,null,null,'1320×450×200・約35kg',['⑨'],'バッテリー駆動・充電器 要確認'],
+ ['STOCK 内コンセント（ネットワーク機器等）',1,200,200,'—',['⑪'],'汎用'],
 ];
 const fmt=n=>n.toLocaleString('en-US');
-const totalW=EQ.reduce((t,e)=>t+(e[2]||0)*e[1],0), outlets=EQ.reduce((t,e)=>t+(e[2]===0?0:e[1]),0);
-document.getElementById('sum-w').textContent=fmt(totalW)+' W';
+const totalW=EQ.reduce((t,e)=>t+(e[2]||0)*e[1],0), ratedW=EQ.reduce((t,e)=>t+(e[3]||0)*e[1],0), outlets=EQ.reduce((t,e)=>t+(e[2]===0?0:e[1]),0);
+document.getElementById('sum-w').textContent=fmt(totalW)+' W';document.getElementById('sum-w').title='定格合計 '+fmt(ratedW)+' W';
 document.getElementById('sum-a').textContent=Math.round(totalW/120)+' A';
 document.getElementById('sum-o').textContent=outlets+' 口';
 const list=document.getElementById('list');const rows=[],tags={};
@@ -464,9 +464,10 @@ function select(n,fly){rows.forEach(([li,ar])=>li.setAttribute('aria-current',St
     window.__flyTo(new THREE.Vector3(x+3.2,ty+2.6,z+3.6),new THREE.Vector3(x,ty,z));}}}
 AREAS.forEach(([n,name,X,Y,h])=>{const lb=label(`<b>${n}</b>${name}`,X,Y,h);tags[n]=lb.element;
   lb.element.onclick=ev=>{ev.stopPropagation();if(window.__showList)window.__showList(true);select(n,true);};});
-EQ.forEach(([name,qty,w,size,ar,note])=>{
+EQ.forEach(([name,qty,w,rw,size,ar,note])=>{
   const pw=w===null?'<em>要確認</em>':(w===0?'USB給電':`${fmt(w)} W${qty>1?' ／台':''}`);
   const sub=w?` ＝ ${fmt(w*qty)} W`:'';
+  note=(rw&&rw!==w?`定格 ${fmt(rw)} W・`:'')+note;
   const li=document.createElement('li');li.tabIndex=0;
   li.innerHTML=`<b>${ar.join('')}</b><span>${name}<small>${size}</small><span class="pw">${pw} × ${qty}${sub}</span><small>${note}</small></span>`;
   rows.push([li,ar]);const go=()=>{select(ar[0],true);setPressed(null);};
