@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CES #20548 Booth 3D</title>
+<title>CES 2027 FORUM8 Booth 3D</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: full-bleed 3D viewport, one floating control bar top-left, spec strip bottom-left, equipment & power panel right (same scheme as the SIGGRAPH Asia 2026 booth page) */
@@ -80,47 +80,51 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 @media (prefers-reduced-motion: reduce){.pin span{transition:none}}
 </style>
 
-<div id="stage" aria-label="ブースの3Dビュー。ドラッグで回転、ホイール／ピンチで拡大"></div>
+<div id="stage" aria-label="3D view of the booth. Drag to orbit, scroll or pinch to zoom."></div>
 <div class="bar">
-  <div class="title">CES 2027 FORUM8 ブース<small>ブース #20548 20'×40'（6,096×12,192）／ 平面図 1/60（2026.11.21）</small></div>
+  <div class="title"><span data-en="CES 2027 · FORUM8 Booth" data-ja="CES 2027 FORUM8 ブース">CES 2027 · FORUM8 Booth</span><small data-en="Booth #20548 · 20'×40' (6,096×12,192) / floor plan 1:60 (21 Nov 2026)" data-ja="ブース #20548 20'×40'（6,096×12,192）／ 平面図 1/60（2026.11.21）">Booth #20548</small></div>
   <div class="group" role="group" aria-label="視点">
-    <button id="v-persp" aria-pressed="true">パース</button>
-    <button id="v-front" aria-pressed="false">正面（メイン通路）</button>
-    <button id="v-left" aria-pressed="false">左（西）</button>
-    <button id="v-back" aria-pressed="false">背面（裏通路）</button>
-    <button id="v-right" aria-pressed="false">右（東）</button>
-    <button id="v-top" aria-pressed="false">真上</button>
+    <button id="v-persp" aria-pressed="true" data-en="Perspective" data-ja="パース">Perspective</button>
+    <button id="v-front" aria-pressed="false" data-en="Front (main aisle)" data-ja="正面（メイン通路）">Front (main aisle)</button>
+    <button id="v-left" aria-pressed="false" data-en="Left (west)" data-ja="左（西）">Left (west)</button>
+    <button id="v-back" aria-pressed="false" data-en="Back (rear aisle)" data-ja="背面（裏通路）">Back (rear aisle)</button>
+    <button id="v-right" aria-pressed="false" data-en="Right (east)" data-ja="右（東）">Right (east)</button>
+    <button id="v-top" aria-pressed="false" data-en="Top" data-ja="真上">Top</button>
   </div>
   <div class="group" role="group" aria-label="表示">
-    <button id="t-eq" aria-pressed="true">機材・電力</button>
-    <button id="t-banner" aria-pressed="true">吊りバナー</button>
-    <button id="t-label" aria-pressed="false">ラベル</button>
-    <button id="t-rot" aria-pressed="false">自動回転</button>
+    <button id="t-eq" aria-pressed="true" data-en="Equipment &amp; power" data-ja="機材・電力">Equipment &amp; power</button>
+    <button id="t-banner" aria-pressed="true" data-en="Banner" data-ja="吊りバナー">Banner</button>
+    <button id="t-label" aria-pressed="false" data-en="Labels" data-ja="ラベル">Labels</button>
+    <button id="t-rot" aria-pressed="false" data-en="Auto-rotate" data-ja="自動回転">Auto-rotate</button>
   </div>
   <div class="group" role="group" aria-label="帳票">
-    <details class="docs" id="docs"><summary>帳票（PDF）</summary>
+    <details class="docs" id="docs"><summary data-en="Documents (PDF)" data-ja="帳票（PDF）">Documents (PDF)</summary>
     <div class="menu">
-      <a href="docs/floor-plan.pdf" target="_blank" rel="noopener"><span>平面図</span><small>PDF A3 1/60</small></a>
-      <a href="docs/power-list.pdf" target="_blank" rel="noopener"><span>機材・電力一覧</span><small>PDF A3</small></a>
-      <a class="all" href="docs/booth-documents-all.pdf" target="_blank" rel="noopener"><span>帳票一式（2ページ）</span><small>PDF</small></a>
+      <a href="docs/floor-plan.pdf" target="_blank" rel="noopener"><span data-en="Floor plan" data-ja="平面図">Floor plan</span><small>PDF A3 1:60</small></a>
+      <a href="docs/power-list.pdf" target="_blank" rel="noopener"><span data-en="Equipment & power list" data-ja="機材・電力一覧">Equipment &amp; power list</span><small>PDF A3</small></a>
+      <a class="all" href="docs/booth-documents-all.pdf" target="_blank" rel="noopener"><span data-en="All documents (2 pages)" data-ja="帳票一式（2ページ）">All documents (2 pages)</span><small>PDF</small></a>
     </div></details>
   </div>
+  <div class="group" role="group" aria-label="Language">
+    <button id="l-en" aria-pressed="true" lang="en">EN</button>
+    <button id="l-ja" aria-pressed="false" lang="ja">日本語</button>
+  </div>
 </div>
-<div class="spec">STOCK 壁 4000・展示壁 3000・展示カウンター 1010・体験コーナー 1100・吊りバナー下端 4500。ドラッグで回転、ホイール／ピンチで拡大。番号をクリックで詳細。</div>
+<div class="spec"><span data-en="STOCK walls 4000 · display walls 3000 · counters 1010 · driving counters 1100 · banner bottom 4500. Drag to orbit, scroll / pinch to zoom. Click a number for details." data-ja="STOCK 壁 4000・展示壁 3000・展示カウンター 1010・体験コーナー 1100・吊りバナー下端 4500。ドラッグで回転、ホイール／ピンチで拡大。番号をクリックで詳細。">STOCK walls 4000</span></div>
 <aside class="panel" id="panel" aria-labelledby="eq-h">
   <header>
-    <div class="hd"><h2 id="eq-h">出展機材・電力</h2><button class="x" id="eq-x" aria-label="閉じる">×</button></div>
+    <div class="hd"><h2 id="eq-h" data-en="Equipment & power" data-ja="出展機材・電力">Equipment &amp; power</h2><button class="x" id="eq-x" aria-label="Close">×</button></div>
     <div class="sum">
-      <div><b id="sum-w"></b><span>合計電力（目安）</span></div>
-      <div><b id="sum-a"></b><span>120V換算</span></div>
-      <div><b id="sum-o"></b><span>口数</span></div>
+      <div><b id="sum-w"></b><span data-en="Total power (est.)" data-ja="合計電力（目安）">Total power (est.)</span></div>
+      <div><b id="sum-a"></b><span data-en="at 120 V" data-ja="120V換算">at 120 V</span></div>
+      <div><b id="sum-o"></b><span data-en="Outlets" data-ja="口数">Outlets</span></div>
     </div>
   </header>
   <div class="list" id="eq-list"></div>
   <footer>
-    <p>口数は1機材1口の目安。</p>
-    <p>電力は使用時の目安。定格は SIGGRAPH Asia 2026 機材一覧の値（①は指定値 1,500W）。</p>
-    <p>要確認：ZENMAI ロボット、G1 充電器。</p>
+    <p data-en="Guide: one outlet per device." data-ja="口数は1機材1口の目安。">Guide: one outlet per device.</p>
+    <p data-en="Power figures are running estimates; rated values are from the SIGGRAPH Asia 2026 equipment list (No.1 is the specified 1,500 W)." data-ja="電力は使用時の目安。定格は SIGGRAPH Asia 2026 機材一覧の値（①は指定値 1,500W）。">Power figures are running estimates.</p>
+    <p data-en="To confirm: ZENMAI robots, G1 charger." data-ja="要確認：ZENMAI ロボット、G1 充電器。">To confirm: ZENMAI robots, G1 charger.</p>
   </footer>
 </aside>
 
@@ -180,8 +184,12 @@ function prism(pts,z0,h,m){const s=new THREE.Shape();pts.forEach(([X,Y],i)=>{con
 function cyl(X,Y,r,z0,h,m,seg=40){const [x,z]=P(X,Y);const o=mesh(new THREE.CylinderGeometry(r,r,h,seg),m);o.position.set(x,z0+h/2,z);return o;}
 
 const labels=[];
-let LABELS_ON=false;   // name labels are off by default (toggle with ラベル)
-function label(html,X,Y,h,cls=''){const d=document.createElement('div');d.className='lbl '+cls;d.innerHTML=html;const o=new CSS2DObject(d);const [x,z]=P(X,Y);o.position.set(x,h,z);scene.add(o);o.visible=LABELS_ON||cls==='small';if(cls!=='small')labels.push(o);return o;}
+let LABELS_ON=false;   // name labels are off by default (toggle with Labels)
+// language: English by default, Japanese via the toggle (or ?lang=ja); text is [ja, en] or a neutral string
+let lang='en';try{lang=new URLSearchParams(location.search).get('lang')||localStorage.getItem('ces-booth-lang')||'en';}catch(e){}
+if(lang!=='ja')lang='en';
+const tr=v=>Array.isArray(v)?v[lang==='ja'?0:1]:v;const i18nLabels=[];
+function label(html,X,Y,h,cls=''){const d=document.createElement('div');d.className='lbl '+cls;d.innerHTML=tr(html);if(Array.isArray(html))i18nLabels.push([d,html]);const o=new CSS2DObject(d);const [x,z]=P(X,Y);o.position.set(x,h,z);scene.add(o);o.visible=LABELS_ON||cls==='small';if(cls!=='small')labels.push(o);return o;}
 
 function screenTex(title,sub,hue){const c=document.createElement('canvas');c.width=640;c.height=360;const g=c.getContext('2d');
   const gr=g.createLinearGradient(0,0,640,360);gr.addColorStop(0,`hsl(${hue},70%,26%)`);gr.addColorStop(1,`hsl(${hue+30},80%,52%)`);g.fillStyle=gr;g.fillRect(0,0,640,360);
@@ -200,9 +208,9 @@ const hall=mesh(new THREE.PlaneGeometry(40,50),mat.hall,false);hall.rotation.x=-
 box(-3048,-6096,9144,-1,0,.004,mat.aisle);            // main aisle 20' (south)
 box(-3048,12193,9144,15240,0,.004,mat.aisle);         // back aisle 10' (north)
 box(-3048,0,-1,12192,0,.004,mat.aisle); box(6097,0,9144,12192,0,.004,mat.aisle);   // side aisles 10' (measured on the hall plan)
-label("メイン通路 20'（6,096）",OX,-3000,.3,'small');
-label("裏通路 10'（3,048）",OX,13700,.3,'small');
-label("通路 10'（3,048）",-1524,6096,.3,'small'); label("通路 10'（3,048）",7620,6096,.3,'small');
+label(["メイン通路 20'（6,096）","Main aisle 20' (6,096)"],OX,-3000,.3,'small');
+label(["裏通路 10'（3,048）","Rear aisle 10' (3,048)"],OX,13700,.3,'small');
+label(["通路 10'（3,048）","Aisle 10' (3,048)"],-1524,6096,.3,'small'); label(["通路 10'（3,048）","Aisle 10' (3,048)"],7620,6096,.3,'small');
 box(0,0,6096,12192,0,.012,mat.carpet);
 
 // ---------- plan 4: no perimeter walls; only STOCK and the display walls are H3000 ----------
@@ -440,7 +448,7 @@ const banner=new THREE.Group();scene.add(banner);
     head.lookAt(new THREE.Vector3(u,zb+.75,v));});}
  const wire=new THREE.LineBasicMaterial({color:0x666a72});
  T.forEach(p=>{const [x,z]=P(...p);const gg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,zt,z),new THREE.Vector3(x,10,z)]);banner.add(new THREE.Line(gg,wire));});
- const bl=label('吊りバナー 下端4.5m／上端6.0m',OX,OY,6.35);banner.add(bl);}
+ const bl=label(['吊りバナー 下端4.5m／上端6.0m','Hanging banner, bottom 4.5 m / top 6.0 m'],OX,OY,6.35);banner.add(bl);}
 
 // FORUM8 logo, solid (stacked cut-out layers ≈ 40 mm deep letters) on both faces of the 85" wall (toward ① and ⑦)
 function logo3D(X,Y,nx,ny,width,cy,depth=.04,layers=16){const [x,z]=P(X,Y),dx=nx,dz=-ny;
@@ -460,26 +468,26 @@ logo3D(1420,9794,0,-1,2.2,3.5);          // STOCK south face, upper band (toward
  const b=new THREE.Mesh(new THREE.CylinderGeometry(.16,.13,1.0,16),m);b.position.y=.95;g.add(b);
  const lg=new THREE.Mesh(new THREE.CylinderGeometry(.12,.1,.5,16),m);lg.position.y=.25;g.add(lg);
  const hd=new THREE.Mesh(new THREE.SphereGeometry(.11,20,14),m);hd.position.y=1.58;g.add(hd);
- g.traverse(o=>{if(o.isMesh)o.castShadow=true;});label('人物 1700',4600,-900,1.85,'small');}
+ g.traverse(o=>{if(o.isMesh)o.castShadow=true;});label(['人物 1700','Person 1700'],4600,-900,1.85,'small');}
 
 // ---------- item list + labels ----------
 // ===== equipment & power (same structure as the SIGGRAPH Asia 2026 booth page) =====
 // unit power: est = running estimate used for the totals, rated = SIGGRAPH equipment list value; pos: pin point (plan), pin: pin height
 const EQ=[
- {no:1,name:'ドライビングシミュレータ（32"×3面・モーション）',qty:1,est:1500,rated:1500,size:'約2240×1800×1800',kg:'—',mount:'床置き',note:'指定値 1,500W（モーション部・PC・モニター込み）',pos:[1118,1556],pin:2.15,view:[.2,-1],d:4.2,th:1.0},
- {no:2,name:'VR360シミュレータ',qty:1,est:2000,rated:2800,size:'2047×1250×1960',kg:'350',mount:'床置き',note:'ポールパーテーションで動線規制',pos:[1342,8700],pin:2.3,view:[-.6,-1],d:4.5,th:1.1},
- {no:3,name:'VRモーションシート（公道最速体感）',qty:1,est:800,rated:1100,size:'800×800×1600',kg:'約110',mount:'床置き',note:'背面の倉庫斜め壁に43インチTV',pos:[4097,11103],pin:1.95,view:[1,.3],d:3.5,th:1.0},
- {no:4,name:'3Dホログラフィックディスプレイ（Metavania HoloSync）',qty:1,est:200,rated:200,size:'750×750 厚み150・台座Ø500',kg:'約1.5',mount:'床置き',note:'ZENMAI 北袖の外側モニターと連動',pos:[5733,8070],pin:2.2,view:[1,-.2],d:3,th:1.4},
- {no:5,name:'85インチモニター（プレゼン）',qty:1,est:300,rated:400,size:'約1900×70×1100',kg:'55',mount:'壁掛け',note:'85インチ壁 東面',pos:[2794,1577],pin:2.5,view:[1,-.3],d:4,th:1.6},
- {no:6,name:'50インチTV（ZENMAI 5台・3面タワー 3台）',qty:8,est:100,rated:120,size:'約1120×65×650',kg:'12',mount:'壁掛け',note:'',pos:[4249,7001],pin:2.15,view:[-1,-.2],d:3,th:1.5},
- {no:7,name:'43インチTV（モーションシート用）',qty:1,est:70,rated:80,size:'約960×60×560',kg:'9',mount:'壁掛け（中心 H2200）',note:'',pos:[3664,11354],pin:2.75,view:[.8,-.6],d:3,th:2.0},
- {no:8,name:'55インチディスプレイ（STOCK 扉横）',qty:1,est:120,rated:150,size:'約1230×60×710',kg:'約17',mount:'壁掛け（裏通路向き）',note:'',pos:[2838,12192],pin:2.2,view:[0,1],d:3.5,th:1.6},
- {no:9,name:'体験コーナー（ハンドル＋ペダル）',qty:6,est:0,rated:0,wText:'PCからUSB給電',size:'—',kg:'—',mount:'天板・足元',note:'カウンター 600×2200 H1100 ×2列、1列3セット',pos:[4796,1100],pin:1.7,view:[.3,-1],d:4.5,th:1.0},
- {no:10,name:'ノートPC（体験 6・3面タワー 6・ZENMAI 2）',qty:14,est:65,rated:120,size:'—',kg:'—',mount:'各カウンター上',note:'',pos:[1700,4600],pin:1.45,view:[1,-.2],d:3,th:1.0},
- {no:11,name:'iPad（3面タワー 3・ZENMAI 1）',qty:4,est:0,rated:0,wText:'PC/USB給電',size:'—',kg:'—',mount:'スタンド',note:'',pos:null},
- {no:12,name:'ZENMAI ロボット',qty:2,est:null,rated:null,wText:'要確認',size:'—',kg:'—',mount:'ロボット台',note:'',pos:[4033,5800],pin:1.6,view:[-1,-.3],d:2.8,th:1.2},
- {no:13,name:'ヒューマノイドロボット（Unitree G1）',qty:1,est:null,rated:null,wText:'要確認（充電器）',size:'1320×450×200',kg:'約35',mount:'床置き',note:'バッテリー駆動',pos:[5250,6056],pin:1.6,view:[1,0],d:3,th:0.9},
- {no:14,name:'STOCK 内コンセント（ネットワーク機器等）',qty:1,est:200,rated:200,size:'—',kg:'—',mount:'STOCK 内・床',note:'',pos:[1600,10700],pin:1.3,view:[0,-1],d:3,th:0.5,up:4.5},
+ {no:1,name:['ドライビングシミュレータ（32"×3面・モーション）','Driving simulator (motion, 32" ×3)'],qty:1,est:1500,rated:1500,size:'約2240×1800×1800',kg:'—',mount:['床置き','Floor'],note:['指定値 1,500W（モーション部・PC・モニター込み）','Specified 1,500 W (motion base, PC and monitors)'],pos:[1118,1556],pin:2.15,view:[.2,-1],d:4.2,th:1.0},
+ {no:2,name:['VR360シミュレータ','VR360 Simulator'],qty:1,est:2000,rated:2800,size:'2047×1250×1960',kg:'350',mount:['床置き','Floor'],note:['ポールパーテーションで動線規制','Pole partitions guide visitor flow'],pos:[1342,8700],pin:2.3,view:[-.6,-1],d:4.5,th:1.1},
+ {no:3,name:['VRモーションシート（公道最速体感）','VR motion seat (rally experience)'],qty:1,est:800,rated:1100,size:'800×800×1600',kg:['約110','approx. 110'],mount:['床置き','Floor'],note:['背面の倉庫斜め壁に43インチTV','43" TV on the STOCK slant wall behind'],pos:[4097,11103],pin:1.95,view:[1,.3],d:3.5,th:1.0},
+ {no:4,name:['3Dホログラフィックディスプレイ（Metavania HoloSync）','3D holographic display (Metavania HoloSync)'],qty:1,est:200,rated:200,size:['750×750 厚み150・台座Ø500','750×750, depth 150, base Ø500'],kg:['約1.5','approx. 1.5'],mount:['床置き','Floor'],note:['ZENMAI 北袖の外側モニターと連動','Synced with the ZENMAI north-wing outer monitor'],pos:[5733,8070],pin:2.2,view:[1,-.2],d:3,th:1.4},
+ {no:5,name:['85インチモニター（プレゼン）','85" monitor (presentation)'],qty:1,est:300,rated:400,size:['約1900×70×1100','approx. 1900×70×1100'],kg:'55',mount:['壁掛け','Wall-mounted'],note:['85インチ壁 東面','East face of the 85" wall'],pos:[2794,1577],pin:2.5,view:[1,-.3],d:4,th:1.6},
+ {no:6,name:['50インチTV（ZENMAI 5台・3面タワー 3台）','50" TV (ZENMAI 5, 3-face tower 3)'],qty:8,est:100,rated:120,size:['約1120×65×650','approx. 1120×65×650'],kg:'12',mount:['壁掛け','Wall-mounted'],note:'',pos:[4249,7001],pin:2.15,view:[-1,-.2],d:3,th:1.5},
+ {no:7,name:['43インチTV（モーションシート用）','43" TV (for the motion seat)'],qty:1,est:70,rated:80,size:['約960×60×560','approx. 960×60×560'],kg:'9',mount:['壁掛け（中心 H2200）','Wall-mounted (centre H2200)'],note:'',pos:[3664,11354],pin:2.75,view:[.8,-.6],d:3,th:2.0},
+ {no:8,name:['55インチディスプレイ（STOCK 扉横）','55" display (beside the STOCK door)'],qty:1,est:120,rated:150,size:['約1230×60×710','approx. 1230×60×710'],kg:['約17','approx. 17'],mount:['壁掛け（裏通路向き）','Wall-mounted (facing the rear aisle)'],note:'',pos:[2838,12192],pin:2.2,view:[0,1],d:3.5,th:1.6},
+ {no:9,name:['体験コーナー（ハンドル＋ペダル）','Driving corner (wheel + pedals)'],qty:6,est:0,rated:0,wText:['PCからUSB給電','USB-powered from PC'],size:'—',kg:'—',mount:['天板・足元','Tabletop / floor'],note:['カウンター 600×2200 H1100 ×2列、1列3セット','Counters 600×2200 H1100, 2 rows of 3 sets'],pos:[4796,1100],pin:1.7,view:[.3,-1],d:4.5,th:1.0},
+ {no:10,name:['ノートPC（体験 6・3面タワー 6・ZENMAI 2）','Laptop PCs (driving 6, tower 6, ZENMAI 2)'],qty:14,est:65,rated:120,size:'—',kg:'—',mount:['各カウンター上','On the counters'],note:'',pos:[1700,4600],pin:1.45,view:[1,-.2],d:3,th:1.0},
+ {no:11,name:['iPad（3面タワー 3・ZENMAI 1）','iPad (tower 3, ZENMAI 1)'],qty:4,est:0,rated:0,wText:['PC/USB給電','PC / USB-powered'],size:'—',kg:'—',mount:['スタンド','On a holder'],note:'',pos:null},
+ {no:12,name:['ZENMAI ロボット','ZENMAI robots'],qty:2,est:null,rated:null,wText:['要確認','To confirm'],size:'—',kg:'—',mount:['ロボット台','Robot stand'],note:'',pos:[4033,5800],pin:1.6,view:[-1,-.3],d:2.8,th:1.2},
+ {no:13,name:['ヒューマノイドロボット（Unitree G1）','Humanoid robot (Unitree G1)'],qty:1,est:null,rated:null,wText:['要確認（充電器）','To confirm (charger)'],size:'1320×450×200',kg:['約35','approx. 35'],mount:['床置き','Floor'],note:['バッテリー駆動','Battery-powered'],pos:[5250,6056],pin:1.6,view:[1,0],d:3,th:0.9},
+ {no:14,name:['STOCK 内コンセント（ネットワーク機器等）','STOCK outlet (network switch etc.)'],qty:1,est:200,rated:200,size:'—',kg:'—',mount:['STOCK 内・床','Inside STOCK, floor'],note:'',pos:[1600,10700],pin:1.3,view:[0,-1],d:3,th:0.5,up:4.5},
 ];
 const fmt=n=>n.toLocaleString('en-US');
 const totalW=EQ.reduce((t,e)=>t+(e.est||0)*e.qty,0), ratedW=EQ.reduce((t,e)=>t+(e.rated||0)*e.qty,0);
@@ -488,23 +496,23 @@ const pins={};let sel=null;
 EQ.forEach(e=>{if(!e.pos)return;const d=document.createElement('div');d.className='pin';d.innerHTML=`<span>${e.no}</span>`;
   d.onclick=ev=>{ev.stopPropagation();select(e.no,true);};const o=new CSS2DObject(d);const [x,z]=P(...e.pos);o.position.set(x,e.pin,z);scene.add(o);pins[e.no]=d;});
 // area names (text labels, as on the SIGGRAPH page)
-[['ドライビングシミュレータ',1118,1556,2.5],['VR360シミュレータ',1342,8700,2.7],['ZENMAI Interactive Robot Experience',4400,6400,3.3],['Metabania HoloSync',5733,8070,2.6],
- ['3面モニタータワー',866,5128,2.7],['85インチ壁',2540,1577,3.3],['体験コーナー',4796,1100,2.0],['VRモーションシート',4097,11103,2.35],['ヒューマノイド',5250,6056,2.0],['STOCK',1600,11000,3.3]]
+[[['ドライビングシミュレータ','Driving simulator'],1118,1556,2.5],[['VR360シミュレータ','VR360 Simulator'],1342,8700,2.7],['ZENMAI Interactive Robot Experience',4400,6400,3.3],['Metabania HoloSync',5733,8070,2.6],
+ [['3面モニタータワー','3-face monitor tower'],866,5128,2.7],[['85インチ壁','85" wall'],2540,1577,3.3],[['体験コーナー','Driving corner'],4796,1100,2.0],[['VRモーションシート','VR motion seat'],4097,11103,2.35],[['ヒューマノイド','Humanoid'],5250,6056,2.0],['STOCK',1600,11000,4.3]]
  .forEach(([t,X,Y,h])=>label(t,X,Y,h));
 const list=document.getElementById('eq-list'),panel=document.getElementById('panel');
-function rowHTML(e){const on=sel===e.no,tot=(e.est||0)*e.qty;
-  const pw=e.est===null?`<span class="pw tbc">${e.wText}</span>`:`<span class="pw">${tot?fmt(tot)+' W':e.wText}</span>`;
+function rowHTML(e){const on=sel===e.no,tot=(e.est||0)*e.qty;const L=(ja,en)=>lang==='ja'?ja:en;
+  const pw=e.est===null?`<span class="pw tbc">${tr(e.wText)}</span>`:`<span class="pw">${tot?fmt(tot)+' W':tr(e.wText)}</span>`;
   const det=on?`<span class="detail">
-    <span>外形</span><b>${e.size}${e.size==='—'?'':' mm'}</b>
-    <span>重量</span><b>${e.kg}${e.kg==='—'?'':' kg'}</b>
-    <span>電力</span><b>${e.est?`目安 ${fmt(e.est)} W${e.qty>1?'／台':''}${e.rated&&e.rated!==e.est?`（定格 ${fmt(e.rated)} W）`:''}`:e.wText}</b>
-    <span>設置</span><b>${e.mount}</b>
-    ${e.note?`<span>備考</span><b>${e.note}</b>`:''}</span>`:'';
-  return `<button class="row${on?' on':''}" data-no="${e.no}" aria-expanded="${on}"><span class="no">${e.no}</span><span class="nm">${e.name}${e.qty>1?` <em>×${e.qty}</em>`:''}</span>
+    <span>${L('外形','Size')}</span><b>${tr(e.size)}${tr(e.size)==='—'?'':' mm'}</b>
+    <span>${L('重量','Weight')}</span><b>${tr(e.kg)}${tr(e.kg)==='—'?'':' kg'}</b>
+    <span>${L('電力','Power')}</span><b>${e.est?`${L('目安','est.')} ${fmt(e.est)} W${e.qty>1?L('／台',' / unit'):''}${e.rated&&e.rated!==e.est?L(`（定格 ${fmt(e.rated)} W）`,` (rated ${fmt(e.rated)} W)`):''}`:tr(e.wText)}</b>
+    <span>${L('設置','Mounting')}</span><b>${tr(e.mount)}</b>
+    ${tr(e.note)?`<span>${L('備考','Notes')}</span><b>${tr(e.note)}</b>`:''}</span>`:'';
+  return `<button class="row${on?' on':''}" data-no="${e.no}" aria-expanded="${on}"><span class="no">${e.no}</span><span class="nm">${tr(e.name)}${e.qty>1?` <em>×${e.qty}</em>`:''}</span>
     ${pw}<span class="bar2"><i style="width:${(tot/maxW*100).toFixed(1)}%"></i></span>${det}</button>`;}
 function renderPanel(){list.innerHTML=EQ.map(rowHTML).join('');
-  document.getElementById('sum-w').textContent=fmt(totalW)+' W';document.getElementById('sum-w').title='定格合計 '+fmt(ratedW)+' W';
-  document.getElementById('sum-a').textContent='約'+(totalW/120).toFixed(1)+' A';
+  document.getElementById('sum-w').textContent=fmt(totalW)+' W';document.getElementById('sum-w').title=(lang==='ja'?'定格合計 ':'Rated total ')+fmt(ratedW)+' W';
+  document.getElementById('sum-a').textContent=(lang==='ja'?'約':'≈')+(totalW/120).toFixed(1)+' A';
   document.getElementById('sum-o').textContent=outlets;}
 list.addEventListener('click',ev=>{const b=ev.target.closest('.row');if(!b)return;const no=+b.dataset.no;select(sel===no?null:no,true);});
 function select(no,flyTo_){sel=no;Object.entries(pins).forEach(([k,d])=>d.classList.toggle('on',String(no)===k));renderPanel();
@@ -544,6 +552,14 @@ const tl=document.getElementById('t-label');tl.onclick=()=>{const on=tl.getAttri
 const tr_=document.getElementById('t-rot');tr_.onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=.8;tr_.setAttribute('aria-pressed',String(controls.autoRotate));};
 window.__flyTo=(p,t)=>fly(p,t);
 window.__look=(px,py,pz,tx,ty,tz)=>{camera.position.set(px,py,pz);controls.target.set(tx,ty,tz);};
+function applyLang(l){lang=l;try{localStorage.setItem('ces-booth-lang',l);}catch(e){}
+  document.documentElement.lang=l;document.title=l==='ja'?'CES 2027 FORUM8 ブース3D':'CES 2027 FORUM8 Booth 3D';
+  document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
+  i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
+  document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
+  renderPanel();placePanel();}
+document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
+applyLang(lang);
 camera.position.copy(VIEWS.persp[0]);controls.target.copy(VIEWS.persp[1]);
 
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);labelR.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
