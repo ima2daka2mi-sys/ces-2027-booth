@@ -372,9 +372,8 @@ const SIM_ROT=(()=>{try{const v=new URLSearchParams(location.search).get('simrot
 // ② VR360 simulator 2047×1250×1960 + pole partitions (SIGGRAPH)
 box(717,7677,1967,9724,0,.12,mat.grey); box(817,7777,1867,9624,.12,.01,mat.green);   // 100 off the STOCK wall
 placeModel('m-vr360',1342,8700,1.96,0,.13);
-// 43" spectator monitor on the VR360 monitor frame + arm (inventory), front edge, facing south
-cyl(1342,7600,.2,0,.02,mat.grey,32);cyl(1342,7600,.03,0,1.5,mat.metal,16);
-tv(1342,7570,0,-1,IN[43],1.8,screenTex('VR360','43"',190));
+// 43" spectator monitor on the STOCK south wall above the VR360 (sim top 1.96 m), centre H2600
+tv(1342,9794,0,-1,IN[43],2.6,screenTex('VR360','43"',190));
 function polePair(X,Ya,Yb){[Ya,Yb].forEach(Y=>{cyl(X,Y,.15,0,.03,mat.grey,32);cyl(X,Y,.03,0,.95,mat.metal,16);});box(X-10,Ya,X+10,Yb,.84,.05,mat.red);}
 polePair(273,8090,9089); polePair(2442,8128,9099);
 
@@ -524,7 +523,7 @@ const EQ=[
  {no:4,name:['3Dホログラフィックディスプレイ（Metavania HoloSync）','3D holographic display (Metavania HoloSync)'],qty:1,est:200,rated:200,size:['750×750 厚み150・台座Ø500','750×750, depth 150, base Ø500'],kg:['約1.5','approx. 1.5'],mount:['床置き','Floor'],note:['背面の55インチと連動','Synced with the 55" TV behind it'],pos:[5733,8070],pin:2.2,view:[1,-.2],d:3,th:1.4},
  {no:5,name:['85インチモニター（プレゼン 1・STOCK 裏通路向き 1）','85" monitors (presentation 1, STOCK rear aisle 1)'],qty:2,est:300,rated:400,size:['約1900×70×1100','approx. 1900×70×1100'],kg:'55',mount:['壁掛け','Wall-mounted'],note:['保管物 Samsung AU8000 ×2。85インチ壁 東面（中心H1700）／STOCK 北面 扉横','Inventory: Samsung AU8000 ×2. East face of the 85" wall (centre H1700) / STOCK north face by the door'],pos:[2794,1577],pin:2.5,view:[1,-.3],d:4,th:1.6},
  {no:6,name:['55インチTV（3面タワー 3・デモ壁 内側 2・北袖 1・HoloSync 背面 1）','55" TVs (tower 3, demo wall inner 2, north wing 1, behind HoloSync 1)'],qty:7,est:120,rated:150,size:['約1230×60×710','approx. 1230×60×710'],kg:['約17','approx. 17'],mount:['壁掛け（中心H1600）','Wall-mounted (centre H1600)'],note:['保管物 Samsung DU6900F ×7。SIGGRAPH の50/65インチ位置に充当','Inventory: Samsung DU6900F ×7, used where SIGGRAPH had 50" / 65" screens'],pos:[4249,7001],pin:2.15,view:[-1,-.2],d:3,th:1.5},
- {no:7,name:['43インチTV（モーションシート 1・ロボット 1・VR360 1）','43" TVs (motion seat 1, robot 1, VR360 1)'],qty:3,est:70,rated:80,size:['約960×60×560','approx. 960×60×560'],kg:'9',mount:['壁掛け／VR360 フレーム＋アーム','Wall-mounted / VR360 frame + arm'],note:['保管物 Samsung U8000 ×4（1台予備）。モーションシートは中心H2200','Inventory: Samsung U8000 ×4 (1 spare). Motion seat screen at centre H2200'],pos:[3664,11354],pin:2.75,view:[.8,-.6],d:3,th:2.0},
+ {no:7,name:['43インチTV（モーションシート 1・ロボット 1・VR360 1）','43" TVs (motion seat 1, robot 1, VR360 1)'],qty:3,est:70,rated:80,size:['約960×60×560','approx. 960×60×560'],kg:'9',mount:['壁掛け','Wall-mounted'],note:['保管物 Samsung U8000 ×4（1台予備）。モーションシートは中心H2200、VR360 は背面のSTOCK壁 中心H2600','Inventory: Samsung U8000 ×4 (1 spare). Motion seat at centre H2200; VR360 on the STOCK wall behind it, centre H2600'],pos:[3664,11354],pin:2.75,view:[.8,-.6],d:3,th:2.0},
  {no:8,name:['32インチモニター（STOCK 西面・南面）','32" monitors (STOCK west and south faces)'],qty:2,est:45,rated:50,size:['約715×50×420','approx. 715×50×420'],kg:['約5','approx. 5'],mount:['壁掛け（中心H1600）','Wall-mounted (centre H1600)'],note:['保管物 32インチ ×2（機種未定）。SIGGRAPH同様の紹介映像用','Inventory: 32" ×2 (model TBC). Intro video, as at SIGGRAPH'],pos:[48,10993],pin:2.2,view:[-1,-.2],d:3.2,th:1.6},
  {no:9,name:['体験コーナー（ハンドル＋ペダル）','Driving corner (wheel + pedals)'],qty:6,est:0,rated:0,wText:['PCからUSB給電','USB-powered from PC'],size:'—',kg:'—',mount:['天板・足元','Tabletop / floor'],note:['カウンター 600×2200 H1100 ×2列、1列3セット','Counters 600×2200 H1100, 2 rows of 3 sets'],pos:[4796,1100],pin:1.7,view:[.3,-1],d:4.5,th:1.0},
  {no:10,name:['ノートPC（体験 6・デモ 12・講師 1・ロボット 1）','Laptop PCs (driving 6, demo 12, presenter 1, robot 1)'],qty:20,est:65,rated:120,size:'—',kg:'—',mount:['各カウンター・講師テーブル上','On the counters / presenter table'],note:['デモは各画面にノートPC 2台','Demo: two laptops per screen'],pos:[1700,4600],pin:1.45,view:[1,-.2],d:3,th:1.0},
