@@ -201,7 +201,7 @@ function label(html,X,Y,h,cls=''){const d=document.createElement('div');d.classN
 function screenTex(title,sub,hue){const c=document.createElement('canvas');c.width=640;c.height=360;const g=c.getContext('2d');
   const gr=g.createLinearGradient(0,0,640,360);gr.addColorStop(0,`hsl(${hue},70%,26%)`);gr.addColorStop(1,`hsl(${hue+30},80%,52%)`);g.fillStyle=gr;g.fillRect(0,0,640,360);
   g.fillStyle='#fff';g.textAlign='center';g.font='800 56px "Noto Sans JP",sans-serif';g.fillText(title,320,190);
-  if(sub){g.font='600 28px "Noto Sans JP",sans-serif';g.fillStyle='rgba(255,255,255,.85)';g.fillText(sub,320,240);}
+  if(sub){g.font='700 44px "Noto Sans JP",sans-serif';g.fillStyle='rgba(255,255,255,.9)';g.fillText(sub,320,255);}
   const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}
 const IN={32:[.715,.402],43:[.952,.535],50:[1.107,.623],55:[1.215,.684],65:[1.439,.809],85:[1.882,1.059]};
 // TV on a wall face: centre (plan), outward normal (plan), size (m), centre height
@@ -273,7 +273,7 @@ const unit=(x,y)=>{const l=Math.hypot(x,y);return [x/l,y/l];};
 // ⑥ 85" wall (CEATEC, moved 250 west); the 1200 wing was removed to widen the aisle
 const R=(X,Y)=>[X-250,Y];
 prism([[2536,2],[3044,2],[3044,3152],[2536,3152]].map(p=>R(...p)),0,H,mat.wall);
-tv(...R(3044,1577),1,0,IN[85],1.7,screenTex('85"','Presentation',215));
+tv(...R(3044,1577),1,0,IN[85],1.7,screenTex('PRESENTATION','85"',215));
 
 // presenter's high table Ø600 H1050 + laptop (as at SIGGRAPH), by the 85" screen
 // on the main-aisle side, east end of the presentation corner
@@ -284,14 +284,14 @@ tv(...R(3044,1577),1,0,IN[85],1.7,screenTex('85"','Presentation',215));
  laptop(X,Y,1,0,1.05,screenTex('ROBOT','G1',215));}
 // ③ ZENMAI bent wall (CEATEC shape) + robot stands with SIGGRAPH counters
 prism([[5150,9440],[4249,7878],[4249,5028],[4917,3850],[5136,3966],[4536,5000],[4536,7716],[5436,9270]],0,H,mat.wall);
-tv(4249,5802,-1,0,IN[55],1.6,screenTex('DEMO','',265));
-tv(4249,7001,-1,0,IN[55],1.6,screenTex('DEMO','',285));
+tv(4249,5802,-1,0,IN[55],1.6,screenTex('DEMO','55"',265));
+tv(4249,7001,-1,0,IN[55],1.6,screenTex('DEMO','55"',285));
 tv(4536,6450,1,0,IN[85],1.7,screenTex('ROBOT','85"',265));
 // 85" #2 behind the robot (demo wall outer face, centre H1700)
 // video gallery: one 32" on the inner face of the south slant of the demo wall (the other 32" is spare)
-tv(4583,4439,-.870,-.493,IN[32],1.6,screenTex('VIDEO','GALLERY',320));
+tv(4583,4439,-.870,-.493,IN[32],1.6,screenTex('VIDEO GALLERY','32"',320));
 label(['ビデオギャラリー','Video gallery'],4583-700,4439-400,2.4);
-tv(4642,8688,-.866,.5,IN[55],1.6,screenTex('ZENMAI','',300));
+tv(4642,8688,-.866,.5,IN[55],1.6,screenTex('DEMO','55"',300));
 tv(5040,8470,.866,-.5,IN[55],1.6,screenTex('HoloSync','55"',280));
 // 55" behind the hologram (SIGGRAPH used a 65"; the inventory has 55")
 counterOn([4233,5202],[4233,6401],[-1,0],.4,1.01,true,false);   // demo corner: 2 laptops per screen
@@ -309,9 +309,9 @@ function robot(X,Y){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(
 // ⑤ 3-face tower (H2400) at the west edge + SIGGRAPH counters
 const T=(X,Y)=>[X-1400,Y-5];   // centred between ① and ② (centre Y about 5,130)
 prism([[1912,4520],[2975,5133],[1912,5745]].map(p=>T(...p)),0,H,mat.wall);   // H3000
-tv(...T(1912,5133),-1,0,IN[55],1.6,screenTex('DEMO','A',200));
-tv(...T(2443,4826),.5,-.866,IN[55],1.6,screenTex('DEMO','B',170));
-tv(...T(2443,5439),.5,.866,IN[55],1.6,screenTex('DEMO','C',230));
+tv(...T(1912,5133),-1,0,IN[55],1.6,screenTex('DEMO A','55"',200));
+tv(...T(2443,4826),.5,-.866,IN[55],1.6,screenTex('DEMO B','55"',170));
+tv(...T(2443,5439),.5,.866,IN[55],1.6,screenTex('DEMO C','55"',230));
 counterOn(T(1899,5731),T(1899,4532),[-1,0],.4,1.01,true,false);   // demo tower: 2 laptops per screen
 counterOn(T(1939,4506),T(2981,5106),[.5,-.866],.4,1.01,true,false);
 counterOn(T(2981,5157),T(1939,5761),[.5,.866],.4,1.01,true,false);
