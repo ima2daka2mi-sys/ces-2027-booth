@@ -272,7 +272,8 @@ const unit=(x,y)=>{const l=Math.hypot(x,y);return [x/l,y/l];};
 
 // ⑥ 85" wall (CEATEC, moved 250 west); the 1200 wing was removed to widen the aisle
 const R=(X,Y)=>[X-250,Y];
-prism([[2536,2],[3044,2],[3044,3152],[2536,3152]].map(p=>R(...p)),0,H,mat.wall);
+// both ends cut at 45 deg: the east (presentation) face stays 3,150 long, the west face is 508 shorter at each end
+prism([[2536,510],[3044,2],[3044,3152],[2536,2644]].map(p=>R(...p)),0,H,mat.wall);
 tv(...R(3044,1577),1,0,IN[85],1.7,screenTex('PRESENTATION','85"',215));
 
 // presenter's high table Ø600 H1050 + laptop (as at SIGGRAPH), by the 85" screen
