@@ -494,11 +494,11 @@ function logo3D(X,Y,nx,ny,width,cy,depth=.04,layers=16,matte=false){const [x,z]=
   img.src=F8_LOGO;return g;}
 // printed (flat) logo on a wall face
 const logoPrint=(X,Y,nx,ny,width,cy)=>logo3D(X,Y,nx,ny,width,cy,0,0,true);
-// STOCK upper band: solid letters on the slant wall behind the motion seat, printed logos on the other three faces
+// STOCK upper band: solid letters on the slant wall behind the motion seat, solid letters also on the south face behind the VR360; printed logos on the north and west faces
 logo3D(3463+.864*30,11008-.503*30,.864,-.503,2.2,3.5);
 logoPrint(2101,12192,0,1,2.4,3.5);
 logoPrint(48,10993,-1,0,2.0,3.5);
-logoPrint(1411,9794,0,-1,2.2,3.5);
+logo3D(1411,9794,0,-1,2.2,3.5);
 // 85" wall (between ① and ⑤): solid letters on the upper band of both faces
 logo3D(...R(3044,1577),1,0,1.9,2.62);
 logo3D(...R(2536,1577),-1,0,1.9,2.62);
