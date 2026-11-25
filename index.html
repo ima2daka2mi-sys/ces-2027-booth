@@ -305,7 +305,7 @@ tv(4916,8515,.8666,-.499,IN[55],1.6,screenTex('HoloSync','55"',280));
 counterOn([4083,5127],[4083,6397],[-1,0],.5,1.01,true,false);   // demo corner: 2 laptops per screen
 counterOn([4083,6397],[4083,7667],[-1,0],.5,1.01,true,false);
 ipad(3833,6397,-1,0,1.01,screenTex('iPad','',205));   // iPad between the four demo laptops
-counterOn([4234,8016],[4991,9311],[-.8634,.5047],.5);
+counterOn([4211,7953],[4990,9302],[-.8634,.5047],.55);   // pico plan A0001: frame 1558 x 550 (top 1485 x 495)
 function robot(X,Y){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(x,1.01,z);scene.add(g);
   const w=M(0xf5f6f8,{roughness:.35}),acc=M(0x2e86de,{roughness:.4});
   const b=new THREE.Mesh(new THREE.CylinderGeometry(.09,.11,.22,24),w);b.position.y=.11;g.add(b);
@@ -637,7 +637,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125194157';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125194626';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
