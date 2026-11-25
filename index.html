@@ -291,7 +291,7 @@ tv(2820,1567,1,0,IN[85],1.7,screenTex('PRESENTATION','85"',215));
 {const X=5400,Y=4500;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
 }
 // ③ ZENMAI bent wall (CEATEC shape) + robot stands with SIGGRAPH counters
-prism([[5163,9570],[4099,7750],[4099,5057],[4916,3658],[5185,3813],[4418,5146],[4418,7651],[5428,9405]],0,H,mat.wall);
+prism([[5006,9302],[4099,7750],[4099,5057],[4855,3762],[5131,3923],[4418,5146],[4418,7651],[5287,9138]],0,H,mat.wall);
 tv(4099,5763,-1,0,IN[55],1.6,screenTex('DEMO','55"',265));
 tv(4099,7031,-1,0,IN[55],1.6,screenTex('DEMO','55"',285));
 tv(4418,6398,1,0,IN[85],1.7,screenTex('AIR DRIVING','85"',265));
@@ -477,7 +477,7 @@ const banner=new THREE.Group();scene.add(banner);
   const L=[[2535,1700, 3000,1750, Math.PI/2.6,34,3.0],
            [3032,10300,3000,10250,Math.PI/2.6,34,4.0],
            [45,9620,   250,6000,  Math.PI/4.2,70,4.0],
-           [5295,9480, 5750,6000, Math.PI/4.2,64,3.0]];
+           [5146,9220, 5750,6000, Math.PI/4.2,64,3.0]];
   L.forEach(([lx,ly,tx,ty,ang,int,mh])=>{const [x,z]=P(lx,ly),[u,v]=P(tx,ty);
     const sp=new THREE.SpotLight(0xfff0d8,int,9,ang,.55,1.1);sp.position.set(x,mh+.12,z);sp.target.position.set(u,zb+.75,v);banner.add(sp);banner.add(sp.target);
     const g=new THREE.Group();g.position.set(x,mh,z);banner.add(g);
@@ -620,7 +620,7 @@ const tr_=document.getElementById('t-rot');tr_.onclick=()=>{controls.autoRotate=
 // height guides
 __dimLine(2580,9560,0,4.0,['STOCK 壁 H4000','STOCK wall H4000']);
 __dimLine(2820,10,0,3.0,['展示壁 H3000','Display wall H3000']);
-__dimLine(5185,3813,0,3.0,['展示壁 H3000','Display wall H3000']);
+__dimLine(5131,3923,0,3.0,['展示壁 H3000','Display wall H3000']);
 __dimLine(517,5000,0,3.0,['3面タワー H3000','Tower H3000']);
 __dimLine(OX-2500,OY-4000,0,4.5,['吊りバナー下端 H4500','Banner bottom H4500']);
 __dimLine(OX-3000,OY-4500,4.5,6.0,['吊りバナー 1500（上端 H6000）','Banner 1500 (top H6000)']);
@@ -637,7 +637,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125192741';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125193048';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
