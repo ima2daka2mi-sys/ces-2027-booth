@@ -299,7 +299,7 @@ tv(4418,6398,1,0,IN[85],1.7,screenTex('AIR DRIVING','85"',265));
 // video gallery: one 32" on the inner face of the south slant of the demo wall (the other 32" is spare)
 tv(4372,4590,-.8647,-.5025,IN[32],1.6,screenTex('VIDEO GALLERY','32"',320));
 label(['ビデオギャラリー','Video gallery'],4372-700,4590-400,2.4);
-tv(4623,8647,-.8634,.5047,IN[55],1.6,screenTex('DEMO','55"',300));
+tv(4551,8523,-.8634,.5047,IN[55],1.6,screenTex('DEMO','55"',300));
 tv(4916,8515,.8666,-.499,IN[55],1.6,screenTex('HoloSync','55"',280));
 // 55" behind the hologram (SIGGRAPH used a 65"; the inventory has 55")
 counterOn([4083,5127],[4083,6397],[-1,0],.5,1.01,true,false);   // demo corner: 2 laptops per screen
@@ -637,7 +637,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125194952';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125195423';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
