@@ -285,27 +285,27 @@ tv(2820,1567,1,0,IN[85],1.7,screenTex('PRESENTATION','85"',215));
 {const X=3297,Y=324;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
  laptop(X,Y,0,1,1.05,screenTex('PRESENT','',215));}
 // Air Driving corner: high table Ø600 H1050 with one laptop, against the demo wall (kept from the former robot corner)
-{const X=4770,Y=5650;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
+{const X=4831,Y=5390;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
  laptop(X,Y,1,0,1.05,screenTex('AIR DRIVING','',215));}
 // SENSO-Wheel on a second high table Ø600, left of the Air Driving table seen from the east aisle
-{const X=5400,Y=4800;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
+{const X=5040,Y=4520;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
 }
 // ③ ZENMAI bent wall (CEATEC shape) + robot stands with SIGGRAPH counters
-prism([[5006,9302],[4099,7750],[4099,5057],[4646,4122],[4922,4283],[4418,5146],[4418,7651],[5287,9138]],0,H,mat.wall);
-tv(4099,5763,-1,0,IN[55],1.6,screenTex('DEMO','55"',265));
-tv(4099,7031,-1,0,IN[55],1.6,screenTex('DEMO','55"',285));
-tv(4418,6398,1,0,IN[85],1.7,screenTex('AIR DRIVING','85"',265));
+prism([[5155,9357],[4099,7526],[4099,4846],[4662,3872],[4937,4033],[4418,4933],[4418,7439],[5428,9187]],0,H,mat.wall);   // pico plan rev
+tv(4099,5550,-1,0,IN[55],1.6,screenTex('DEMO','55"',265));
+tv(4099,6819,-1,0,IN[55],1.6,screenTex('DEMO','55"',285));
+tv(4418,6185,1,0,IN[85],1.7,screenTex('AIR DRIVING','85"',265));
 // 85" #2 for the Air Driving corner (demo wall outer face, centre H1700)
 // video gallery: one 32" on the inner face of the south slant of the demo wall (the other 32" is spare)
-tv(4372,4590,-.8647,-.5025,IN[32],1.6,screenTex('VIDEO GALLERY','32"',320));
-label(['ビデオギャラリー','Video gallery'],4372-700,4590-400,2.4);
-tv(4551,8523,-.8634,.5047,IN[55],1.6,screenTex('DEMO','55"',300));
-tv(4852,8394,.8666,-.499,IN[55],1.6,screenTex('HoloSync','55"',280));
+tv(4380,4359,-.8658,-.5004,IN[32],1.6,screenTex('VIDEO GALLERY','32"',320));
+label(['ビデオギャラリー','Video gallery'],4380-700,4359-400,2.4);
+tv(4587,8455,-.8648,.5021,IN[55],1.6,screenTex('DEMO','55"',300));
+tv(4940,8282,.8667,-.4988,IN[55],1.6,screenTex('HoloSync','55"',280));
 // 55" behind the hologram (SIGGRAPH used a 65"; the inventory has 55")
-counterOn([4083,5127],[4083,6397],[-1,0],.5,1.01,true,false);   // demo corner: 2 laptops per screen
-counterOn([4083,6397],[4083,7667],[-1,0],.5,1.01,true,false);
-ipad(3833,6397,-1,0,1.01,screenTex('iPad','',205));   // iPad between the four demo laptops
-counterOn([4099,7750],[4990,9302],[-.8634,.5047],.55);   // from the bend to the wall end, 550 deep (pico plan: counter runs right up to the bend)
+counterOn([4083,4916],[4083,6184],[-1,0],.55,1.01,true,false);   // demo corner: 2 laptops per screen
+counterOn([4083,6184],[4083,7454],[-1,0],.55,1.01,true,false);
+ipad(3808,6184,-1,0,1.01,screenTex('iPad','',205));   // iPad between the four demo laptops
+counterOn([4211,7739],[4990,9090],[-.8655,.5009],.55);   // pico plan rev: 1558 x 550
 function robot(X,Y){const [x,z]=P(X,Y);const g=new THREE.Group();g.position.set(x,1.01,z);scene.add(g);
   const w=M(0xf5f6f8,{roughness:.35}),acc=M(0x2e86de,{roughness:.4});
   const b=new THREE.Mesh(new THREE.CylinderGeometry(.09,.11,.22,24),w);b.position.y=.11;g.add(b);
@@ -367,7 +367,7 @@ const SIM_ROT=(()=>{try{const v=new URLSearchParams(location.search).get('simrot
 // (humanoid robot corner removed: now the Air Driving corner)
 // SENSO-Wheel: Meshy model (steering assembly, simplified to 46k triangles) on the Ø600 table, wheel toward the east aisle;
 // scaled so the wheel is about 300 across (assembly about 590 long); a 15" laptop sits on the control box behind the wheel
-{const src=document.getElementById('m-steer'),tj=document.getElementById('m-steer-tex');const X=5400,Y=4800,TOP=1.05,S=.31;
+{const src=document.getElementById('m-steer'),tj=document.getElementById('m-steer-tex');const X=5040,Y=4520,TOP=1.05,S=.31;
  if(src&&tj){const tx=JSON.parse(tj.textContent),tl=new THREE.TextureLoader(),ani=renderer.capabilities.getMaxAnisotropy();
   const T=(u,srgb)=>{const t=tl.load(u);t.flipY=false;if(srgb)t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=ani;return t;};
   const mr=T(tx.roughnessMap);
@@ -394,7 +394,7 @@ polePair(282,8012,8912); polePair(2396,8012,8912);
 
 // ④ Metabania HoloSync (SIGGRAPH): pole stand Ø500, acrylic 750×750×150, faces the booth
 let holoCore;
-{const [x,z]=P(5607,7946);const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=Math.atan2(.866,.5);scene.add(g);   // in front of the ZENMAI north-wing outer monitor
+{const [x,z]=P(5607,7733);const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=Math.atan2(.866,.5);scene.add(g);   // in front of the ZENMAI north-wing outer monitor
  const dk=M(0x1b1c1f,{roughness:.4,metalness:.3});
  const foot=new THREE.Mesh(new THREE.CylinderGeometry(.25,.25,.02,48),dk);foot.position.y=.01;g.add(foot);
  const pole=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,1.18,16),dk);pole.position.y=.6;pole.castShadow=true;g.add(pole);
@@ -477,7 +477,7 @@ const banner=new THREE.Group();scene.add(banner);
   const L=[[2535,1700, 3000,1750, Math.PI/2.6,34,3.0],
            [3032,10300,3000,10250,Math.PI/2.6,34,4.0],
            [45,9620,   250,6000,  Math.PI/4.2,70,4.0],
-           [5146,9220, 5750,6000, Math.PI/4.2,64,3.0]];
+           [5292,9272, 5750,6000, Math.PI/4.2,64,3.0]];
   L.forEach(([lx,ly,tx,ty,ang,int,mh])=>{const [x,z]=P(lx,ly),[u,v]=P(tx,ty);
     const sp=new THREE.SpotLight(0xfff0d8,int,9,ang,.55,1.1);sp.position.set(x,mh+.12,z);sp.target.position.set(u,zb+.75,v);banner.add(sp);banner.add(sp.target);
     const g=new THREE.Group();g.position.set(x,mh,z);banner.add(g);
@@ -531,19 +531,19 @@ const EQ=[
  {no:1,name:['ドライビングシミュレータ（32"×3面・モーション）','Driving simulator (motion, 32" ×3)'],qty:1,est:1500,rated:1500,size:'約2240×1800×1800',kg:'350',mount:['床置き','Floor'],note:['指定値 1,500W（モーション部・PC・モニター込み）','Specified 1,500 W (motion base, PC and monitors)'],pos:[1118,1556],pin:2.15,view:[.2,-1],d:4.2,th:1.0},
  {no:2,name:['VR360シミュレータ','VR360 Simulator'],qty:1,est:2000,rated:2800,size:'2047×1250×1960',kg:'350',mount:['床置き','Floor'],note:['ポールパーテーションで動線規制','Pole partitions guide visitor flow'],pos:[1332,8437],pin:2.3,view:[-.6,-1],d:4.5,th:1.1},
  {no:3,name:['VRモーションシート（公道最速体感）','VR motion seat (rally experience)'],qty:1,est:800,rated:1100,size:'800×800×1600',kg:['約110','approx. 110'],mount:['床置き','Floor'],note:['背面の倉庫斜め壁に43インチTV','43" TV on the STOCK slant wall behind'],pos:[4118,11175],pin:1.95,view:[1,.3],d:3.5,th:1.0},
- {no:4,name:['3Dホログラフィックディスプレイ（Metavania HoloSync）','3D holographic display (Metavania HoloSync)'],qty:1,est:200,rated:200,size:['750×750 厚み150・台座Ø500','750×750, depth 150, base Ø500'],kg:['約1.5','approx. 1.5'],mount:['床置き','Floor'],note:['背面の55インチと連動','Synced with the 55" TV behind it'],pos:[5607,7946],pin:2.2,view:[1,-.2],d:3,th:1.4},
+ {no:4,name:['3Dホログラフィックディスプレイ（Metavania HoloSync）','3D holographic display (Metavania HoloSync)'],qty:1,est:200,rated:200,size:['750×750 厚み150・台座Ø500','750×750, depth 150, base Ø500'],kg:['約1.5','approx. 1.5'],mount:['床置き','Floor'],note:['背面の55インチと連動','Synced with the 55" TV behind it'],pos:[5607,7733],pin:2.2,view:[1,-.2],d:3,th:1.4},
  {no:5,name:['85インチモニター（プレゼン 1・Air Driving 1）','85" monitors (presentation 1, Air Driving 1)'],qty:2,est:300,rated:400,size:['約1900×70×1100','approx. 1900×70×1100'],kg:'55',mount:['壁掛け','Wall-mounted'],note:['保管物 Samsung AU8000 ×2。85インチ壁 東面／Air Driving のデモ壁外側（どちらも中心H1700）','Inventory: Samsung AU8000 ×2. East face of the 85" wall / demo wall at Air Driving (both centre H1700)'],pos:[2820,1567],pin:2.5,view:[1,-.3],d:4,th:1.6},
- {no:6,name:['55インチTV（3面タワー 3・デモ壁 内側 2・北袖 1・HoloSync 背面 1）','55" TVs (tower 3, demo wall inner 2, north wing 1, behind HoloSync 1)'],qty:7,est:120,rated:150,size:['約1230×60×710','approx. 1230×60×710'],kg:['約17','approx. 17'],mount:['壁掛け（中心H1600）','Wall-mounted (centre H1600)'],note:['保管物 Samsung DU6900F ×7。SIGGRAPH の50/65インチ位置に充当','Inventory: Samsung DU6900F ×7, used where SIGGRAPH had 50" / 65" screens'],pos:[4099,7031],pin:2.15,view:[-1,-.2],d:3,th:1.5},
+ {no:6,name:['55インチTV（3面タワー 3・デモ壁 内側 2・北袖 1・HoloSync 背面 1）','55" TVs (tower 3, demo wall inner 2, north wing 1, behind HoloSync 1)'],qty:7,est:120,rated:150,size:['約1230×60×710','approx. 1230×60×710'],kg:['約17','approx. 17'],mount:['壁掛け（中心H1600）','Wall-mounted (centre H1600)'],note:['保管物 Samsung DU6900F ×7。SIGGRAPH の50/65インチ位置に充当','Inventory: Samsung DU6900F ×7, used where SIGGRAPH had 50" / 65" screens'],pos:[4099,6819],pin:2.15,view:[-1,-.2],d:3,th:1.5},
  {no:7,name:['43インチTV（モーションシート 1・VR360 1・STOCK 裏通路向き 1）','43" TVs (motion seat 1, VR360 1, STOCK rear aisle 1)'],qty:3,est:70,rated:80,size:['約960×60×560','approx. 960×60×560'],kg:'9',mount:['壁掛け','Wall-mounted'],note:['保管物 Samsung U8000 ×4（1台予備）。モーションシートは中心H1800（SIGGRAPHの1600より少し上）、VR360 は背面のSTOCK壁 中心H2600','Inventory: Samsung U8000 ×4 (1 spare). Motion seat at centre H1800 (a little above the SIGGRAPH 1600); VR360 on the STOCK wall behind it, centre H2600'],pos:[3738,11388],pin:2.2,view:[.8,-.6],d:3,th:1.6},
- {no:8,name:['32インチモニター（ビデオギャラリー）','32" monitor (video gallery)'],qty:1,est:45,rated:50,size:['約715×50×420','approx. 715×50×420'],kg:['約5','approx. 5'],mount:['壁掛け（中心H1600）','Wall-mounted (centre H1600)'],note:['保管物 32インチ ×2 のうち1台（1台予備）。デモ壁 南側斜め面の内側','1 of the 2 inventory 32" (1 spare). Inner face of the demo wall south slant'],pos:[4372,4590],pin:2.35,view:[-.87,-.49],d:3,th:1.6},
+ {no:8,name:['32インチモニター（ビデオギャラリー）','32" monitor (video gallery)'],qty:1,est:45,rated:50,size:['約715×50×420','approx. 715×50×420'],kg:['約5','approx. 5'],mount:['壁掛け（中心H1600）','Wall-mounted (centre H1600)'],note:['保管物 32インチ ×2 のうち1台（1台予備）。デモ壁 南側斜め面の内側','1 of the 2 inventory 32" (1 spare). Inner face of the demo wall south slant'],pos:[4380,4359],pin:2.35,view:[-.87,-.49],d:3,th:1.6},
  {no:9,name:['体験コーナー（ハンドル＋ペダル）','Driving corner (wheel + pedals)'],qty:6,est:0,rated:0,wText:['PCからUSB給電','USB-powered from PC'],size:'—',kg:'—',mount:['天板・足元','Tabletop / floor'],note:['カウンター 600×2300 H1100 ×2列、1列3セット','Counters 600×2300 H1100, 2 rows of 3 sets'],pos:[4700,1500],pin:1.7,view:[.3,-1],d:4.5,th:1.0},
  {no:10,name:['ノートPC（体験 6・デモ 12・講師 1・Air Driving 1・SENSO 1）','Laptop PCs (driving 6, demo 12, presenter 1, Air Driving 1, SENSO 1)'],qty:21,est:65,rated:120,size:'—',kg:'—',mount:['各カウンター・講師テーブル上','On the counters / presenter table'],note:['デモは各画面にノートPC 2台','Demo: two laptops per screen'],pos:[1500,4500],pin:1.45,view:[1,-.2],d:3,th:1.0},
  {no:11,name:['iPad（デモ壁 内側 1・北袖 1）','iPad (demo wall inner 1, north wing 1)'],qty:2,est:0,rated:0,wText:['PC/USB給電','PC / USB-powered'],size:'—',kg:'—',mount:['スタンド','On a holder'],note:'',pos:null},
  {no:12,name:['ハイテーブル Ø600（講師用 1・Air Driving 2）','High tables Ø600 (presenter 1, Air Driving 2)'],qty:3,est:0,rated:0,wText:['電源なし（PCは⑩）','No power (laptop in No.10)'],size:['Ø600 H1050','Ø600 H1050'],kg:'—',mount:['床置き','Floor'],note:['講師用：85インチ前の通路側／Air Driving 用：デモ壁沿い 2 台（うち 1 台に SENSO-Wheel）','Presenter: aisle side of the 85" screen / Air Driving: two by the demo wall (one with the SENSO-Wheel)'],pos:[3297,324],pin:1.5,view:[.3,-1],d:3,th:1.0},
- {no:13,name:['SENSO-Wheel（Air Driving コーナー）','SENSO-Wheel (Air Driving corner)'],qty:1,est:null,rated:null,wText:['要確認','To confirm'],size:'—',kg:'—',mount:['ハイテーブル上','On a high table'],note:['Air Driving テーブルの左（通路から見て）、Ø600 テーブル上。本体の制御ボックス上に 15インチ ノートPC','On a Ø600 table, left of the Air Driving table (seen from the aisle); a 15" laptop on its control box'],pos:[5400,4800],pin:1.7,view:[1,-.2],d:3,th:1.1},
+ {no:13,name:['SENSO-Wheel（Air Driving コーナー）','SENSO-Wheel (Air Driving corner)'],qty:1,est:null,rated:null,wText:['要確認','To confirm'],size:'—',kg:'—',mount:['ハイテーブル上','On a high table'],note:['Air Driving テーブルの左（通路から見て）、Ø600 テーブル上。本体の制御ボックス上に 15インチ ノートPC','On a Ø600 table, left of the Air Driving table (seen from the aisle); a 15" laptop on its control box'],pos:[5040,4520],pin:1.7,view:[1,-.2],d:3,th:1.1},
  {no:14,name:['STOCK 内コンセント（ネットワーク機器等）','STOCK outlet (network switch etc.)'],qty:1,est:200,rated:200,size:'—',kg:'—',mount:['STOCK 内・床','Inside STOCK, floor'],note:'',pos:[1600,10700],pin:1.3,view:[0,-1],d:3,th:0.5,up:4.5},
 ];
-const LAN=[{"no": "L1", "name": ["ドライビングシミュレータ用PC", "Driving simulator PC"], "ports": 1, "pos": [250, 1556], "tag": 1.4, "view": [0.2, -1], "d": 3.2, "th": 1.0}, {"no": "L2", "name": ["VR360 シミュレータ用PC", "VR360 Simulator PC"], "ports": 1, "pos": [2150, 9300], "tag": 1.75, "view": [0.6, -1], "d": 3.0, "th": 1.0}, {"no": "L3", "name": ["VRモーションシート用PC", "VR motion seat PC"], "ports": 1, "pos": [4650, 10880], "tag": 1.4, "view": [1, -0.3], "d": 2.8, "th": 1.0}, {"no": "L4", "name": ["3Dホログラフィックディスプレイ（HoloSync）", "3D holographic display (HoloSync)"], "ports": 1, "pos": [5650, 8250], "tag": 1.25, "view": [1, -0.2], "d": 2.6, "th": 1.0}, {"no": "L5", "name": ["デモ壁 内側（ノートPC×4＋iPad）", "Demo wall, inner side (4 laptops + iPad)"], "ports": 5, "pos": [3850, 6397], "tag": 1.35, "view": [-1, -0.2], "d": 3.0, "th": 1.0}, {"no": "L6", "name": ["デモ壁 北袖（ノートPC×2＋iPad）", "Demo wall, north wing (2 laptops + iPad)"], "ports": 3, "pos": [4500, 8700], "tag": 1.35, "view": [-0.86, 0.5], "d": 2.6, "th": 1.0}, {"no": "L7", "name": ["3面デモタワー（ノートPC×6）", "3-face demo tower (6 laptops)"], "ports": 6, "pos": [1100, 5000], "tag": 1.5, "view": [1, -0.3], "d": 3.0, "th": 1.0}, {"no": "L8", "name": ["体験コーナー 1列目（ノートPC×3）", "Driving corner, row 1 (3 laptops)"], "ports": 3, "pos": [4050, 1500], "tag": 1.5, "view": [0.3, -1], "d": 3.2, "th": 1.0}, {"no": "L9", "name": ["体験コーナー 2列目（ノートPC×3）", "Driving corner, row 2 (3 laptops)"], "ports": 3, "pos": [5350, 1500], "tag": 1.5, "view": [0.3, -1], "d": 3.2, "th": 1.0}, {"no": "L10", "name": ["プレゼンコーナー 講師用（ノートPC）", "Presentation corner – presenter (laptop)"], "ports": 1, "pos": [3297, 324], "tag": 1.4, "view": [0.2, -1], "d": 2.6, "th": 1.0}, {"no": "L11", "name": ["Air Driving コーナー（テーブル上ノートPC）", "Air Driving corner (laptop on the table)"], "ports": 1, "pos": [4770, 5650], "tag": 1.4, "view": [1, 0], "d": 2.6, "th": 1.0}, {"no": "L12", "name": ["STOCK（倉庫）内", "Inside STOCK"], "ports": 1, "pos": [3000, 11500], "tag": 0.75, "view": [0, -1], "d": 2.2, "th": 0.2, "up": 5.0}];
+const LAN=[{"no": "L1", "name": ["ドライビングシミュレータ用PC", "Driving simulator PC"], "ports": 1, "pos": [250, 1556], "tag": 1.4, "view": [0.2, -1], "d": 3.2, "th": 1.0}, {"no": "L2", "name": ["VR360 シミュレータ用PC", "VR360 Simulator PC"], "ports": 1, "pos": [2150, 9300], "tag": 1.75, "view": [0.6, -1], "d": 3.0, "th": 1.0}, {"no": "L3", "name": ["VRモーションシート用PC", "VR motion seat PC"], "ports": 1, "pos": [4650, 10880], "tag": 1.4, "view": [1, -0.3], "d": 2.8, "th": 1.0}, {"no": "L4", "name": ["3Dホログラフィックディスプレイ（HoloSync）", "3D holographic display (HoloSync)"], "ports": 1, "pos": [5650, 8040], "tag": 1.25, "view": [1, -0.2], "d": 2.6, "th": 1.0}, {"no": "L5", "name": ["デモ壁 内側（ノートPC×4＋iPad）", "Demo wall, inner side (4 laptops + iPad)"], "ports": 5, "pos": [3850, 6184], "tag": 1.35, "view": [-1, -0.2], "d": 3.0, "th": 1.0}, {"no": "L6", "name": ["デモ壁 北袖（ノートPC×2＋iPad）", "Demo wall, north wing (2 laptops + iPad)"], "ports": 3, "pos": [4370, 8350], "tag": 1.35, "view": [-0.86, 0.5], "d": 2.6, "th": 1.0}, {"no": "L7", "name": ["3面デモタワー（ノートPC×6）", "3-face demo tower (6 laptops)"], "ports": 6, "pos": [1100, 5000], "tag": 1.5, "view": [1, -0.3], "d": 3.0, "th": 1.0}, {"no": "L8", "name": ["体験コーナー 1列目（ノートPC×3）", "Driving corner, row 1 (3 laptops)"], "ports": 3, "pos": [4050, 1500], "tag": 1.5, "view": [0.3, -1], "d": 3.2, "th": 1.0}, {"no": "L9", "name": ["体験コーナー 2列目（ノートPC×3）", "Driving corner, row 2 (3 laptops)"], "ports": 3, "pos": [5350, 1500], "tag": 1.5, "view": [0.3, -1], "d": 3.2, "th": 1.0}, {"no": "L10", "name": ["プレゼンコーナー 講師用（ノートPC）", "Presentation corner – presenter (laptop)"], "ports": 1, "pos": [3297, 324], "tag": 1.4, "view": [0.2, -1], "d": 2.6, "th": 1.0}, {"no": "L11", "name": ["Air Driving コーナー（テーブル上ノートPC）", "Air Driving corner (laptop on the table)"], "ports": 1, "pos": [4831, 5390], "tag": 1.4, "view": [1, 0], "d": 2.6, "th": 1.0}, {"no": "L12", "name": ["STOCK（倉庫）内", "Inside STOCK"], "ports": 1, "pos": [3000, 11500], "tag": 0.75, "view": [0, -1], "d": 2.2, "th": 0.2, "up": 5.0}];
 // wired LAN drops (as on the SIGGRAPH page): floor outlet, cable up to an orange tag
 const lanPorts=LAN.reduce((t,l)=>t+l.ports,0);
 const lanTags={},lanGroup=new THREE.Group();scene.add(lanGroup);
@@ -560,8 +560,8 @@ const pins={};let sel=null;
 EQ.forEach(e=>{if(!e.pos)return;const d=document.createElement('div');d.className='pin';d.innerHTML=`<span>${e.no}</span>`;
   d.onclick=ev=>{ev.stopPropagation();select(e.no,true);};const o=new CSS2DObject(d);const [x,z]=P(...e.pos);o.position.set(x,e.pin,z);scene.add(o);pins[e.no]=d;});
 // area names (text labels, as on the SIGGRAPH page)
-[[['ドライビングシミュレータ','Driving simulator'],1118,1556,2.5],[['VR360シミュレータ','VR360 Simulator'],1332,8437,2.7],[['デモコーナー','Demo corner'],4250,6400,3.3],['Metabania HoloSync',5607,7946,2.6],
- [['3面デモタワー','3-face demo tower'],800,5000,3.3],[['講師用ハイテーブル','Presenter table'],3297,324,1.5],[['Air Driving テーブル','Air Driving table'],4770,5650,1.5],[['SENSO-Wheel','SENSO-Wheel'],5400,4800,1.5],[['85インチ壁','85" wall'],2535,1570,3.3],[['体験コーナー','Driving corner'],4700,1500,2.0],[['VRモーションシート','VR motion seat'],4118,11175,2.35],[['Air Driving','Air Driving'],5150,6100,2.0],['STOCK',1500,10900,4.3]]
+[[['ドライビングシミュレータ','Driving simulator'],1118,1556,2.5],[['VR360シミュレータ','VR360 Simulator'],1332,8437,2.7],[['デモコーナー','Demo corner'],4250,6190,3.3],['Metabania HoloSync',5607,7733,2.6],
+ [['3面デモタワー','3-face demo tower'],800,5000,3.3],[['講師用ハイテーブル','Presenter table'],3297,324,1.5],[['Air Driving テーブル','Air Driving table'],4831,5390,1.5],[['SENSO-Wheel','SENSO-Wheel'],5040,4520,1.5],[['85インチ壁','85" wall'],2535,1570,3.3],[['体験コーナー','Driving corner'],4700,1500,2.0],[['VRモーションシート','VR motion seat'],4118,11175,2.35],[['Air Driving','Air Driving'],5150,5950,2.0],['STOCK',1500,10900,4.3]]
  .forEach(([t,X,Y,h])=>label(t,X,Y,h));
 const list=document.getElementById('eq-list'),panel=document.getElementById('panel');
 function rowHTML(e){const on=sel===e.no,tot=(e.est||0)*e.qty;const L=(ja,en)=>lang==='ja'?ja:en;
@@ -620,7 +620,7 @@ const tr_=document.getElementById('t-rot');tr_.onclick=()=>{controls.autoRotate=
 // height guides
 __dimLine(2580,9560,0,4.0,['STOCK 壁 H4000','STOCK wall H4000']);
 __dimLine(2820,10,0,3.0,['展示壁 H3000','Display wall H3000']);
-__dimLine(4922,4283,0,3.0,['展示壁 H3000','Display wall H3000']);
+__dimLine(4937,4033,0,3.0,['展示壁 H3000','Display wall H3000']);
 __dimLine(517,5000,0,3.0,['3面タワー H3000','Tower H3000']);
 __dimLine(OX-2500,OY-4000,0,4.5,['吊りバナー下端 H4500','Banner bottom H4500']);
 __dimLine(OX-3000,OY-4500,4.5,6.0,['吊りバナー 1500（上端 H6000）','Banner 1500 (top H6000)']);
@@ -637,7 +637,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125200259';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125235726';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
