@@ -470,17 +470,11 @@ const banner=new THREE.Group();scene.add(banner);
      txt(g,LINES[face],cx,ty,fs,600,'#ffffff',.05);rule(g,cx-tw/2-rg-rl,ty-1,rl,2);rule(g,cx+tw/2+rg,ty-1,rl,2);
      // inside: theme text, quieter, for reading from inside the booth
      g=ci.getContext('2d');g.fillStyle=NAVY;g.fillRect(0,0,ci.width,ci.height);
-     if(long){const L=[['Intelligent Engineering Solutions',44,700,'#ffffff',.03,''],['Connect the Real World. Simulate the Future.',26,400,SUB,0,''],
-         ['From Smart Communities to Space.',26,300,SUB,0,'italic '],['GLOBAL ENGINEERING SOFTWARE COMPANY FORUM8 · JAPAN MADE SOFTWARE',16,600,CAPS,.18,'']];
-       const bw=Math.max(...L.map(l=>wid(g,l[0],l[1],l[2],l[4],l[5]))),mh=120,mw=mh*290/309,row=mw+44+2+44+bw,x0=(BW-row)/2;
-       if(ok){g.globalAlpha=.9;g.drawImage(wl,0,0,290,309,x0*k,(158-mh/2)*k,mw*k,mh*k);g.globalAlpha=1;}
-       rule(g,x0+mw+44,158-75,2,150);
-       const tx=x0+mw+44+2+44,hs=[53,31,31,25],tot=hs.reduce((a,b)=>a+b,0)+3*12;let y=158-tot/2;
-       L.forEach((l,n)=>{g.textAlign='left';g.font=`${l[5]}${l[2]} ${l[1]*k}px ${FF}`;g.fillStyle=l[3];try{g.letterSpacing=(l[4]*l[1]*k)+'px';}catch(e){}g.textBaseline='middle';g.fillText(l[0],tx*k,(y+hs[n]/2)*k);y+=hs[n]+12;});}
-     else{const mh=70,mw=mh*290/309;let y=(316-(mh+14+41+14+2+14+19))/2;
-       if(ok){g.globalAlpha=.9;g.drawImage(wl,0,0,290,309,(BW/2-mw/2)*k,y*k,mw*k,mh*k);g.globalAlpha=1;}
-       y+=mh+14;txt(g,'From Smart Communities to Space.',BW/2,y+20,34,600,'#ffffff',.03);y+=41+14;rule(g,BW/2-45,y,90,2);y+=2+14;
-       txt(g,'JAPAN MADE SOFTWARE',BW/2,y+10,16,600,CAPS,.18);}
+     // no mark, few words, large enough to read from inside the booth
+     if(long){txt(g,'Intelligent Engineering Solutions',BW/2,128,56,700,'#ffffff',.03);
+       const sw=wid(g,'Connect the Real World. Simulate the Future.',32,400);
+       txt(g,'Connect the Real World. Simulate the Future.',BW/2,200,32,400,SUB);rule(g,BW/2-sw/2-120-26,199,120,2);rule(g,BW/2+sw/2+26,199,120,2);}
+     else{txt(g,'From Smart Communities to Space.',BW/2,150,44,600,'#ffffff',.02);}
      t.needsUpdate=true;t2.needsUpdate=true;};
    draw();return {draw,out:new THREE.MeshStandardMaterial({map:t,emissive:0xffffff,emissiveMap:t,emissiveIntensity:.42,roughness:.8,side:THREE.FrontSide}),
      in:new THREE.MeshStandardMaterial({map:t2,emissive:0xffffff,emissiveMap:t2,emissiveIntensity:.35,roughness:.8,side:THREE.BackSide})};}
@@ -664,7 +658,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126173025';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126174213';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
