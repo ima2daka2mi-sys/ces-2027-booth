@@ -450,7 +450,7 @@ const banner=new THREE.Group();scene.add(banner);
  // UVs follow the trapezoid (bottom edge uses the inner part of the image) so the print is not sheared
  const SLANT=Math.hypot(1500,500), ANISO=renderer.capabilities.getMaxAnisotropy();
  const im=new Image();const prints=[];
- const NAVY='#002063',ACC='#4fa3ff',SUB='#d6e4ff',CAPS='#8fb6ff',FF='Montserrat,"Segoe UI",Arial,sans-serif';
+ const NAVY='#00123a',ACC='#4fa3ff',SUB='#d6e4ff',CAPS='#8fb6ff',FF='Montserrat,"Segoe UI",Arial,sans-serif';
  // face order: 0 south (main aisle, 6000), 1 east (9000), 2 north (rear aisle, 6000), 3 west (9000)
  const LINES=['Intelligent Engineering Solutions','Connect the Real World. Simulate the Future.','Japan made software','From Smart Communities to Space.'];
  function makePrint(face,topLen){const c=document.createElement('canvas'),ci=document.createElement('canvas');
@@ -482,7 +482,7 @@ const banner=new THREE.Group();scene.add(banner);
        y+=mh+14;txt(g,'From Smart Communities to Space.',BW/2,y+20,34,600,'#ffffff',.03);y+=41+14;rule(g,BW/2-45,y,90,2);y+=2+14;
        txt(g,'JAPAN MADE SOFTWARE',BW/2,y+10,16,600,CAPS,.18);}
      t.needsUpdate=true;t2.needsUpdate=true;};
-   draw();return {draw,out:new THREE.MeshStandardMaterial({map:t,emissive:0xffffff,emissiveMap:t,emissiveIntensity:.55,roughness:.8,side:THREE.FrontSide}),
+   draw();return {draw,out:new THREE.MeshStandardMaterial({map:t,emissive:0xffffff,emissiveMap:t,emissiveIntensity:.42,roughness:.8,side:THREE.FrontSide}),
      in:new THREE.MeshStandardMaterial({map:t2,emissive:0xffffff,emissiveMap:t2,emissiveIntensity:.35,roughness:.8,side:THREE.BackSide})};}
  for(let f=0;f<4;f++)prints.push(makePrint(f,f%2?9000:6000));
  const redraw=()=>prints.forEach(p=>p.draw());
@@ -664,7 +664,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126171242';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126173025';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
