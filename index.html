@@ -632,7 +632,7 @@ addEventListener('click',ev=>{const d=document.getElementById('docs');if(d.open&
 
 // ---------- views ----------
 const VIEWS={
-  persp:[new THREE.Vector3(-9.5,11,10.5),new THREE.Vector3(0,.8,0)],
+  persp:[new THREE.Vector3(-10.5,1.6,13.5),new THREE.Vector3(0,2.7,0)],   // low eye (about standing height), looking up so the banner and booth fit
   // eye and target raised so the hanging banner (top H6000) is in frame on a 1920x1080 screen
   front:[new THREE.Vector3(0.6,3.4,15.5),new THREE.Vector3(0,2.9,0)],
   left:[new THREE.Vector3(-15,3.4,0.2),new THREE.Vector3(0,2.9,0)],
@@ -671,7 +671,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126183335';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126183910';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
