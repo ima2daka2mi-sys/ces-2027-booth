@@ -57,6 +57,9 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 /* 3D-letter notes: always shown */
 .lbl.l3d{background:rgba(64,140,255,.92);color:#fff;border-color:transparent}
 .hide-labels .lbl.l3d{display:block}
+/* on/off: equipment numbers, 3D-letter tags */
+body.hide-pins .pin{display:none!important}
+body.hide-l3d .lbl.l3d{display:none!important}
 /* equipment & power panel */
 .panel{position:fixed;right:max(16px,env(safe-area-inset-right,0px));top:var(--ptop,72px);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(360px,calc(100% - 32px));
   background:var(--panel);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;overflow:hidden;backdrop-filter:blur(6px)}
@@ -103,6 +106,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
     <button id="t-eq" aria-pressed="true" data-en="Equipment &amp; power" data-ja="機材・電力">Equipment &amp; power</button>
     <button id="t-banner" aria-pressed="true" data-en="Banner" data-ja="吊りバナー">Banner</button>
     <button id="t-label" aria-pressed="false" data-en="Labels" data-ja="ラベル">Labels</button>
+    <button id="t-pin" aria-pressed="true" data-en="Numbers" data-ja="番号">Numbers</button>
+    <button id="t-l3d" aria-pressed="true" data-en="3D letters" data-ja="3D文字">3D letters</button>
     <button id="t-lan" aria-pressed="true" data-en="LAN" data-ja="LAN">LAN</button>
     <button id="t-dim" aria-pressed="true" data-en="Heights" data-ja="高さ">Heights</button>
     <button id="t-rot" aria-pressed="false" data-en="Auto-rotate" data-ja="自動回転">Auto-rotate</button>
@@ -642,6 +647,7 @@ const VBTN=['persp','front','left','back','right','top'];
 function setPressed(v){VBTN.forEach(k=>document.getElementById('v-'+k).setAttribute('aria-pressed',String(k===v)));}
 VBTN.forEach(v=>{document.getElementById('v-'+v).onclick=()=>{fly(...VIEWS[v].map(x=>x.clone()));setPressed(v);};});
 const tb=document.getElementById('t-banner');tb.onclick=()=>{banner.visible=!banner.visible;tb.setAttribute('aria-pressed',String(banner.visible));};
+[['t-pin','hide-pins'],['t-l3d','hide-l3d']].forEach(([id,cls])=>{const b=document.getElementById(id);b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));document.body.classList.toggle(cls,!on);};});
 const tl=document.getElementById('t-label');tl.onclick=()=>{const on=tl.getAttribute('aria-pressed')!=='true';LABELS_ON=on;tl.setAttribute('aria-pressed',String(on));labels.forEach(o=>o.visible=on);};
 const tr_=document.getElementById('t-rot');tr_.onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=.8;tr_.setAttribute('aria-pressed',String(controls.autoRotate));};
 // height guides
@@ -664,7 +670,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126180700';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126181242';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
