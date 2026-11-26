@@ -296,7 +296,7 @@ tv(2820,1567,1,0,IN[85],1.7,screenTex('PRESENTATION','85"',215));
 {const X=4831,Y=5390;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
  laptop(X,Y,1,0,1.05,screenTex('AIR DRIVING','',215));}
 // SENSO-Wheel on a second high table Ø600, left of the Air Driving table seen from the east aisle
-{const X=5040,Y=4520;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
+{const X=5200,Y=4520;cyl(X,Y,.3,1.02,.03,mat.white,48);cyl(X,Y,.03,0,1.02,mat.metal,16);cyl(X,Y,.22,0,.02,mat.metal,32);
 }
 // ③ ZENMAI bent wall (CEATEC shape) + robot stands with SIGGRAPH counters
 prism([[5155,9357],[4099,7526],[4099,4846],[4662,3872],[4937,4033],[4418,4933],[4418,7439],[5428,9187]],0,H,mat.wall);   // pico plan rev
@@ -375,7 +375,7 @@ const SIM_ROT=(()=>{try{const v=new URLSearchParams(location.search).get('simrot
 // (humanoid robot corner removed: now the Air Driving corner)
 // SENSO-Wheel: Meshy model (steering assembly, simplified to 46k triangles) on the Ø600 table, wheel toward the east aisle;
 // scaled so the wheel is about 300 across (assembly about 590 long); a 15" laptop sits on the control box behind the wheel
-{const src=document.getElementById('m-steer'),tj=document.getElementById('m-steer-tex');const X=5040,Y=4520,TOP=1.05,S=.31;
+{const src=document.getElementById('m-steer'),tj=document.getElementById('m-steer-tex');const X=5200,Y=4520,TOP=1.05,S=.31;
  if(src&&tj){const tx=JSON.parse(tj.textContent),tl=new THREE.TextureLoader(),ani=renderer.capabilities.getMaxAnisotropy();
   const T=(u,srgb)=>{const t=tl.load(u);t.flipY=false;if(srgb)t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=ani;return t;};
   const mr=T(tx.roughnessMap);
@@ -603,7 +603,7 @@ const EQ=[
  {no:10,name:['ノートPC（体験 6・デモ 12・講師 1・Air Driving 1・SENSO 1）','Laptop PCs (driving 6, demo 12, presenter 1, Air Driving 1, SENSO 1)'],qty:21,est:65,rated:120,size:'—',kg:'—',mount:['各カウンター・講師テーブル上','On the counters / presenter table'],note:['デモは各画面にノートPC 2台','Demo: two laptops per screen'],pos:[1500,4500],pin:1.45,view:[1,-.2],d:3,th:1.0},
  {no:11,name:['iPad（デモ壁 内側 1・北袖 1）','iPad (demo wall inner 1, north wing 1)'],qty:2,est:0,rated:0,wText:['PC/USB給電','PC / USB-powered'],size:'—',kg:'—',mount:['スタンド','On a holder'],note:'',pos:null},
  {no:12,name:['ハイテーブル Ø600（講師用 1・Air Driving 2）','High tables Ø600 (presenter 1, Air Driving 2)'],qty:3,est:0,rated:0,wText:['電源なし（PCは⑩）','No power (laptop in No.10)'],size:['Ø600 H1050','Ø600 H1050'],kg:'—',mount:['床置き','Floor'],note:['講師用：85インチ前の通路側／Air Driving 用：デモ壁沿い 2 台（うち 1 台に SENSO-Wheel）','Presenter: aisle side of the 85" screen / Air Driving: two by the demo wall (one with the SENSO-Wheel)'],pos:[3297,324],pin:1.5,view:[.3,-1],d:3,th:1.0},
- {no:13,name:['SENSO-Wheel（Air Driving コーナー）','SENSO-Wheel (Air Driving corner)'],qty:1,est:null,rated:null,wText:['要確認','To confirm'],size:'—',kg:'—',mount:['ハイテーブル上','On a high table'],note:['Air Driving テーブルの左（通路から見て）、Ø600 テーブル上。本体の制御ボックス上に 15インチ ノートPC','On a Ø600 table, left of the Air Driving table (seen from the aisle); a 15" laptop on its control box'],pos:[5040,4520],pin:1.7,view:[1,-.2],d:3,th:1.1},
+ {no:13,name:['SENSO-Wheel（Air Driving コーナー）','SENSO-Wheel (Air Driving corner)'],qty:1,est:null,rated:null,wText:['要確認','To confirm'],size:'—',kg:'—',mount:['ハイテーブル上','On a high table'],note:['Air Driving テーブルの左（通路から見て）、Ø600 テーブル上。本体の制御ボックス上に 15インチ ノートPC','On a Ø600 table, left of the Air Driving table (seen from the aisle); a 15" laptop on its control box'],pos:[5200,4520],pin:1.7,view:[1,-.2],d:3,th:1.1},
  {no:14,name:['STOCK 内コンセント（ネットワーク機器等）','STOCK outlet (network switch etc.)'],qty:1,est:200,rated:200,size:'—',kg:'—',mount:['STOCK 内・床','Inside STOCK, floor'],note:'',pos:[1600,10700],pin:1.3,view:[0,-1],d:3,th:0.5,up:4.5},
 ];
 const LAN=[{"no": "L1", "name": ["ドライビングシミュレータ用PC", "Driving simulator PC"], "ports": 1, "pos": [250, 1556], "tag": 1.4, "view": [0.2, -1], "d": 3.2, "th": 1.0}, {"no": "L2", "name": ["VR360 シミュレータ用PC", "VR360 Simulator PC"], "ports": 1, "pos": [2150, 9300], "tag": 1.75, "view": [0.6, -1], "d": 3.0, "th": 1.0}, {"no": "L3", "name": ["VRモーションシート用PC", "VR motion seat PC"], "ports": 1, "pos": [4650, 10880], "tag": 1.4, "view": [1, -0.3], "d": 2.8, "th": 1.0}, {"no": "L4", "name": ["3Dホログラフィックディスプレイ（HoloSync）", "3D holographic display (HoloSync)"], "ports": 1, "pos": [5650, 8040], "tag": 1.25, "view": [1, -0.2], "d": 2.6, "th": 1.0}, {"no": "L5", "name": ["デモ壁 内側（ノートPC×4＋iPad）", "Demo wall, inner side (4 laptops + iPad)"], "ports": 5, "pos": [3850, 6184], "tag": 1.35, "view": [-1, -0.2], "d": 3.0, "th": 1.0}, {"no": "L6", "name": ["デモ壁 北袖（ノートPC×2＋iPad）", "Demo wall, north wing (2 laptops + iPad)"], "ports": 3, "pos": [4370, 8350], "tag": 1.35, "view": [-0.86, 0.5], "d": 2.6, "th": 1.0}, {"no": "L7", "name": ["3面デモタワー（ノートPC×6）", "3-face demo tower (6 laptops)"], "ports": 6, "pos": [1100, 5000], "tag": 1.5, "view": [1, -0.3], "d": 3.0, "th": 1.0}, {"no": "L8", "name": ["体験コーナー 1列目（ノートPC×3）", "Driving corner, row 1 (3 laptops)"], "ports": 3, "pos": [4050, 1500], "tag": 1.5, "view": [0.3, -1], "d": 3.2, "th": 1.0}, {"no": "L9", "name": ["体験コーナー 2列目（ノートPC×3）", "Driving corner, row 2 (3 laptops)"], "ports": 3, "pos": [5350, 1500], "tag": 1.5, "view": [0.3, -1], "d": 3.2, "th": 1.0}, {"no": "L10", "name": ["プレゼンコーナー 講師用（ノートPC）", "Presentation corner – presenter (laptop)"], "ports": 1, "pos": [3297, 324], "tag": 1.4, "view": [0.2, -1], "d": 2.6, "th": 1.0}, {"no": "L11", "name": ["Air Driving コーナー（テーブル上ノートPC）", "Air Driving corner (laptop on the table)"], "ports": 1, "pos": [4831, 5390], "tag": 1.4, "view": [1, 0], "d": 2.6, "th": 1.0}, {"no": "L12", "name": ["STOCK（倉庫）内", "Inside STOCK"], "ports": 1, "pos": [3000, 11500], "tag": 0.75, "view": [0, -1], "d": 2.2, "th": 0.2, "up": 5.0}];
@@ -624,7 +624,7 @@ EQ.forEach(e=>{if(!e.pos)return;const d=document.createElement('div');d.classNam
   d.onclick=ev=>{ev.stopPropagation();select(e.no,true);};const o=new CSS2DObject(d);const [x,z]=P(...e.pos);o.position.set(x,e.pin,z);scene.add(o);pins[e.no]=d;});
 // area names (text labels, as on the SIGGRAPH page)
 [[['ドライビングシミュレータ','Driving simulator'],1118,1556,2.5],[['VR360シミュレータ','VR360 Simulator'],1332,8437,2.7],[['デモコーナー','Demo corner'],4250,6190,3.3],['Metabania HoloSync',5607,7733,2.6],
- [['3面デモタワー','3-face demo tower'],800,5000,3.3],[['講師用ハイテーブル','Presenter table'],3297,324,1.5],[['Air Driving テーブル','Air Driving table'],4831,5390,1.5],[['SENSO-Wheel','SENSO-Wheel'],5040,4520,1.5],[['85インチ壁','85" wall'],2535,1570,3.3],[['体験コーナー','Driving corner'],4700,1500,2.0],[['VRモーションシート','VR motion seat'],4118,11175,2.35],[['Air Driving','Air Driving'],5150,5950,2.0],['STOCK',1500,10900,4.3]]
+ [['3面デモタワー','3-face demo tower'],800,5000,3.3],[['講師用ハイテーブル','Presenter table'],3297,324,1.5],[['Air Driving テーブル','Air Driving table'],4831,5390,1.5],[['SENSO-Wheel','SENSO-Wheel'],5200,4520,1.5],[['85インチ壁','85" wall'],2535,1570,3.3],[['体験コーナー','Driving corner'],4700,1500,2.0],[['VRモーションシート','VR motion seat'],4118,11175,2.35],[['Air Driving','Air Driving'],5150,5950,2.0],['STOCK',1500,10900,4.3]]
  .forEach(([t,X,Y,h])=>label(t,X,Y,h));
 const list=document.getElementById('eq-list'),panel=document.getElementById('panel');
 function rowHTML(e){const on=sel===e.no,tot=(e.est||0)*e.qty;const L=(ja,en)=>lang==='ja'?ja:en;
@@ -702,7 +702,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126185824';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127000826';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
