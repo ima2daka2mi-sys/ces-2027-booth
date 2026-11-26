@@ -541,11 +541,37 @@ logo3D(3327+.849*5,10775-.5286*5,.849,-.5286,2.2,3.5);
 logoPrint(2045,12000,0,1,2.4,3.5);
 logoPrint(0,10775,-1,0,2.0,3.5);
 logo3D(1282,9549,0,-1,2.2,3.5);
-// 85" wall (between ① and ⑤): solid letters on the upper band of both faces
-logo3D(2820,1567,1,0,1.9,2.62);
+// 85" wall (between ① and ⑤): solid letters (logo with katakana) on the west face only;
+// the east (presentation) face carries a printed zone graphic above the 85" screen instead
 logo3D(2251,1570,-1,0,1.9,2.62);
+// zone graphic, printed on the wall face above the TV: 2,900 x 640, centre H2640 (TV top ~H2230)
+{const W=2.9,Hh=.64,cy=2.64,X=2820,Y=1567;
+ const c=document.createElement('canvas');c.width=2048;c.height=Math.round(2048*Hh/W);
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();
+ const FF='Montserrat,"Segoe UI",Arial,sans-serif',k=c.width/2900;   // drawn in mm (2900 x 640)
+ const draw=()=>{const g=c.getContext('2d');const T=(s,x,y,px,w,col,ls=0,al='left',maxW=0)=>{g.font=`${w} ${px*k}px ${FF}`;try{g.letterSpacing=(ls*px*k)+'px';}catch(e){}if(maxW){const mw=g.measureText(s).width/k;if(mw>maxW){px*=maxW/mw;g.font=`${w} ${px*k}px ${FF}`;}}g.fillStyle=col;try{g.letterSpacing=(ls*px*k)+'px';}catch(e){}g.textAlign=al;g.textBaseline='alphabetic';g.fillText(s,x*k,y*k);};
+   const gr=g.createLinearGradient(0,0,c.width,0);gr.addColorStop(0,'#00123a');gr.addColorStop(.62,'#001a52');gr.addColorStop(1,'#002a78');g.fillStyle=gr;g.fillRect(0,0,c.width,c.height);
+   // thin accent frame lines
+   g.fillStyle='#4fa3ff';g.fillRect(0,0,c.width,6*k);g.fillRect(0,c.height-6*k,c.width,6*k);
+   // left block: zone name, main line, sub line
+   g.fillRect(110*k,110*k,70*k,8*k);
+   T('EXPERIENCE & PRESENTATION ZONE',205,128,46,700,'#4fa3ff',.16,'left',1800);
+   T('Intelligent Engineering Solutions',110,330,150,700,'#ffffff',.01,'left',1880);
+   T('Connect the Real World. Simulate the Future.',110,450,74,400,'#d6e4ff',0,'left',1880);
+   // right block: timetable, divided by a vertical rule
+   g.fillStyle='rgba(79,163,255,.55)';g.fillRect(2060*k,95*k,4*k,450*k);
+   const cx=2225,cyy=300,r=95;g.strokeStyle='#ffffff';g.lineWidth=12*k;g.beginPath();g.arc(cx*k,cyy*k,r*k,0,Math.PI*2);g.stroke();
+   g.lineCap='round';g.beginPath();g.moveTo(cx*k,cyy*k);g.lineTo(cx*k,(cyy-65)*k);g.moveTo(cx*k,cyy*k);g.lineTo((cx+36)*k,(cyy+48)*k);g.stroke();   // hands at :10 past (minute hand on 2)
+   T('PRESENTATION',2370,180,38,700,'#4fa3ff',.14,'left',470);
+   T('Every hour',2370,272,64,600,'#ffffff',0,'left',470);
+   T('at :10',2370,385,100,700,'#ffffff',0,'left',470);
+   T('15 min',2370,470,54,400,'#d6e4ff',0,'left',470);
+   t.needsUpdate=true;};
+ draw();try{Promise.all(['400','600','700'].map(w=>document.fonts.load(w+' 40px Montserrat'))).then(draw,()=>{});document.fonts.ready.then(draw);}catch(e){}
+ const m=new THREE.Mesh(new THREE.PlaneGeometry(W,Hh),new THREE.MeshStandardMaterial({map:t,emissive:0xffffff,emissiveMap:t,emissiveIntensity:.35,roughness:.85}));
+ const [x,z]=P(X,Y);m.position.set(x+.004,cy,z);m.rotation.y=Math.PI/2;scene.add(m);}
 // notes on every solid-letter location
-label(['3D文字（両面）','3D letters (both faces)'],2535,1570,3.25,'l3d');
+label(['3D文字（西面）','3D letters (west face)'],2535,1570,3.25,'l3d');
 label(['3D文字','3D letters'],3327,10775,4.25,'l3d');
 label(['3D文字','3D letters'],1282,9549,4.25,'l3d');
 
@@ -671,7 +697,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126183910';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126184438';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
