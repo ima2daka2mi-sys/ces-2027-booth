@@ -114,6 +114,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
       <a href="docs/power-list-en.pdf" data-href-en="docs/power-list-en.pdf" data-href-ja="docs/power-list.pdf" target="_blank" rel="noopener"><span data-en="Equipment & power list" data-ja="機材・電力一覧">Equipment &amp; power list</span><small>PDF A3</small></a>
       <a href="docs/warehouse-inventory.pdf" data-href-en="docs/warehouse-inventory.pdf" data-href-ja="docs/warehouse-inventory.pdf" target="_blank" rel="noopener"><span data-en="US warehouse inventory" data-ja="米国倉庫 保管物一覧">US warehouse inventory</span><small>PDF (English + Japanese)</small></a>
       <a href="docs/amazon-purchase-list.pdf" data-href-en="docs/amazon-purchase-list.pdf" data-href-ja="docs/amazon-purchase-list.pdf" target="_blank" rel="noopener"><span data-en="Amazon.com purchase list" data-ja="Amazon.com 購入リスト">Amazon.com purchase list</span><small>PDF (English)</small></a>
+      <a href="docs/banner-print-data.pdf" data-href-en="docs/banner-print-data.pdf" data-href-ja="docs/banner-print-data.pdf" target="_blank" rel="noopener"><span data-en="Hanging banner print data" data-ja="吊りバナー 印刷データ">Hanging banner print data</span><small>PDF 1:10 (7 pages)</small></a>
       <a class="all" href="docs/booth-documents-all-en.pdf" data-href-en="docs/booth-documents-all-en.pdf" data-href-ja="docs/booth-documents-all.pdf" target="_blank" rel="noopener"><span data-en="All documents (7 pages)" data-ja="帳票一式（7ページ）">All documents (7 pages)</span><small>PDF</small></a>
     </div></details>
   </div>
@@ -663,7 +664,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126175021';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126180700';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
