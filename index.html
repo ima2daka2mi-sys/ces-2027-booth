@@ -1,4 +1,5 @@
 <title>CES 2027 FORUM8 Booth 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: full-bleed 3D viewport, one floating control bar top-left, spec strip bottom-left, equipment & power panel right (same scheme as the SIGGRAPH Asia 2026 booth page) */
@@ -448,19 +449,45 @@ const banner=new THREE.Group();scene.add(banner);
  // one print per face size, drawn at the face's true proportions (top edge x slant height 1581),
  // UVs follow the trapezoid (bottom edge uses the inner part of the image) so the print is not sheared
  const SLANT=Math.hypot(1500,500), ANISO=renderer.capabilities.getMaxAnisotropy();
- const im=new Image();const prints={};
- function makePrint(topLen){const c=document.createElement('canvas');c.width=2048;c.height=Math.round(2048*SLANT/topLen);
-   const g=c.getContext('2d');const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=ANISO;
-   const t2=t.clone();t2.wrapS=THREE.RepeatWrapping;t2.repeat.x=-1;t2.offset.x=1;   // inside face, read the right way round
-   const draw=()=>{const W=c.width,Hh=c.height;g.fillStyle='#141518';g.fillRect(0,0,W,Hh);
-     {const gr=g.createLinearGradient(0,Hh,0,0);gr.addColorStop(0,'rgba(255,236,205,.42)');gr.addColorStop(.35,'rgba(255,236,205,.16)');gr.addColorStop(.8,'rgba(255,236,205,0)');g.fillStyle=gr;g.fillRect(0,0,W,Hh);
-      }
-     if(im.complete&&im.naturalWidth){const r=im.naturalWidth/im.naturalHeight;let h=Hh*.5,w=h*r;if(w>W*.7){w=W*.7;h=w/r;}g.drawImage(whiteLogo(im),(W-w)/2,Hh*.5-h/2,w,h);}
+ const im=new Image();const prints=[];
+ const NAVY='#002063',ACC='#4fa3ff',SUB='#d6e4ff',CAPS='#8fb6ff',FF='Montserrat,"Segoe UI",Arial,sans-serif';
+ // face order: 0 south (main aisle, 6000), 1 east (9000), 2 north (rear aisle, 6000), 3 west (9000)
+ const LINES=['Intelligent Engineering Solutions','Connect the Real World. Simulate the Future.','Japan made software','From Smart Communities to Space.'];
+ function makePrint(face,topLen){const c=document.createElement('canvas'),ci=document.createElement('canvas');
+   c.width=ci.width=2048;c.height=ci.height=Math.round(2048*SLANT/topLen);
+   const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=ANISO;
+   const t2=new THREE.CanvasTexture(ci);t2.colorSpace=THREE.SRGBColorSpace;t2.anisotropy=ANISO;t2.wrapS=THREE.RepeatWrapping;t2.repeat.x=-1;t2.offset.x=1;   // inside, read the right way round
+   const long=topLen>7000,BW=long?1800:1200,k=c.width/BW;   // artwork drawn on a 1 px = 5 mm board (BW x 316), scaled to the canvas
+   const txt=(g,str,x,y,px,w,col,ls=0,it='')=>{g.font=`${it}${w} ${px*k}px ${FF}`;g.fillStyle=col;try{g.letterSpacing=(ls*px*k)+'px';}catch(e){}g.textBaseline='middle';g.textAlign='center';g.fillText(str,x*k,y*k);};
+   const wid=(g,str,px,w,ls=0,it='')=>{g.font=`${it}${w} ${px*k}px ${FF}`;try{g.letterSpacing=(ls*px*k)+'px';}catch(e){}return g.measureText(str).width/k;};
+   const rule=(g,x,y,w,h)=>{g.fillStyle=ACC;g.fillRect(x*k,y*k,w*k,h*k);};
+   const draw=()=>{const ok=im.complete&&im.naturalWidth;const wl=ok?whiteLogo(im):null;
+     // outside: big white logo + this face's theme line between two accent rules
+     let g=c.getContext('2d');g.fillStyle=NAVY;g.fillRect(0,0,c.width,c.height);
+     const lh=long?150:128,fs=long?36:32,gap=long?20:18,top=(316-(lh+gap+fs*1.2))/2,cx=BW/2;
+     if(ok){const lw=lh*im.naturalWidth/im.naturalHeight;g.drawImage(wl,(cx-lw/2)*k,top*k,lw*k,lh*k);}
+     const ty=top+lh+gap+fs*.6,tw=wid(g,LINES[face],fs,600,.05),rl=long?70:50,rg=long?22:18;
+     txt(g,LINES[face],cx,ty,fs,600,'#ffffff',.05);rule(g,cx-tw/2-rg-rl,ty-1,rl,2);rule(g,cx+tw/2+rg,ty-1,rl,2);
+     // inside: theme text, quieter, for reading from inside the booth
+     g=ci.getContext('2d');g.fillStyle=NAVY;g.fillRect(0,0,ci.width,ci.height);
+     if(long){const L=[['Intelligent Engineering Solutions',44,700,'#ffffff',.03,''],['Connect the Real World. Simulate the Future.',26,400,SUB,0,''],
+         ['From Smart Communities to Space.',26,300,SUB,0,'italic '],['GLOBAL ENGINEERING SOFTWARE COMPANY FORUM8 · JAPAN MADE SOFTWARE',16,600,CAPS,.18,'']];
+       const bw=Math.max(...L.map(l=>wid(g,l[0],l[1],l[2],l[4],l[5]))),mh=120,mw=mh*290/309,row=mw+44+2+44+bw,x0=(BW-row)/2;
+       if(ok){g.globalAlpha=.9;g.drawImage(wl,0,0,290,309,x0*k,(158-mh/2)*k,mw*k,mh*k);g.globalAlpha=1;}
+       rule(g,x0+mw+44,158-75,2,150);
+       const tx=x0+mw+44+2+44,hs=[53,31,31,25],tot=hs.reduce((a,b)=>a+b,0)+3*12;let y=158-tot/2;
+       L.forEach((l,n)=>{g.textAlign='left';g.font=`${l[5]}${l[2]} ${l[1]*k}px ${FF}`;g.fillStyle=l[3];try{g.letterSpacing=(l[4]*l[1]*k)+'px';}catch(e){}g.textBaseline='middle';g.fillText(l[0],tx*k,(y+hs[n]/2)*k);y+=hs[n]+12;});}
+     else{const mh=70,mw=mh*290/309;let y=(316-(mh+14+41+14+2+14+19))/2;
+       if(ok){g.globalAlpha=.9;g.drawImage(wl,0,0,290,309,(BW/2-mw/2)*k,y*k,mw*k,mh*k);g.globalAlpha=1;}
+       y+=mh+14;txt(g,'From Smart Communities to Space.',BW/2,y+20,34,600,'#ffffff',.03);y+=41+14;rule(g,BW/2-45,y,90,2);y+=2+14;
+       txt(g,'JAPAN MADE SOFTWARE',BW/2,y+10,16,600,CAPS,.18);}
      t.needsUpdate=true;t2.needsUpdate=true;};
    draw();return {draw,out:new THREE.MeshStandardMaterial({map:t,emissive:0xffffff,emissiveMap:t,emissiveIntensity:.55,roughness:.8,side:THREE.FrontSide}),
-     in:new THREE.MeshStandardMaterial({color:0x141518,roughness:.8,side:THREE.BackSide})/* inside: plain, no logo */};}
- prints[6000]=makePrint(6000);prints[9000]=makePrint(9000);
- im.onload=()=>{prints[6000].draw();prints[9000].draw();};im.src=F8_LOGO;
+     in:new THREE.MeshStandardMaterial({map:t2,emissive:0xffffff,emissiveMap:t2,emissiveIntensity:.35,roughness:.8,side:THREE.BackSide})};}
+ for(let f=0;f<4;f++)prints.push(makePrint(f,f%2?9000:6000));
+ const redraw=()=>prints.forEach(p=>p.draw());
+ im.onload=redraw;im.src=F8_LOGO;
+ try{Promise.all(['300','400','600','700'].map(w=>document.fonts.load(w+' 40px Montserrat'))).then(redraw,()=>{});document.fonts.ready.then(redraw);}catch(e){}
  const T=[[OX-3000,OY-4500],[OX+3000,OY-4500],[OX+3000,OY+4500],[OX-3000,OY+4500]];
  const B=[[OX-2500,OY-4000],[OX+2500,OY-4000],[OX+2500,OY+4000],[OX-2500,OY+4000]];
  for(let i=0;i<4;i++){const j=(i+1)%4;const v=[[...P(...B[i])],[...P(...B[j])],[...P(...T[j])],[...P(...T[i])]];
@@ -468,7 +495,7 @@ const banner=new THREE.Group();scene.add(banner);
    const pos=new Float32Array([v[0][0],zb,v[0][1], v[1][0],zb,v[1][1], v[2][0],zt,v[2][1], v[3][0],zt,v[3][1]]);
    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
    geo.setAttribute('uv',new THREE.BufferAttribute(new Float32Array([inset,0,1-inset,0,1,1,0,1]),2));geo.setIndex([0,1,2,0,2,3]);geo.computeVertexNormals();
-   const pr=prints[topLen];const m=new THREE.Mesh(geo,pr.out);m.castShadow=true;banner.add(m);banner.add(new THREE.Mesh(geo,pr.in));}
+   const pr=prints[i];const m=new THREE.Mesh(geo,pr.out);m.castShadow=true;banner.add(m);banner.add(new THREE.Mesh(geo,pr.in));}
  // banner lighting: one spot per face, fixed on top of a 3 m wall and aimed up at the outer face
  {const body=M(0x1b1c1f,{roughness:.4,metalness:.5}),lens=new THREE.MeshBasicMaterial({color:0xfff1d6});
   const beamM=new THREE.MeshBasicMaterial({color:0xfff1d6,transparent:true,opacity:.05,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
@@ -637,7 +664,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261125235726';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261126171242';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
