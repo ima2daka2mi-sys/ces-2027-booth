@@ -410,6 +410,16 @@ function splitTop(m,cut,centre=false,caps=false){const geo=m.geometry,pos=geo.at
     const rb=ring(base,yc-band,yc+band);
     if(!rb.isEmpty()){const w=rb.max.x-rb.min.x,d=rb.max.z-rb.min.z;const c=new THREE.Mesh(new THREE.BoxGeometry(w,th,d),cm);
       c.position.set(m.position.x+(rb.min.x+rb.max.x)/2,m.position.y+yc-th/2,m.position.z+(rb.min.z+rb.max.z)/2);c.castShadow=c.receiveShadow=true;m.parent.add(c);}
+    // underside of the moving part: a closed cap following its own outline (convex hull of its lowest band), so it looks shut when it rolls over
+    {let ymin=Infinity;for(const i of top)ymin=Math.min(ymin,pos.getY(i));
+     const pts=[];const seen=new Set();for(const i of top){const y=pos.getY(i);if(y<=ymin+band*1.5){const k=Math.round(pos.getX(i)*2)+','+Math.round(pos.getZ(i)*2);if(!seen.has(k)){seen.add(k);pts.push([pos.getX(i),pos.getZ(i)]);}}}
+     if(pts.length>=3){pts.sort((p,q)=>p[0]-q[0]||p[1]-q[1]);const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);
+       const lo=[],hi=[];for(const p of pts){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p);}
+       for(let k=pts.length-1;k>=0;k--){const p=pts[k];while(hi.length>=2&&cr(hi[hi.length-2],hi[hi.length-1],p)<=0)hi.pop();hi.push(p);}
+       const hull=lo.slice(0,-1).concat(hi.slice(0,-1));
+       const sh=new THREE.Shape();hull.forEach(([x,z],k)=>{k?sh.lineTo(x-cx,-(z-cz)):sh.moveTo(x-cx,-(z-cz));});
+       const g2=new THREE.ExtrudeGeometry(sh,{depth:th,bevelEnabled:false});g2.rotateX(-Math.PI/2);   // shape plane -> horizontal (y up), z restored
+       const cp=new THREE.Mesh(g2,cm);cp.position.set(0,ymin-py,0);cp.castShadow=cp.receiveShadow=true;pv.add(cp);}}
 }
   return pv;}
 // ② VR360: the pod (seat + shells) rolls round and round sideways, seen from the front, about its centre on the front-back axis; base fixed (?vrcut=)
@@ -735,7 +745,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127110252';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127111009';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
