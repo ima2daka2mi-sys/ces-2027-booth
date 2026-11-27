@@ -110,7 +110,7 @@ body.hide-l3d .lbl.l3d{display:none!important}
     <button id="t-l3d" aria-pressed="true" data-en="3D letters" data-ja="3D文字">3D letters</button>
     <button id="t-lan" aria-pressed="true" data-en="LAN" data-ja="LAN">LAN</button>
     <button id="t-dim" aria-pressed="true" data-en="Heights" data-ja="高さ">Heights</button>
-    <button id="t-vr" aria-pressed="true" data-en="VR360 spin" data-ja="VR360回転">VR360 spin</button>
+    <button id="t-vr" aria-pressed="true" data-en="Motion" data-ja="動き">Motion</button>
     <button id="t-rot" aria-pressed="false" data-en="Auto-rotate" data-ja="自動回転">Auto-rotate</button>
   </div>
   <div class="group" role="group" aria-label="帳票">
@@ -347,10 +347,10 @@ try{window.createImageBitmap=undefined;}catch(e){}   // GLTFLoader then uses Tex
 const gltf=new GLTFLoader();
 // models are embedded as base64 GLB: decode locally (no fetch), and load textures through <img> rather than createImageBitmap/fetch
 function b64ToBuf(b){const s=atob(b.trim()),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u.buffer;}
-function placeModel(id,X,Y,h,rotY,y0=0){const src=document.getElementById(id);if(!src)return;gltf.parse(b64ToBuf(src.textContent),'',g=>{const o=g.scene;o.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
+function placeModel(id,X,Y,h,rotY,y0=0,onDone=null){const src=document.getElementById(id);if(!src)return;gltf.parse(b64ToBuf(src.textContent),'',g=>{const o=g.scene;o.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
   const bb=new THREE.Box3().setFromObject(o),sz=bb.getSize(new THREE.Vector3()),ct=bb.getCenter(new THREE.Vector3());const s=h/sz.y;
   const wrap=new THREE.Group();o.position.set(-ct.x,-bb.min.y,-ct.z);wrap.add(o);wrap.scale.setScalar(s);
-  const [x,z]=P(X,Y);wrap.position.set(x,y0,z);wrap.rotation.y=rotY;scene.add(wrap);},e=>console.error('model',id,e));}
+  const [x,z]=P(X,Y);wrap.position.set(x,y0,z);wrap.rotation.y=rotY;scene.add(wrap);if(onDone)onDone(o,wrap);},e=>console.error('model',id,e));}
 
 // ① driving simulator — Meshy model supplied by the user (simplified to 80k triangles, textures embedded),
 // turned so the screens face east (driver faces the 85" wall); width across the screens about 1,800, length about 2,240
@@ -371,7 +371,9 @@ const SIM_ROT=(()=>{try{const v=new URLSearchParams(location.search).get('simrot
     bb=new THREE.Box3().setFromObject(wrap);const c=bb.getCenter(new THREE.Vector3());
     const [x,z]=P(1118,1556);wrap.position.set(x-c.x,-bb.min.y,z-c.z);
     bb=new THREE.Box3().setFromObject(wrap);const f=bb.getSize(new THREE.Vector3());
-    window.__simSize=[f.x,f.y,f.z].map(v=>Math.round(v*1000));},e=>console.error('drivesim',e));}}
+    window.__simSize=[f.x,f.y,f.z].map(v=>Math.round(v*1000));
+    {let m=null;o.traverse(c=>{if(c.isMesh&&!m)m=c;});if(m)MOTION.sim=splitTop(m,qcut('simcut',.2));}   // four corner actuators: the top heaves, pitches and rolls
+  },e=>console.error('drivesim',e));}}
 
 // (humanoid robot corner removed: now the Air Driving corner)
 // SENSO-Wheel: Meshy model (steering assembly, simplified to 46k triangles) on the Ø600 table, wheel toward the east aisle;
@@ -388,27 +390,26 @@ const SIM_ROT=(()=>{try{const v=new URLSearchParams(location.search).get('simrot
 // ② VR360 simulator 2047×1250×1960 + pole partitions (SIGGRAPH)
 box(707,7414,1957,9461,0,.12,mat.grey); box(807,7514,1857,9361,.12,.01,mat.green);   // 88 off the STOCK wall (Octanorm plan)
 // VR360: the model is one mesh; split it at load into the fixed base and the seat that spins (?vrcut= sets the split height, 0..1)
-const vrSpin={pivot:null,on:true,ang:0,w:0,t:0};
+// motion: each simulator model is one mesh; at load it is split into a fixed base and a moving top (pivot at the split height)
+const MOTION={on:true,t:0,vr:null,seat:null,sim:null};
+const qcut=(k,d)=>{try{const q=new URLSearchParams(location.search).get(k);return q===null?d:parseFloat(q);}catch(e){return d;}};
+function splitTop(m,cut){const geo=m.geometry,pos=geo.attributes.position;let idx=geo.index?geo.index.array:null;
+  if(!idx){idx=new Uint32Array(pos.count);for(let i=0;i<pos.count;i++)idx[i]=i;}
+  geo.computeBoundingBox();const y0=geo.boundingBox.min.y,yc=y0+(geo.boundingBox.max.y-y0)*cut;
+  const base=[],top=[];
+  for(let i=0;i<idx.length;i+=3){const a=idx[i],b=idx[i+1],c=idx[i+2];(Math.min(pos.getY(a),pos.getY(b),pos.getY(c))>=yc?top:base).push(a,b,c);}
+  const gB=geo.clone();gB.setIndex(base);const gT=geo.clone();gT.setIndex(top);
+  const tb=new THREE.Box3();for(const i of top)tb.expandByPoint(new THREE.Vector3(pos.getX(i),pos.getY(i),pos.getZ(i)));
+  const cx=(tb.min.x+tb.max.x)/2,cz=(tb.min.z+tb.max.z)/2;m.geometry=gB;
+  const tm=new THREE.Mesh(gT,m.material);tm.castShadow=true;tm.receiveShadow=true;tm.position.set(-cx,-yc,-cz);
+  const pv=new THREE.Group();pv.position.set(m.position.x+cx,m.position.y+yc,m.position.z+cz);pv.add(tm);m.parent.add(pv);return pv;}
+// ② VR360: seat swings 180 deg in yaw (accelerate, peak about 6 km/h at the seat edge, decelerate), pauses, swings back (?vrcut=)
 {const src=document.getElementById('m-vr360');
- if(src)gltf.parse(b64ToBuf(src.textContent),'',g=>{const o=g.scene;let m=null;o.traverse(c=>{if(c.isMesh&&!m)m=c;});
+ if(src)gltf.parse(b64ToBuf(src.textContent),'',g=>{const o=g.scene;let m=null;o.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;if(!m)m=c;}});
   const bb=new THREE.Box3().setFromObject(o),sz=bb.getSize(new THREE.Vector3()),ct=bb.getCenter(new THREE.Vector3());
   const wrap=new THREE.Group();o.position.set(-ct.x,-bb.min.y,-ct.z);wrap.add(o);wrap.scale.setScalar(1.96/sz.y);
   const [x,z]=P(1332,8437);wrap.position.set(x,.13,z);scene.add(wrap);
-  o.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
-  if(!m)return;
-  let cut=.12;try{const q=new URLSearchParams(location.search).get('vrcut');if(q!==null)cut=parseFloat(q);}catch(e){}
-  const geo=m.geometry,pos=geo.attributes.position;let idx=geo.index?geo.index.array:null;
-  if(!idx){idx=new Uint32Array(pos.count);for(let i=0;i<pos.count;i++)idx[i]=i;}
-  geo.computeBoundingBox();const y0=geo.boundingBox.min.y,yc=y0+(geo.boundingBox.max.y-y0)*cut;
-  const base=[],seat=[];
-  for(let i=0;i<idx.length;i+=3){const a=idx[i],b=idx[i+1],c=idx[i+2];const lo=Math.min(pos.getY(a),pos.getY(b),pos.getY(c));(lo>=yc?seat:base).push(a,b,c);}
-  const gB=geo.clone();gB.setIndex(base);const gS=geo.clone();gS.setIndex(seat);
-  const sb=new THREE.Box3();for(const i of seat)sb.expandByPoint(new THREE.Vector3(pos.getX(i),pos.getY(i),pos.getZ(i)));
-  const cx=(sb.min.x+sb.max.x)/2,cz=(sb.min.z+sb.max.z)/2;
-  m.geometry=gB;
-  const sm=new THREE.Mesh(gS,m.material);sm.castShadow=true;sm.receiveShadow=true;sm.position.set(-cx,0,-cz);
-  const pv=new THREE.Group();pv.position.set(m.position.x+cx,m.position.y,m.position.z+cz);pv.add(sm);m.parent.add(pv);
-  vrSpin.pivot=pv;},e=>console.error('vr360',e));}
+  if(m)MOTION.vr=splitTop(m,qcut('vrcut',.12));},e=>console.error('vr360',e));}
 // 43" spectator monitor on the STOCK south wall above the VR360 (sim top 1.96 m), centre H2600
 tv(1282,9549,0,-1,IN[43],2.6,screenTex('VR360','43"',190));
 function polePair(X,Ya,Yb){[Ya,Yb].forEach(Y=>{cyl(X,Y,.15,0,.03,mat.grey,32);cyl(X,Y,.03,0,.95,mat.metal,16);});box(X-10,Ya,X+10,Yb,.84,.05,mat.red);}
@@ -418,7 +419,7 @@ polePair(282,8012,8912); polePair(2396,8012,8912);
 {const a=[2564,9549],b=[4090,12000],L=Math.hypot(b[0]-a[0],b[1]-a[1]),u=[(b[0]-a[0])/L,(b[1]-a[1])/L],n=[u[1],-u[0]];
  const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2];
  const vc=[mid[0]+n[0]*460+u[0]*757,mid[1]+n[1]*460+u[1]*757];   // slid to the upper (north-east) end of the slant wall
- placeModel('m-motionseat',vc[0],vc[1],1.6,Math.atan2(n[0],-n[1]),.012);
+ placeModel('m-motionseat',vc[0],vc[1],1.6,Math.atan2(n[0],-n[1]),.012,o=>{let m=null;o.traverse(c=>{if(c.isMesh&&!m)m=c;});if(m)MOTION.seat=splitTop(m,qcut('seatcut',.22));});   // seat moves in pitch and roll
  tv(mid[0]+u[0]*737+n[0]*25,mid[1]+u[1]*737+n[1]*25,n[0],n[1],[.952,.535],1.8,screenTex('RALLY VR','43"',0));   // centre 1.8 m (SIGGRAPH 1.6, raised a little)
  window.__seat=vc;}
 
@@ -703,7 +704,7 @@ VBTN.forEach(v=>{document.getElementById('v-'+v).onclick=()=>{fly(...VIEWS[v].ma
 const tb=document.getElementById('t-banner');tb.onclick=()=>{banner.visible=!banner.visible;tb.setAttribute('aria-pressed',String(banner.visible));};
 [['t-pin','hide-pins'],['t-l3d','hide-l3d']].forEach(([id,cls])=>{const b=document.getElementById(id);b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));document.body.classList.toggle(cls,!on);};});
 const tl=document.getElementById('t-label');tl.onclick=()=>{const on=tl.getAttribute('aria-pressed')!=='true';LABELS_ON=on;tl.setAttribute('aria-pressed',String(on));labels.forEach(o=>o.visible=on);};
-const tvr=document.getElementById('t-vr');tvr.onclick=()=>{vrSpin.on=!vrSpin.on;tvr.setAttribute('aria-pressed',String(vrSpin.on));};
+const tvr=document.getElementById('t-vr');tvr.onclick=()=>{MOTION.on=!MOTION.on;tvr.setAttribute('aria-pressed',String(MOTION.on));};
 const tr_=document.getElementById('t-rot');tr_.onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=.8;tr_.setAttribute('aria-pressed',String(controls.autoRotate));};
 // height guides
 __dimLine(2580,9560,0,4.0,['STOCK 壁 H4000','STOCK wall H4000']);
@@ -725,7 +726,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127101338';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127101649';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
@@ -733,18 +734,22 @@ camera.position.copy(VIEWS.persp[0]);controls.target.copy(VIEWS.persp[1]);
 
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);labelR.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
 addEventListener('resize',resize);resize();
-// VR360 seat: rides of accel 3 s -> full speed 6 s -> decel 3 s -> pause 2 s, direction alternating.
-// Full speed: about 6.5 km/h at the seat edge (r ~0.6 m) = 3.0 rad/s (~0.48 rev/s)
-let vrLast=performance.now();
-function vrStep(now){const dt=Math.min(.1,(now-vrLast)/1000);vrLast=now;if(!vrSpin.pivot)return;
-  const W=3.0,A=3,C=6,D=3,Pz=2,T=A+C+D+Pz;
-  if(vrSpin.on&&!reduce){vrSpin.t+=dt;}
-  const ph=vrSpin.t%T,cyc=Math.floor(vrSpin.t/T),dir=cyc%2?-1:1,sm=u=>u*u*(3-2*u);
-  let w=ph<A?W*sm(ph/A):ph<A+C?W:ph<A+C+D?W*(1-sm((ph-A-C)/D)):0;
-  if(!vrSpin.on||reduce){vrSpin.w*=Math.max(0,1-dt*1.5);w=vrSpin.w;}else vrSpin.w=w;
-  vrSpin.ang+=dir*w*dt;vrSpin.pivot.rotation.y=vrSpin.ang;}
+// motion loop (button "Motion"): VR360 yaw 180 deg swings; motion seat pitch/roll; driving simulator heave/pitch/roll
+let mLast=performance.now(),mAmp=1;
+function motionStep(now){const dt=Math.min(.1,(now-mLast)/1000);mLast=now;
+  const go=MOTION.on&&!reduce;if(go)MOTION.t+=dt;mAmp+= ((go?1:0)-mAmp)*Math.min(1,dt*2);   // ease in/out when switched
+  const t=MOTION.t,ss=u=>u*u*u*(u*(u*6-15)+10);
+  if(MOTION.vr){const Tm=1.9,Pz=1.6,T=2*(Tm+Pz),ph=t%T;   // peak ~2.5 rad/s = about 5.4 km/h at r 0.6 m
+    let a=ph<Tm?ss(ph/Tm):ph<Tm+Pz?1:ph<2*Tm+Pz?1-ss((ph-Tm-Pz)/Tm):0;
+    MOTION.vr.rotation.y=Math.PI*a*mAmp;}
+  if(MOTION.seat){MOTION.seat.rotation.x=THREE.MathUtils.degToRad(7)*Math.sin(t*2*Math.PI/3.6)*mAmp;
+    MOTION.seat.rotation.z=THREE.MathUtils.degToRad(6)*Math.sin(t*2*Math.PI/2.9+1.1)*mAmp;}
+  if(MOTION.sim){const p=MOTION.sim;if(p.userData.y0===undefined)p.userData.y0=p.position.y;
+    p.rotation.x=THREE.MathUtils.degToRad(3)*Math.sin(t*2*Math.PI/2.4)*mAmp;
+    p.rotation.z=THREE.MathUtils.degToRad(2.5)*Math.sin(t*2*Math.PI/1.9+.7)*mAmp;
+    p.position.y=p.userData.y0+(.03*Math.sin(t*2*Math.PI/1.3+.3))*mAmp/p.parent.getWorldScale(new THREE.Vector3()).y;}}
 renderer.setAnimationLoop(t=>{
-  vrStep(performance.now());
+  motionStep(performance.now());
   if(anim){const k=Math.min(1,(performance.now()-anim.s)/900),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
     camera.position.lerpVectors(anim.p0,anim.p1,e);controls.target.lerpVectors(anim.t0,anim.t1,e);if(k>=1)anim=null;}
   if(scene.userData.holo&&!reduce)scene.userData.holo.rotation.y=t/1200;
