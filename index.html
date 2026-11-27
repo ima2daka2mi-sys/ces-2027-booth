@@ -403,7 +403,7 @@ function splitTop(m,cut,centre=false){const geo=m.geometry,pos=geo.attributes.po
   const cx=(tb.min.x+tb.max.x)/2,cz=(tb.min.z+tb.max.z)/2,py=centre?(tb.min.y+tb.max.y)/2:yc;m.geometry=gB;
   const tm=new THREE.Mesh(gT,m.material);tm.castShadow=true;tm.receiveShadow=true;tm.position.set(-cx,-py,-cz);
   const pv=new THREE.Group();pv.position.set(m.position.x+cx,m.position.y+py,m.position.z+cz);pv.add(tm);m.parent.add(pv);return pv;}
-// ② VR360: the pod (seat + shells) rolls 180 deg sideways, seen from the front, about its centre on the front-back axis; base fixed (?vrcut=)
+// ② VR360: the pod (seat + shells) rolls round and round sideways, seen from the front, about its centre on the front-back axis; base fixed (?vrcut=)
 {const src=document.getElementById('m-vr360');
  if(src)gltf.parse(b64ToBuf(src.textContent),'',g=>{const o=g.scene;let m=null;o.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;if(!m)m=c;}});
   const bb=new THREE.Box3().setFromObject(o),sz=bb.getSize(new THREE.Vector3()),ct=bb.getCenter(new THREE.Vector3());
@@ -726,7 +726,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127103223';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127103706';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
@@ -734,14 +734,14 @@ camera.position.copy(VIEWS.persp[0]);controls.target.copy(VIEWS.persp[1]);
 
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);labelR.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
 addEventListener('resize',resize);resize();
-// motion loop (button "Motion"): VR360 pod rolls 180 deg and back; motion seat pitch/roll; driving simulator heave/pitch/roll
+// motion loop (button "Motion"): VR360 pod rolls continuously (accelerate, cruise, decelerate, pause, reverse); motion seat pitch/roll; driving simulator heave/pitch/roll
 let mLast=performance.now(),mAmp=1;
 function motionStep(now){const dt=Math.min(.1,(now-mLast)/1000);mLast=now;
   const go=MOTION.on&&!reduce;if(go)MOTION.t+=dt;mAmp+= ((go?1:0)-mAmp)*Math.min(1,dt*2);   // ease in/out when switched
   const t=MOTION.t,ss=u=>u*u*u*(u*(u*6-15)+10);
-  if(MOTION.vr){const Tm=1.9,Pz=1.6,T=2*(Tm+Pz),ph=t%T;   // peak ~2.5 rad/s = about 5.4 km/h at r 0.6 m
-    let a=ph<Tm?ss(ph/Tm):ph<Tm+Pz?1:ph<2*Tm+Pz?1-ss((ph-Tm-Pz)/Tm):0;
-    MOTION.vr.rotation.z=Math.PI*a*mAmp;}
+  if(MOTION.vr){const W=2.2,A=3,C=6,D=3,Pz=2,T=A+C+D+Pz,ph=t%T,dir=Math.floor(t/T)%2?-1:1,sm=u=>u*u*(3-2*u);   // full rolls: peak 2.2 rad/s = about 6.5 km/h at r 0.85 m
+    const w=ph<A?W*sm(ph/A):ph<A+C?W:ph<A+C+D?W*(1-sm((ph-A-C)/D)):0;
+    MOTION.vr.userData.ang=(MOTION.vr.userData.ang||0)+dir*w*dt*mAmp;MOTION.vr.rotation.z=MOTION.vr.userData.ang;}
   if(MOTION.seat){MOTION.seat.rotation.x=THREE.MathUtils.degToRad(7)*Math.sin(t*2*Math.PI/3.6)*mAmp;
     MOTION.seat.rotation.z=THREE.MathUtils.degToRad(6)*Math.sin(t*2*Math.PI/2.9+1.1)*mAmp;}
   if(MOTION.sim){const p=MOTION.sim;if(p.userData.y0===undefined)p.userData.y0=p.position.y;
