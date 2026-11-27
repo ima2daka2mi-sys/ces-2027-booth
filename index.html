@@ -397,20 +397,20 @@ function splitTop(m,cut,centre=false,caps=false){const geo=m.geometry,pos=geo.at
   if(!idx){idx=new Uint32Array(pos.count);for(let i=0;i<pos.count;i++)idx[i]=i;}
   geo.computeBoundingBox();const y0=geo.boundingBox.min.y,yc=y0+(geo.boundingBox.max.y-y0)*cut;
   const base=[],top=[];
-  for(let i=0;i<idx.length;i+=3){const a=idx[i],b=idx[i+1],c=idx[i+2];(Math.min(pos.getY(a),pos.getY(b),pos.getY(c))>=yc?top:base).push(a,b,c);}
+  // with caps: triangles reaching above the cut belong to the moving part (keeps its own structure), the base keeps only what lies wholly below
+  for(let i=0;i<idx.length;i+=3){const a=idx[i],b=idx[i+1],c=idx[i+2];const ys=[pos.getY(a),pos.getY(b),pos.getY(c)];(caps?Math.max(...ys)>yc:Math.min(...ys)>=yc)?top.push(a,b,c):base.push(a,b,c);}
   const gB=geo.clone();gB.setIndex(base);const gT=geo.clone();gT.setIndex(top);
   const tb=new THREE.Box3();for(const i of top)tb.expandByPoint(new THREE.Vector3(pos.getX(i),pos.getY(i),pos.getZ(i)));
   const cx=(tb.min.x+tb.max.x)/2,cz=(tb.min.z+tb.max.z)/2,py=centre?(tb.min.y+tb.max.y)/2:yc;m.geometry=gB;
   const tm=new THREE.Mesh(gT,m.material);tm.castShadow=true;tm.receiveShadow=true;tm.position.set(-cx,-py,-cz);
   const pv=new THREE.Group();pv.position.set(m.position.x+cx,m.position.y+py,m.position.z+cz);pv.add(tm);m.parent.add(pv);
-  if(caps){   // cover plates over the cut: top of the fixed base, bottom of the moving part
+  if(caps){   // cover plate over the cut on top of the fixed base
     const H=geo.boundingBox.max.y-y0,band=H*.04,th=H*.012,cm=new THREE.MeshStandardMaterial({color:0x1b1c1f,roughness:.55,metalness:.3});
     const ring=(list,lo,hi)=>{const b=new THREE.Box3();for(const i of list){const y=pos.getY(i);if(y>=lo&&y<=hi)b.expandByPoint(new THREE.Vector3(pos.getX(i),y,pos.getZ(i)));}return b;};
-    const rb=ring(base,yc-band,yc+band),rt=ring(top,yc,yc+band*1.5);
+    const rb=ring(base,yc-band,yc+band);
     if(!rb.isEmpty()){const w=rb.max.x-rb.min.x,d=rb.max.z-rb.min.z;const c=new THREE.Mesh(new THREE.BoxGeometry(w,th,d),cm);
       c.position.set(m.position.x+(rb.min.x+rb.max.x)/2,m.position.y+yc-th/2,m.position.z+(rb.min.z+rb.max.z)/2);c.castShadow=c.receiveShadow=true;m.parent.add(c);}
-    if(!rt.isEmpty()){const w=rt.max.x-rt.min.x,d=rt.max.z-rt.min.z;const c=new THREE.Mesh(new THREE.BoxGeometry(w,th,d),cm);
-      c.position.set((rt.min.x+rt.max.x)/2-cx,yc+th/2-py,(rt.min.z+rt.max.z)/2-cz);c.castShadow=c.receiveShadow=true;pv.add(c);}}
+}
   return pv;}
 // ② VR360: the pod (seat + shells) rolls round and round sideways, seen from the front, about its centre on the front-back axis; base fixed (?vrcut=)
 {const src=document.getElementById('m-vr360');
@@ -735,7 +735,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127105941';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127110252';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
