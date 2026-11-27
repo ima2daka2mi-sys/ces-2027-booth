@@ -393,7 +393,7 @@ box(707,7414,1957,9461,0,.12,mat.grey); box(807,7514,1857,9361,.12,.01,mat.green
 // motion: each simulator model is one mesh; at load it is split into a fixed base and a moving top (pivot at the split height)
 const MOTION={on:true,t:0,vr:null,seat:null,sim:null};
 const qcut=(k,d)=>{try{const q=new URLSearchParams(location.search).get(k);return q===null?d:parseFloat(q);}catch(e){return d;}};
-function splitTop(m,cut,centre=false){const geo=m.geometry,pos=geo.attributes.position;let idx=geo.index?geo.index.array:null;
+function splitTop(m,cut,centre=false,caps=false){const geo=m.geometry,pos=geo.attributes.position;let idx=geo.index?geo.index.array:null;
   if(!idx){idx=new Uint32Array(pos.count);for(let i=0;i<pos.count;i++)idx[i]=i;}
   geo.computeBoundingBox();const y0=geo.boundingBox.min.y,yc=y0+(geo.boundingBox.max.y-y0)*cut;
   const base=[],top=[];
@@ -402,14 +402,23 @@ function splitTop(m,cut,centre=false){const geo=m.geometry,pos=geo.attributes.po
   const tb=new THREE.Box3();for(const i of top)tb.expandByPoint(new THREE.Vector3(pos.getX(i),pos.getY(i),pos.getZ(i)));
   const cx=(tb.min.x+tb.max.x)/2,cz=(tb.min.z+tb.max.z)/2,py=centre?(tb.min.y+tb.max.y)/2:yc;m.geometry=gB;
   const tm=new THREE.Mesh(gT,m.material);tm.castShadow=true;tm.receiveShadow=true;tm.position.set(-cx,-py,-cz);
-  const pv=new THREE.Group();pv.position.set(m.position.x+cx,m.position.y+py,m.position.z+cz);pv.add(tm);m.parent.add(pv);return pv;}
+  const pv=new THREE.Group();pv.position.set(m.position.x+cx,m.position.y+py,m.position.z+cz);pv.add(tm);m.parent.add(pv);
+  if(caps){   // cover plates over the cut: top of the fixed base, bottom of the moving part
+    const H=geo.boundingBox.max.y-y0,band=H*.04,th=H*.012,cm=new THREE.MeshStandardMaterial({color:0x1b1c1f,roughness:.55,metalness:.3});
+    const ring=(list,lo,hi)=>{const b=new THREE.Box3();for(const i of list){const y=pos.getY(i);if(y>=lo&&y<=hi)b.expandByPoint(new THREE.Vector3(pos.getX(i),y,pos.getZ(i)));}return b;};
+    const rb=ring(base,yc-band,yc+band),rt=ring(top,yc,yc+band*1.5);
+    if(!rb.isEmpty()){const w=rb.max.x-rb.min.x,d=rb.max.z-rb.min.z;const c=new THREE.Mesh(new THREE.BoxGeometry(w,th,d),cm);
+      c.position.set(m.position.x+(rb.min.x+rb.max.x)/2,m.position.y+yc-th/2,m.position.z+(rb.min.z+rb.max.z)/2);c.castShadow=c.receiveShadow=true;m.parent.add(c);}
+    if(!rt.isEmpty()){const w=rt.max.x-rt.min.x,d=rt.max.z-rt.min.z;const c=new THREE.Mesh(new THREE.BoxGeometry(w,th,d),cm);
+      c.position.set((rt.min.x+rt.max.x)/2-cx,yc+th/2-py,(rt.min.z+rt.max.z)/2-cz);c.castShadow=c.receiveShadow=true;pv.add(c);}}
+  return pv;}
 // ② VR360: the pod (seat + shells) rolls round and round sideways, seen from the front, about its centre on the front-back axis; base fixed (?vrcut=)
 {const src=document.getElementById('m-vr360');
  if(src)gltf.parse(b64ToBuf(src.textContent),'',g=>{const o=g.scene;let m=null;o.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;if(!m)m=c;}});
   const bb=new THREE.Box3().setFromObject(o),sz=bb.getSize(new THREE.Vector3()),ct=bb.getCenter(new THREE.Vector3());
   const wrap=new THREE.Group();o.position.set(-ct.x,-bb.min.y,-ct.z);wrap.add(o);wrap.scale.setScalar(1.96/sz.y);
   const [x,z]=P(1332,8437);wrap.position.set(x,.13,z);scene.add(wrap);
-  if(m)MOTION.vr=splitTop(m,qcut('vrcut',.12),true);},e=>console.error('vr360',e));}
+  if(m)MOTION.vr=splitTop(m,qcut('vrcut',.12),true,true);},e=>console.error('vr360',e));}
 // 43" spectator monitor on the STOCK south wall above the VR360 (sim top 1.96 m), centre H2600
 tv(1282,9549,0,-1,IN[43],2.6,screenTex('VR360','43"',190));
 function polePair(X,Ya,Yb){[Ya,Yb].forEach(Y=>{cyl(X,Y,.15,0,.03,mat.grey,32);cyl(X,Y,.03,0,.95,mat.metal,16);});box(X-10,Ya,X+10,Yb,.84,.05,mat.red);}
@@ -726,7 +735,7 @@ function applyLang(l){lang=l;if(typeof dimLbls!=='undefined')dimLbls.forEach(([d
   document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[l]);
   i18nLabels.forEach(([d,t])=>d.innerHTML=tr(t));
   document.getElementById('l-en').setAttribute('aria-pressed',String(l==='en'));document.getElementById('l-ja').setAttribute('aria-pressed',String(l==='ja'));
-  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127103706';});
+  document.querySelectorAll('#docs a[data-href-en]').forEach(a=>{a.href=DOC_BASE+a.dataset[l==='ja'?'hrefJa':'hrefEn']+'?v=20261127105941';});
   renderPanel();placePanel();}
 document.getElementById('l-en').onclick=()=>applyLang('en');document.getElementById('l-ja').onclick=()=>applyLang('ja');
 applyLang(lang);
